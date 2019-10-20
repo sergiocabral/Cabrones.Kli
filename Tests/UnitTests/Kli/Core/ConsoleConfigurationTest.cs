@@ -2,7 +2,6 @@
 using AutoFixture;
 using FluentAssertions;
 using Kli.Core;
-using Kli.Infrastructure;
 using Xunit;
 
 namespace Tests.UnitTests.Kli.Core
@@ -14,8 +13,8 @@ namespace Tests.UnitTests.Kli.Core
         {
             // Arrange, Given
             
-            var consoleConfiguration = DependencyResolver.Default.GetInstance<IConsoleConfiguration>();
-            
+            var consoleConfiguration = DependencyResolverFromProgram.GetInstance<IConsoleConfiguration>();
+
             Console.BackgroundColor++;
             var backupParaBackgroundColor = Console.BackgroundColor;
 
@@ -37,7 +36,7 @@ namespace Tests.UnitTests.Kli.Core
         {
             // Arrange, Given
             
-            var consoleConfiguration = DependencyResolver.Default.GetInstance<IConsoleConfiguration>();
+            var consoleConfiguration = DependencyResolverFromProgram.GetInstance<IConsoleConfiguration>();
             
             var backupParaBackgroundColor = consoleConfiguration.BackgroundColorBackup;
             Console.BackgroundColor++;
@@ -60,7 +59,7 @@ namespace Tests.UnitTests.Kli.Core
         {
             // Arrange, Given
             
-            var consoleConfiguration = DependencyResolver.Default.GetInstance<IConsoleConfiguration>();
+            var consoleConfiguration = DependencyResolverFromProgram.GetInstance<IConsoleConfiguration>();
             
             Console.BackgroundColor = Fixture.Create<ConsoleColor>();
             var backupParaBackgroundColor = Console.BackgroundColor;
@@ -88,7 +87,7 @@ namespace Tests.UnitTests.Kli.Core
         {
             // Arrange, Given
             
-            var consoleConfiguration = DependencyResolver.Default.GetInstance<IConsoleConfiguration>();
+            var consoleConfiguration = DependencyResolverFromProgram.GetInstance<IConsoleConfiguration>();
             
             // Act, When
 

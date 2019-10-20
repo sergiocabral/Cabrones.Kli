@@ -13,7 +13,7 @@ namespace Kli.Infrastructure
         /// </summary>
         /// <typeparam name="TService">Tipo solicitado.</typeparam>
         /// <returns>Instância encontrada.</returns>
-        TService GetInstance<TService>();
+        TService GetInstance<TService>() where TService : class;
     }
     
     /// <summary>
@@ -21,11 +21,6 @@ namespace Kli.Infrastructure
     /// </summary>
     public class DependencyResolver: IDependencyResolver
     {
-        /// <summary>
-        /// Instância padrão.
-        /// </summary>
-        public static IDependencyResolver Default { get; set; } = new DependencyResolver();
-        
         /// <summary>
         /// Construtor estático. Configuração inicial.
         /// </summary>
@@ -39,7 +34,7 @@ namespace Kli.Infrastructure
         /// </summary>
         /// <typeparam name="TService">Tipo solicitado.</typeparam>
         /// <returns>Instância encontrada.</returns>
-        public TService GetInstance<TService>()
+        public TService GetInstance<TService>() where TService : class
         {
             return _container.GetInstance<TService>();
         }

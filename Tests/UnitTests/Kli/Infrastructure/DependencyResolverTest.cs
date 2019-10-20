@@ -26,7 +26,7 @@ namespace Tests.UnitTests.Kli.Infrastructure
             
             // Act, When
             
-            var serviço = métodoQueObtemOServiçoEspecializadoParaOTipoDoServiço?.Invoke(DependencyResolver.Default, null);
+            var serviço = métodoQueObtemOServiçoEspecializadoParaOTipoDoServiço?.Invoke(DependencyResolverFromProgram, null);
 
             // Assert, Then
             
