@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <Version>4.0.0.1</Version>
+        <Version>4.0.0.6</Version>
         <Nullable>enable</Nullable>
         <TargetFramework>netcoreapp3.0</TargetFramework>
         <OutputType>Exe</OutputType>
@@ -15,6 +15,10 @@
         <DebugType>embedded</DebugType>
         <DebugSymbols>true</DebugSymbols>
     </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="LightInject" Version="6.2.0" />
+    </ItemGroup>
 
     <PropertyGroup>
         <Copyright>sergiocabral.com</Copyright>
