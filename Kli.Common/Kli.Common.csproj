@@ -1,11 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <Version>4.0.0.12</Version>
+        <Version>1.0.0.3</Version>
         <Nullable>enable</Nullable>
         <TargetFramework>netcoreapp3.0</TargetFramework>
-        <OutputType>Exe</OutputType>
     </PropertyGroup>
+
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Exec Command="..\IncrementBuildVersion.exe" />
+    </Target>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
         <Exec Command="..\IncrementBuildVersion.exe" />
@@ -16,16 +19,7 @@
         <DebugSymbols>true</DebugSymbols>
     </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="LightInject" Version="6.2.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\Kli.Common\Kli.Common.csproj" />
-    </ItemGroup>
-
     <PropertyGroup>
         <Copyright>sergiocabral.com</Copyright>
     </PropertyGroup>
-
 </Project>

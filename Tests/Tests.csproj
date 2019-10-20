@@ -16,7 +16,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Kli\Kli.csproj" />
+        <ProjectReference Include="..\Kli.Common\Kli.Common.csproj" />
+        <ProjectReference Include="..\Kli\Kli.csproj" />
     </ItemGroup>
 
 </Project>
