@@ -14,7 +14,7 @@ namespace Tests.UnitTests.Kli.Core
         {
             // Arrange, Given
             
-            var consoleConfiguration = DependencyResolver.GetInstance<IConsoleConfiguration>();
+            var consoleConfiguration = DependencyResolver.Default.GetInstance<IConsoleConfiguration>();
             
             Console.BackgroundColor++;
             var backupParaBackgroundColor = Console.BackgroundColor;
@@ -37,7 +37,7 @@ namespace Tests.UnitTests.Kli.Core
         {
             // Arrange, Given
             
-            var consoleConfiguration = DependencyResolver.GetInstance<IConsoleConfiguration>();
+            var consoleConfiguration = DependencyResolver.Default.GetInstance<IConsoleConfiguration>();
             
             var backupParaBackgroundColor = consoleConfiguration.BackgroundColorBackup;
             Console.BackgroundColor++;
@@ -60,7 +60,7 @@ namespace Tests.UnitTests.Kli.Core
         {
             // Arrange, Given
             
-            var consoleConfiguration = DependencyResolver.GetInstance<IConsoleConfiguration>();
+            var consoleConfiguration = DependencyResolver.Default.GetInstance<IConsoleConfiguration>();
             
             Console.BackgroundColor = Fixture.Create<ConsoleColor>();
             var backupParaBackgroundColor = Console.BackgroundColor;
@@ -88,7 +88,7 @@ namespace Tests.UnitTests.Kli.Core
         {
             // Arrange, Given
             
-            var consoleConfiguration = DependencyResolver.GetInstance<IConsoleConfiguration>();
+            var consoleConfiguration = DependencyResolver.Default.GetInstance<IConsoleConfiguration>();
             
             // Act, When
 

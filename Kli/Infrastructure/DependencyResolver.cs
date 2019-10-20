@@ -6,12 +6,30 @@ namespace Kli.Infrastructure
     /// <summary>
     /// Resolvedor de classes.
     /// </summary>
-    public static class DependencyResolver
+    public interface IDependencyResolver
     {
+        /// <summary>
+        /// Retorna uma instância do tipo solicitado.
+        /// </summary>
+        /// <typeparam name="TService">Tipo solicitado.</typeparam>
+        /// <returns>Instância encontrada.</returns>
+        TService GetInstance<TService>();
+    }
+    
+    /// <summary>
+    /// Resolvedor de classes.
+    /// </summary>
+    public class DependencyResolver: IDependencyResolver
+    {
+        /// <summary>
+        /// Instância padrão.
+        /// </summary>
+        public static IDependencyResolver Default { get; set; } = new DependencyResolver();
+        
         /// <summary>
         /// Construtor estático. Configuração inicial.
         /// </summary>
-        static DependencyResolver()
+        public DependencyResolver()
         {
             RegisterAssemblies();
         }
@@ -21,23 +39,24 @@ namespace Kli.Infrastructure
         /// </summary>
         /// <typeparam name="TService">Tipo solicitado.</typeparam>
         /// <returns>Instância encontrada.</returns>
-        public static TService GetInstance<TService>()
+        public TService GetInstance<TService>()
         {
-            return Container.GetInstance<TService>();
+            return _container.GetInstance<TService>();
         }
 
         /// <summary>
         /// Container de trabalho do LightInject para este projeto.
         /// </summary>
-        private static readonly ServiceContainer Container = new ServiceContainer();
+        private readonly ServiceContainer _container = new ServiceContainer();
 
         /// <summary>
         /// Registra as interfaces e tipos associados.
         /// </summary>
-        private static void RegisterAssemblies()
+        private void RegisterAssemblies()
         {
-            Container.Register<IConsoleConfiguration, ConsoleConfiguration>();
-            Container.Register<IEngine, Engine>();
+            _container.Register<IDependencyResolver, DependencyResolver>();
+            _container.Register<IConsoleConfiguration, ConsoleConfiguration>();
+            _container.Register<IEngine, Engine>();
         }
     }
 }
