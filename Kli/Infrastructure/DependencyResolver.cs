@@ -1,4 +1,5 @@
-﻿using LightInject;
+﻿using Kli.Core;
+using LightInject;
 
 namespace Kli.Infrastructure
 {
@@ -35,6 +36,8 @@ namespace Kli.Infrastructure
         /// </summary>
         private static void RegisterAssemblies()
         {
+            Container.Register<IConsoleConfiguration, ConsoleConfiguration>();
+            Container.Register<IEngine, Engine>();
         }
     }
 }
