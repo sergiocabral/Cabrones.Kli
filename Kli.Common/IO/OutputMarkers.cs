@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Kli.Common.IO
 {
@@ -42,6 +43,13 @@ namespace Kli.Common.IO
         /// Lista de todos os caracteres especiais.
         /// </summary>
         IEnumerable<char> Markers { get; }
+
+        /// <summary>
+        /// Escapa o texto para escrever no output mesmo os caracteres de marcadores.
+        /// </summary>
+        /// <param name="text">Texto.</param>
+        /// <returns>Texto devidamente escapado.</returns>
+        string Escape(string text);
     }
 
     /// <summary>
@@ -104,6 +112,21 @@ namespace Kli.Common.IO
 
                 return _chars;
             }
+        }
+
+        /// <summary>
+        /// Escapa o texto para escrever no output mesmo os caracteres de marcadores.
+        /// </summary>
+        /// <param name="text">Texto.</param>
+        /// <returns>Texto devidamente escapado.</returns>
+        public string Escape(string text)
+        {
+            var result = new StringBuilder(text);
+            foreach (var item in Markers)
+            {
+                result.Replace(item.ToString(), item + item.ToString());
+            }
+            return result.ToString();
         }
     }
 }

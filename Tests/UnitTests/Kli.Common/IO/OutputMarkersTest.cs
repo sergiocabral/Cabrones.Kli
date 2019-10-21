@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using FluentAssertions;
 using Kli.Common.IO;
@@ -63,22 +64,46 @@ namespace Tests.UnitTests.Kli.Common.IO
 
             var outputFormatter = DependencyResolverFromProgram.GetInstance<IOutputMarkers>();
 
+            KeyValuePair<IEnumerable<char>, long> Consultar()
+            {
+                var cronômetro = new Stopwatch();
+                cronômetro.Start();
+                var valores = outputFormatter.Markers;
+                cronômetro.Stop();
+                return new KeyValuePair<IEnumerable<char>, long>(valores, cronômetro.ElapsedTicks);
+            }
+
             // Act, When
 
-            var cronômetro1 = new Stopwatch();
-            cronômetro1.Start();
-            var markers1 = outputFormatter.Markers;
-            cronômetro1.Stop();
-
-            var cronômetro2 = new Stopwatch();
-            cronômetro2.Start();
-            var markers2 = outputFormatter.Markers;
-            cronômetro2.Stop();
+            var (valoresDaPrimeiraChamada, tempoDaPrimeiraChamada) = Consultar();
+            var (valoresDaSegundaChamada, tempoDaSegundaChamada) = Consultar();
 
             // Assert, Then
 
-            markers1.Should().BeEquivalentTo(markers2);
-            cronômetro2.ElapsedTicks.Should().BeLessThan(cronômetro1.ElapsedTicks);
+            valoresDaPrimeiraChamada.Should().BeEquivalentTo(valoresDaSegundaChamada);
+            tempoDaSegundaChamada.Should().BeLessThan(tempoDaPrimeiraChamada);
+        }
+
+        [Fact]
+        public void verifica_se_os_caracteres_tipo_marcadores_podem_ser_escapados()
+        {
+            // Arrange, Given
+
+            var outputFormatter = DependencyResolverFromProgram.GetInstance<IOutputMarkers>();
+
+            foreach (var marcador in outputFormatter.Markers)
+            {
+
+                var texto = $"marcador: {marcador}.";
+                
+                // Act, When
+
+                var textoEscapado = outputFormatter.Escape(texto);
+                
+                // Assert, Then
+
+                textoEscapado.Should().Be($"marcador: {marcador}{marcador}.");
+            }
         }
     }
 }

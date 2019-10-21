@@ -23,12 +23,12 @@ namespace Tests
         protected Fixture Fixture { get; } = new Fixture();
 
         /// <summary>
-        /// Resolvedor de dependências usado pelo programa.
+        /// Resolvedor de dependências usado originalmente pelo programa.
         /// </summary>
         protected static IDependencyResolver DependencyResolverFromProgram { get; } = Program.DependencyResolver;
 
         /// <summary>
-        /// Resolvedor de dependências ajustado para atender os testes.
+        /// Resolvedor de dependências ajustado para atender os testes com Substitute.
         /// </summary>
         protected static DependencyResolverForTest DependencyResolverForTest { get; } = new DependencyResolverForTest();
     }
