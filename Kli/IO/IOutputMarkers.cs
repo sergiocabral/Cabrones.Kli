@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Kli.IO
+﻿namespace Kli.IO
 {
     /// <summary>
     /// Marcadores para texto de saída para o usuário.
@@ -40,7 +38,7 @@ namespace Kli.IO
         /// <summary>
         /// Lista de todos os caracteres especiais.
         /// </summary>
-        IEnumerable<char> Markers { get; }
+        string Markers { get; }
 
         /// <summary>
         /// Escapa o texto para escrever no output mesmo os caracteres de marcadores.

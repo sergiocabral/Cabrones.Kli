@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 
 namespace Kli.IO
@@ -42,27 +41,27 @@ namespace Kli.IO
         /// <summary>
         /// Cache para propriedade Markers
         /// </summary>
-        private static char[] _chars = { };
+        private static string _markers = string.Empty;
         
         /// <summary>
         /// Lista de todos os caracteres especiais.
         /// </summary>
-        public IEnumerable<char> Markers
+        public string Markers
         {
             get
             {
-                if (_chars.Length > 0) return _chars;
+                if (_markers.Length > 0) return _markers;
 
-                _chars = (
+                _markers = string.Join("", (
                     from property in GetType().GetProperties()
                     where property.PropertyType == typeof(char)
                     select (char) (property.GetValue(this) ?? 0)
                     into ch
                     where ch != (char) 0
                     select ch
-                ).ToArray();
+                ).ToArray());
 
-                return _chars;
+                return _markers;
             }
         }
 

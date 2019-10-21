@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
 using System.Linq;
 using FluentAssertions;
@@ -64,13 +64,13 @@ namespace Tests.UnitTests.Kli.IO
 
             var outputFormatter = DependencyResolverFromProgram.GetInstance<IOutputMarkers>();
 
-            KeyValuePair<IEnumerable<char>, long> Consultar()
+            Tuple<string, long> Consultar()
             {
                 var cronômetro = new Stopwatch();
                 cronômetro.Start();
                 var valores = outputFormatter.Markers;
                 cronômetro.Stop();
-                return new KeyValuePair<IEnumerable<char>, long>(valores, cronômetro.ElapsedTicks);
+                return new Tuple<string, long>(valores, cronômetro.ElapsedTicks);
             }
 
             // Act, When
@@ -80,7 +80,7 @@ namespace Tests.UnitTests.Kli.IO
 
             // Assert, Then
 
-            valoresDaPrimeiraChamada.Should().BeEquivalentTo(valoresDaSegundaChamada);
+            valoresDaPrimeiraChamada.Should().Be(valoresDaSegundaChamada);
             tempoDaSegundaChamada.Should().BeLessThan(tempoDaPrimeiraChamada);
         }
 

@@ -12,6 +12,7 @@ namespace Tests.UnitTests.Kli.Infrastructure
     public class DependencyResolverTest: Test
     {
         [Theory]
+        [InlineData(typeof(IOutputWriter))]
         [InlineData(typeof(IOutputMarkers))]
         [InlineData(typeof(IConsoleConfiguration))]
         [InlineData(typeof(IEngine))]
@@ -37,6 +38,7 @@ namespace Tests.UnitTests.Kli.Infrastructure
         }
         
         [Theory]
+        [InlineData(typeof(IOutputWriter), typeof(PerContainerLifetime))]
         [InlineData(typeof(IOutputMarkers), typeof(PerContainerLifetime))]
         [InlineData(typeof(IConsoleConfiguration), typeof(PerContainerLifetime))]
         [InlineData(typeof(IEngine), typeof(PerContainerLifetime))]
