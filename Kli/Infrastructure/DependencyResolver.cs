@@ -1,4 +1,5 @@
-﻿using Kli.Core;
+﻿using Kli.Common.IO;
+using Kli.Core;
 using LightInject;
 
 namespace Kli.Infrastructure
@@ -49,9 +50,10 @@ namespace Kli.Infrastructure
         /// </summary>
         private void RegisterAssemblies()
         {
-            _container.Register<IDependencyResolver, DependencyResolver>();
+            _container.Register<IOutputMarkers, OutputMarkers>();
             _container.Register<IConsoleConfiguration, ConsoleConfiguration>();
             _container.Register<IEngine, Engine>();
+            _container.Register<IDependencyResolver, DependencyResolver>();
         }
     }
 }
