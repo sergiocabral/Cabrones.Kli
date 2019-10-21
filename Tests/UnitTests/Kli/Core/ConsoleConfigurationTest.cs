@@ -15,10 +15,10 @@ namespace Tests.UnitTests.Kli.Core
             
             var consoleConfiguration = DependencyResolverFromProgram.GetInstance<IConsoleConfiguration>();
 
-            Console.BackgroundColor++;
+            Console.BackgroundColor = Fixture.Create<ConsoleColor>();
             var backupParaBackgroundColor = Console.BackgroundColor;
 
-            Console.ForegroundColor++;
+            Console.ForegroundColor = Fixture.Create<ConsoleColor>();
             var backupParaForegroundColor = Console.ForegroundColor;
             
             // Act, When
@@ -39,10 +39,10 @@ namespace Tests.UnitTests.Kli.Core
             var consoleConfiguration = DependencyResolverFromProgram.GetInstance<IConsoleConfiguration>();
             
             var backupParaBackgroundColor = consoleConfiguration.BackgroundColorBackup;
-            Console.BackgroundColor++;
+            Console.BackgroundColor = Fixture.Create<ConsoleColor>();
 
             var backupParaForegroundColor = consoleConfiguration.ForegroundColorBackup;
-            Console.ForegroundColor++;
+            Console.ForegroundColor = Fixture.Create<ConsoleColor>();
             
             // Act, When
 
@@ -78,8 +78,8 @@ namespace Tests.UnitTests.Kli.Core
 
             // Assert, Then
 
-            Console.ForegroundColor.Should().Be(backupParaForegroundColor);
             Console.BackgroundColor.Should().Be(backupParaBackgroundColor);
+            Console.ForegroundColor.Should().Be(backupParaForegroundColor);
         }
         
         [Fact]
@@ -89,17 +89,17 @@ namespace Tests.UnitTests.Kli.Core
             
             var consoleConfiguration = DependencyResolverFromProgram.GetInstance<IConsoleConfiguration>();
             
-            // Act, When
+            var novoValorParaBackgroundColor = ++Console.BackgroundColor;
+            var novoValorParaForegroundColor = ++Console.ForegroundColor;
 
-            var novoValorParaForegroundColor = Console.ForegroundColor = Fixture.Create<ConsoleColor>();
-            var novoValorParaBackgroundColor = Console.BackgroundColor = Fixture.Create<ConsoleColor>();
+            // Act, When
             
             consoleConfiguration.SetDefaultColor();
 
             // Assert, Then
 
-            Console.ForegroundColor.Should().Be(ConsoleConfiguration.ForegroundColorDefault).And.NotBe(novoValorParaForegroundColor);
             Console.BackgroundColor.Should().Be(ConsoleConfiguration.BackgroundColorDefault).And.NotBe(novoValorParaBackgroundColor);
+            Console.ForegroundColor.Should().Be(ConsoleConfiguration.ForegroundColorDefault).And.NotBe(novoValorParaForegroundColor);
         }
     }
 }

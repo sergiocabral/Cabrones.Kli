@@ -82,7 +82,7 @@ namespace Kli.Core
         public void SetDefaultColor()
         {
             Console.BackgroundColor = BackgroundColorDefault;
-            Console.ForegroundColor = ForegroundColorBackup;
+            Console.ForegroundColor = ForegroundColorDefault;
         }
     }
 }
