@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Reflection;
 using FluentAssertions;
-using Kli.Common.IO;
 using Kli.Core;
 using Kli.Infrastructure;
+using Kli.IO;
+using LightInject;
 using Xunit;
 
 namespace Tests.UnitTests.Kli.Infrastructure
@@ -33,6 +34,33 @@ namespace Tests.UnitTests.Kli.Infrastructure
             // Assert, Then
             
             serviço.Should().NotBeNull();
+        }
+        
+        [Theory]
+        [InlineData(typeof(IOutputMarkers), typeof(PerContainerLifetime))]
+        [InlineData(typeof(IConsoleConfiguration), typeof(PerContainerLifetime))]
+        [InlineData(typeof(IEngine), typeof(PerContainerLifetime))]
+        [InlineData(typeof(IDependencyResolver), typeof(PerContainerLifetime))]
+        public void verifica_se_o_serviço_está_configurado_com_o_tempo_de_vida_correto(Type tipoDoServiço, Type tempoDeVida)
+        {
+            // Arrange, Given
+            
+            var métodoQueObtemOServiço = 
+                typeof(IDependencyResolver)
+                    .GetMethod("GetInstance", BindingFlags.Instance | BindingFlags.Public);
+            
+            var métodoQueObtemOServiçoEspecializadoParaOTipoDoServiço =
+                métodoQueObtemOServiço?.MakeGenericMethod(tipoDoServiço);
+            
+            // Act, When
+            
+            var serviço1 = métodoQueObtemOServiçoEspecializadoParaOTipoDoServiço?.Invoke(DependencyResolverFromProgram, null);
+            var serviço2 = métodoQueObtemOServiçoEspecializadoParaOTipoDoServiço?.Invoke(DependencyResolverFromProgram, null);
+
+            // Assert, Then
+
+            tempoDeVida.Should().Be(typeof(PerContainerLifetime));
+            serviço1.Should().BeSameAs(serviço2);
         }
     }
 }

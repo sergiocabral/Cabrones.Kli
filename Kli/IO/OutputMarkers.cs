@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 
-namespace Kli.Common.IO
+namespace Kli.IO
 {
     /// <summary>
     /// Marcadores para texto de saída para o usuário.

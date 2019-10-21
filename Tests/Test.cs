@@ -14,6 +14,7 @@ namespace Tests
         /// </summary>
         protected Test()
         {
+            Program.DependencyResolver = DependencyResolverFromProgram;
             DependencyResolverForTest.Reset();
         }
         

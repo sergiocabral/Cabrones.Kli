@@ -2,10 +2,10 @@
 using System.Diagnostics;
 using System.Linq;
 using FluentAssertions;
-using Kli.Common.IO;
+using Kli.IO;
 using Xunit;
 
-namespace Tests.UnitTests.Kli.Common.IO
+namespace Tests.UnitTests.Kli.IO
 {
     public class OutputMarkersTest: Test
     {

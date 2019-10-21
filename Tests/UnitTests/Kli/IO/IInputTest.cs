@@ -1,10 +1,10 @@
 ﻿using System.Reflection;
 using FluentAssertions;
-using Kli.Common.IO;
+using Kli.IO;
 using NSubstitute;
 using Xunit;
 
-namespace Tests.UnitTests.Kli.Common.IO
+namespace Tests.UnitTests.Kli.IO
 {
     // ReSharper disable once InconsistentNaming
     public class IInputTest: Test

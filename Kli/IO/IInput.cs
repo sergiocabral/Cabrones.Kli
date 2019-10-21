@@ -1,4 +1,4 @@
-﻿namespace Kli.Common.IO
+﻿namespace Kli.IO
 {
     /// <summary>
     /// Interface para classe que recebe entrada de dados do usuário.  
