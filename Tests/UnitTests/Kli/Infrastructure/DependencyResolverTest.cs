@@ -14,7 +14,6 @@ namespace Tests.UnitTests.Kli.Infrastructure
         [Theory]
         [InlineData(typeof(IOutputWriter))]
         [InlineData(typeof(IOutputMarkers))]
-        [InlineData(typeof(IConsoleConfiguration))]
         [InlineData(typeof(IEngine))]
         [InlineData(typeof(IDependencyResolver))]
         public void verifica_se_o_serviço_está_sendo_resolvido(Type tipoDoServiço)
@@ -40,7 +39,6 @@ namespace Tests.UnitTests.Kli.Infrastructure
         [Theory]
         [InlineData(typeof(IOutputWriter), typeof(PerContainerLifetime))]
         [InlineData(typeof(IOutputMarkers), typeof(PerContainerLifetime))]
-        [InlineData(typeof(IConsoleConfiguration), typeof(PerContainerLifetime))]
         [InlineData(typeof(IEngine), typeof(PerContainerLifetime))]
         [InlineData(typeof(IDependencyResolver), typeof(PerContainerLifetime))]
         public void verifica_se_o_serviço_está_configurado_com_o_tempo_de_vida_correto(Type tipoDoServiço, Type tempoDeVida)

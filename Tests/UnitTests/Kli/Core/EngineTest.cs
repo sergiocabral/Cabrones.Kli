@@ -1,5 +1,6 @@
-﻿using Kli.Core;
-using NSubstitute;
+﻿using System;
+using FluentAssertions;
+using Kli.Core;
 using Xunit;
 
 namespace Tests.UnitTests.Kli.Core
@@ -7,22 +8,19 @@ namespace Tests.UnitTests.Kli.Core
     public class EngineTest: Test
     {
         [Fact]
-        public void verifica_se_está_configurando_o_console_ao_iniciar_e_redefinindo_as_configurações_padrão_ao_sair()
+        public void método_principal_Run_deve_rodar_sem_error()
         {
             // Arrange, Given
 
-            var consoleConfiguration = Substitute.For<IConsoleConfiguration>();
-            var engine = new Engine(consoleConfiguration);
+            var engine = DependencyResolverFromProgram.GetInstance<IEngine>();
             
             // Act, When
             
-            engine.Run();
-            
-            // Assert, Then
+            Action run = () => engine.Run();
 
-            consoleConfiguration.Received(1).SaveCurrentColor();
-            consoleConfiguration.Received(1).SetDefaultColor();
-            consoleConfiguration.Received(1).RestoreColor();
+            // Assert, Then
+            
+            run.Should().NotThrow();
         }
     }
 }

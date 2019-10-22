@@ -39,7 +39,6 @@ namespace Kli.Infrastructure
         {
             _container.Register<IOutputWriter, OutputWriter>(new PerContainerLifetime());
             _container.Register<IOutputMarkers, OutputMarkers>(new PerContainerLifetime());
-            _container.Register<IConsoleConfiguration, ConsoleConfiguration>(new PerContainerLifetime());
             _container.Register<IEngine, Engine>(new PerContainerLifetime());
             _container.Register<IDependencyResolver, DependencyResolver>(new PerContainerLifetime());
         }
