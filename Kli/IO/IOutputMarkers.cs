@@ -39,6 +39,16 @@
         /// Lista de todos os caracteres especiais.
         /// </summary>
         string Markers { get; }
+        
+        /// <summary>
+        /// Lista de marcadores devidamente escapados para Regex.
+        /// </summary>
+        string MarkersEscapedForRegexJoined { get; }
+        
+        /// <summary>
+        /// Lista de marcadores devidamente escapados para Regex.
+        /// </summary>
+        string[] MarkersEscapedForRegexSeparated { get; }
 
         /// <summary>
         /// Escapa o texto para escrever no output mesmo os caracteres de marcadores.

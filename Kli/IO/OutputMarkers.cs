@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Kli.IO
 {
@@ -39,9 +41,14 @@ namespace Kli.IO
         public char Low { get; } = '#';
 
         /// <summary>
-        /// Cache para propriedade Markers
+        /// Cache para propriedade em geral.
         /// </summary>
-        private static string _markers = string.Empty;
+        private static readonly IDictionary<string, object> Cache = new Dictionary<string, object>();
+
+        /// <summary>
+        /// Chave identificador do valor de cache para a propriedade: Markers
+        /// </summary>
+        private const string CacheKeyMarkers = "Markers";
         
         /// <summary>
         /// Lista de todos os caracteres especiais.
@@ -50,18 +57,57 @@ namespace Kli.IO
         {
             get
             {
-                if (_markers.Length > 0) return _markers;
+                if (Cache.ContainsKey(CacheKeyMarkers)) 
+                    return (string)Cache[CacheKeyMarkers];
 
-                _markers = string.Join("", (
+                return (string) (Cache[CacheKeyMarkers] = string.Join("", (
                     from property in GetType().GetProperties()
                     where property.PropertyType == typeof(char)
                     select (char) (property.GetValue(this) ?? 0)
                     into ch
                     where ch != (char) 0
                     select ch
-                ).ToArray());
+                ).ToArray()));
+            }
+        }
 
-                return _markers;
+        /// <summary>
+        /// Chave identificador do valor de cache para a propriedade: Markers
+        /// </summary>
+        private const string CacheKeyMarkersEscapedForRegexJoined = "MarkersEscapedForRegexJoined";
+        
+        /// <summary>
+        /// Lista de marcadores devidamente escapados para Regex.
+        /// </summary>
+        public string MarkersEscapedForRegexJoined
+        {
+            get
+            {
+                if (Cache.ContainsKey(CacheKeyMarkersEscapedForRegexJoined))
+                    return (string) Cache[CacheKeyMarkersEscapedForRegexJoined];
+
+                return (string) (Cache[CacheKeyMarkersEscapedForRegexJoined] = 
+                    string.Join("", MarkersEscapedForRegexSeparated));
+            }
+        }
+
+        /// <summary>
+        /// Chave identificador do valor de cache para a propriedade: Markers
+        /// </summary>
+        private const string CacheKeyMarkersEscapedForRegexSeparated = "MarkersEscapedForRegexSeparated";
+        
+        /// <summary>
+        /// Lista de marcadores devidamente escapados para Regex.
+        /// </summary>
+        public string[] MarkersEscapedForRegexSeparated
+        {
+            get
+            {
+                if (Cache.ContainsKey(CacheKeyMarkersEscapedForRegexSeparated))
+                    return (string[]) Cache[CacheKeyMarkersEscapedForRegexSeparated];
+
+                return (string[]) (Cache[CacheKeyMarkersEscapedForRegexSeparated] =
+                    Markers.Select(marker => Regex.Escape(marker.ToString())).ToArray());
             }
         }
 
@@ -72,7 +118,9 @@ namespace Kli.IO
         /// <returns>Texto devidamente escapado.</returns>
         public string Escape(string text)
         {
-            if (string.IsNullOrWhiteSpace(text)) return text;
+            if (string.IsNullOrWhiteSpace(text) ||
+                !Regex.IsMatch(text, $"[{MarkersEscapedForRegexJoined}]", RegexOptions.Singleline)) 
+                return text;
             
             var result = new StringBuilder(text);
             foreach (var item in Markers)

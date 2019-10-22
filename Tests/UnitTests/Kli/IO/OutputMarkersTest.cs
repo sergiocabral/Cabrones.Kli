@@ -65,24 +65,39 @@ namespace Tests.UnitTests.Kli.IO
 
             var outputFormatter = DependencyResolverFromProgram.GetInstance<IOutputMarkers>();
 
-            Tuple<string, long> Consultar()
+            Tuple<T, long, T, long> Consultar<T>(Func<T> propriedade)
             {
                 var cronômetro = new Stopwatch();
+                
                 cronômetro.Start();
-                var valores = outputFormatter.Markers;
+                var valores1 = propriedade();
                 cronômetro.Stop();
-                return new Tuple<string, long>(valores, cronômetro.ElapsedTicks);
+                var tempo1 = cronômetro.ElapsedTicks;
+                
+                cronômetro.Restart();
+                var valores2 = propriedade();
+                cronômetro.Stop();
+                var tempo2 = cronômetro.ElapsedTicks;
+                
+                return new Tuple<T, long, T, long>(valores1, tempo1, valores2, tempo2);
             }
 
             // Act, When
 
-            var (valoresDaPrimeiraChamada, tempoDaPrimeiraChamada) = Consultar();
-            var (valoresDaSegundaChamada, tempoDaSegundaChamada) = Consultar();
+            var (markersValores1, markersTempo1, markersValores2, markersTempo2) = Consultar<string>(() => outputFormatter.Markers);
+            var (markersEscapedForRegexJoinedValores1, markersEscapedForRegexJoinedTempo1, markersEscapedForRegexJoinedValores2, markersEscapedForRegexJoinedTempo2) = Consultar<string>(() => outputFormatter.MarkersEscapedForRegexJoined);
+            var (markersEscapedForRegexSeparatedValores1, markersEscapedForRegexSeparatedTempo1, markersEscapedForRegexSeparatedValores2, markersEscapedForRegexSeparatedTempo2) = Consultar<string[]>(() => outputFormatter.MarkersEscapedForRegexSeparated);
 
             // Assert, Then
 
-            valoresDaPrimeiraChamada.Should().Be(valoresDaSegundaChamada);
-            tempoDaSegundaChamada.Should().BeLessThan(tempoDaPrimeiraChamada / 2);
+            markersValores2.Should().Be(markersValores1);
+            markersTempo2.Should().BeLessThan(markersTempo1 / 2);
+            
+            markersEscapedForRegexJoinedValores2.Should().Be(markersEscapedForRegexJoinedValores1);
+            markersEscapedForRegexJoinedTempo2.Should().BeLessThan(markersEscapedForRegexJoinedTempo1 / 2);
+
+            markersEscapedForRegexSeparatedValores2.Should().BeEquivalentTo(markersEscapedForRegexSeparatedValores1);
+            markersEscapedForRegexSeparatedTempo2.Should().BeLessThan(markersEscapedForRegexSeparatedTempo1 / 2);
         }
 
         [Fact]
@@ -108,7 +123,7 @@ namespace Tests.UnitTests.Kli.IO
         }
 
         [Fact]
-        public void verifica_se_texto_vazio_ou_em_branco_é_prontamente_retornada_sem_fazer_análise()
+        public void verifica_se_texto_vazio_ou_em_branco_ou_sem_marcadores_é_prontamente_retornada_sem_fazer_análise()
         {
             // Arrange, Given
 
@@ -125,14 +140,16 @@ namespace Tests.UnitTests.Kli.IO
                 
             // Act, When
 
-            var tempoParaTextoQualquer = TempoGastoParaEscapar(Fixture.Create<string>());
-            var tempoVazio = TempoGastoParaEscapar(string.Empty);
-            var tempoEmBranco = TempoGastoParaEscapar(" ");
+            var tempoParaTextoComMarcador = TempoGastoParaEscapar(outputFormatter.MarkersEscapedForRegexJoined);
+            var tempoParaTextoSemMarcador = TempoGastoParaEscapar(Fixture.Create<string>());
+            var tempoParaTextoVazio = TempoGastoParaEscapar(string.Empty);
+            var tempoParaTextoEmBranco = TempoGastoParaEscapar("          ");
             
             // Assert, Then
 
-            tempoVazio.Should().BeLessThan(tempoParaTextoQualquer / 2);
-            tempoEmBranco.Should().BeLessThan(tempoParaTextoQualquer / 2);
+            tempoParaTextoSemMarcador.Should().BeLessThan(tempoParaTextoComMarcador / 2);
+            tempoParaTextoVazio.Should().BeLessThan(tempoParaTextoComMarcador / 2);
+            tempoParaTextoEmBranco.Should().BeLessThan(tempoParaTextoComMarcador / 2);
         }
     }
 }
