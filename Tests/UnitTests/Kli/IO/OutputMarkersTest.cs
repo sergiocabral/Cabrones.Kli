@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using AutoFixture;
 using FluentAssertions;
 using Kli.IO;
 using Xunit;
@@ -81,7 +82,7 @@ namespace Tests.UnitTests.Kli.IO
             // Assert, Then
 
             valoresDaPrimeiraChamada.Should().Be(valoresDaSegundaChamada);
-            tempoDaSegundaChamada.Should().BeLessThan(tempoDaPrimeiraChamada);
+            tempoDaSegundaChamada.Should().BeLessThan(tempoDaPrimeiraChamada / 2);
         }
 
         [Fact]
@@ -104,6 +105,34 @@ namespace Tests.UnitTests.Kli.IO
 
                 textoEscapado.Should().Be($"marcador: {marcador}{marcador}.");
             }
+        }
+
+        [Fact]
+        public void verifica_se_texto_vazio_ou_em_branco_é_prontamente_retornada_sem_fazer_análise()
+        {
+            // Arrange, Given
+
+            var outputFormatter = DependencyResolverFromProgram.GetInstance<IOutputMarkers>();
+
+            long TempoGastoParaEscapar(string texto)
+            {
+                var cronômetro = new Stopwatch();
+                cronômetro.Start();
+                outputFormatter.Escape(texto);
+                cronômetro.Stop();
+                return cronômetro.ElapsedTicks;
+            }
+                
+            // Act, When
+
+            var tempoParaTextoQualquer = TempoGastoParaEscapar(Fixture.Create<string>());
+            var tempoVazio = TempoGastoParaEscapar(string.Empty);
+            var tempoEmBranco = TempoGastoParaEscapar(" ");
+            
+            // Assert, Then
+
+            tempoVazio.Should().BeLessThan(tempoParaTextoQualquer / 2);
+            tempoEmBranco.Should().BeLessThan(tempoParaTextoQualquer / 2);
         }
     }
 }

@@ -72,6 +72,8 @@ namespace Kli.IO
         /// <returns>Texto devidamente escapado.</returns>
         public string Escape(string text)
         {
+            if (string.IsNullOrWhiteSpace(text)) return text;
+            
             var result = new StringBuilder(text);
             foreach (var item in Markers)
             {
