@@ -4,11 +4,11 @@ using Xunit;
 
 namespace Tests.UnitTests.Kli.Infrastructure
 {
-    public class TestIDependencyResolver: Test
+    public class TestICache: Test
     {
         [Theory]
-        [InlineData(typeof(IDependencyResolver), "TService GetInstance<TService>()")]
-        [InlineData(typeof(IDependencyResolver), "Void Register<TService, TImplementation>()")]
+        [InlineData(typeof(ICache), "T Save<T>(String, T)")]
+        [InlineData(typeof(ICache), "T Read<T>(String)")]
         public void verifica_se_assinatura_de_métodos_existe(Type tipo, string assinaturaEsperada)
         {
             verifica_se_assinatura_de_método_existe(tipo, assinaturaEsperada);

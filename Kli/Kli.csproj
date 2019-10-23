@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <Version>4.0.0.328</Version>
+        <Version>4.0.0.345</Version>
         <Nullable>enable</Nullable>
         <TargetFramework>netcoreapp3.0</TargetFramework>
         <OutputType>Exe</OutputType>
