@@ -1,7 +1,7 @@
 ﻿namespace Kli.Infrastructure
 {
     /// <summary>
-    /// Cache simples para valores
+    /// Cache simples para valores.
     /// </summary>
     public interface ICache
     {

@@ -2,6 +2,9 @@
 
 namespace Kli.Infrastructure
 {
+    /// <summary>
+    /// Cache simples para valores.
+    /// </summary>
     public class Cache: ICache
     {
         /// <summary>

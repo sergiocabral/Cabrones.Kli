@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Kli.Infrastructure;
 
 namespace Kli.IO
 {
@@ -10,6 +10,20 @@ namespace Kli.IO
     /// </summary>
     public class OutputMarkers : IOutputMarkers
     {
+        /// <summary>
+        /// Cache simples para valores.
+        /// </summary>
+        private readonly ICache _cache;
+
+        /// <summary>
+        /// Construtor.
+        /// </summary>
+        /// <param name="cache">Cache simples para valores.</param>
+        public OutputMarkers(ICache cache)
+        {
+            _cache = cache;
+        }
+        
         /// <summary>
         /// Marcador de: erro
         /// </summary>
@@ -41,11 +55,6 @@ namespace Kli.IO
         public char Low { get; } = '#';
 
         /// <summary>
-        /// Cache para propriedade em geral.
-        /// </summary>
-        private static readonly IDictionary<string, object> Cache = new Dictionary<string, object>();
-
-        /// <summary>
         /// Chave identificador do valor de cache para a propriedade: Markers
         /// </summary>
         private const string CacheKeyMarkers = "Markers";
@@ -53,14 +62,10 @@ namespace Kli.IO
         /// <summary>
         /// Lista de todos os caracteres especiais.
         /// </summary>
-        public string Markers
-        {
-            get
-            {
-                if (Cache.ContainsKey(CacheKeyMarkers)) 
-                    return (string)Cache[CacheKeyMarkers];
-
-                return (string) (Cache[CacheKeyMarkers] = string.Join("", (
+        public string Markers =>
+            _cache.Read<string>(CacheKeyMarkers) ??
+            _cache.Save(CacheKeyMarkers,
+                string.Join("", (
                     from property in GetType().GetProperties()
                     where property.PropertyType == typeof(char)
                     select (char) (property.GetValue(this) ?? 0)
@@ -68,8 +73,6 @@ namespace Kli.IO
                     where ch != (char) 0
                     select ch
                 ).ToArray()));
-            }
-        }
 
         /// <summary>
         /// Chave identificador do valor de cache para a propriedade: Markers
@@ -79,17 +82,10 @@ namespace Kli.IO
         /// <summary>
         /// Lista de marcadores devidamente escapados para Regex.
         /// </summary>
-        public string MarkersEscapedForRegexJoined
-        {
-            get
-            {
-                if (Cache.ContainsKey(CacheKeyMarkersEscapedForRegexJoined))
-                    return (string) Cache[CacheKeyMarkersEscapedForRegexJoined];
-
-                return (string) (Cache[CacheKeyMarkersEscapedForRegexJoined] = 
-                    string.Join("", MarkersEscapedForRegexSeparated));
-            }
-        }
+        public string MarkersEscapedForRegexJoined =>
+            _cache.Read<string>(CacheKeyMarkersEscapedForRegexJoined) ??
+            _cache.Save(CacheKeyMarkersEscapedForRegexJoined,
+                string.Join("", MarkersEscapedForRegexSeparated));
 
         /// <summary>
         /// Chave identificador do valor de cache para a propriedade: Markers
@@ -99,17 +95,10 @@ namespace Kli.IO
         /// <summary>
         /// Lista de marcadores devidamente escapados para Regex.
         /// </summary>
-        public string[] MarkersEscapedForRegexSeparated
-        {
-            get
-            {
-                if (Cache.ContainsKey(CacheKeyMarkersEscapedForRegexSeparated))
-                    return (string[]) Cache[CacheKeyMarkersEscapedForRegexSeparated];
-
-                return (string[]) (Cache[CacheKeyMarkersEscapedForRegexSeparated] =
-                    Markers.Select(marker => Regex.Escape(marker.ToString())).ToArray());
-            }
-        }
+        public string[] MarkersEscapedForRegexSeparated =>
+            _cache.Read<string[]>(CacheKeyMarkersEscapedForRegexSeparated) ??
+            _cache.Save(CacheKeyMarkersEscapedForRegexSeparated,
+                Markers.Select(marker => Regex.Escape(marker.ToString())).ToArray());
 
         /// <summary>
         /// Escapa o texto para escrever no output mesmo os caracteres de marcadores.
