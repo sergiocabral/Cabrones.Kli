@@ -8,8 +8,15 @@ using Xunit;
 
 namespace Tests.UnitTests.Kli.IO
 {
-    public class OutputMarkersTest: Test
+    public class TestOutputMarkers: Test
     {
+        [Theory]
+        [InlineData(typeof(OutputMarkers), typeof(IOutputMarkers))]
+        public void verifica_se_classe_implementa_tipos(Type tipoDaClasse, Type tipoQueDeveSerImplementado)
+        {
+            verifica_se_classe_implementa_tipo(tipoDaClasse, tipoQueDeveSerImplementado);
+        }
+        
         [Fact]
         public void verifica_se_os_valores_dos_marcadores_estao_corretos()
         {
@@ -91,13 +98,13 @@ namespace Tests.UnitTests.Kli.IO
             // Assert, Then
 
             markersValores2.Should().Be(markersValores1);
-            markersTempo2.Should().BeLessThan(markersTempo1 / 2);
+            markersTempo2.Should().BeLessThan(markersTempo1);
             
             markersEscapedForRegexJoinedValores2.Should().Be(markersEscapedForRegexJoinedValores1);
-            markersEscapedForRegexJoinedTempo2.Should().BeLessThan(markersEscapedForRegexJoinedTempo1 / 2);
+            markersEscapedForRegexJoinedTempo2.Should().BeLessThan(markersEscapedForRegexJoinedTempo1);
 
             markersEscapedForRegexSeparatedValores2.Should().BeEquivalentTo(markersEscapedForRegexSeparatedValores1);
-            markersEscapedForRegexSeparatedTempo2.Should().BeLessThan(markersEscapedForRegexSeparatedTempo1 / 2);
+            markersEscapedForRegexSeparatedTempo2.Should().BeLessThan(markersEscapedForRegexSeparatedTempo1);
         }
 
         [Fact]
@@ -141,15 +148,15 @@ namespace Tests.UnitTests.Kli.IO
             // Act, When
 
             var tempoParaTextoComMarcador = TempoGastoParaEscapar(outputFormatter.MarkersEscapedForRegexJoined);
-            var tempoParaTextoSemMarcador = TempoGastoParaEscapar(Fixture.Create<string>());
+            var tempoParaTextoSemMarcador = TempoGastoParaEscapar(Fixture.Create<string>().Substring(0, 10));
             var tempoParaTextoVazio = TempoGastoParaEscapar(string.Empty);
             var tempoParaTextoEmBranco = TempoGastoParaEscapar("          ");
             
             // Assert, Then
 
-            tempoParaTextoSemMarcador.Should().BeLessThan(tempoParaTextoComMarcador / 2);
-            tempoParaTextoVazio.Should().BeLessThan(tempoParaTextoComMarcador / 2);
-            tempoParaTextoEmBranco.Should().BeLessThan(tempoParaTextoComMarcador / 2);
+            tempoParaTextoSemMarcador.Should().BeLessThan(tempoParaTextoComMarcador);
+            tempoParaTextoVazio.Should().BeLessThan(tempoParaTextoComMarcador);
+            tempoParaTextoEmBranco.Should().BeLessThan(tempoParaTextoComMarcador);
         }
     }
 }

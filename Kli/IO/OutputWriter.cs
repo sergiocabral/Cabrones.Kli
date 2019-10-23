@@ -14,15 +14,15 @@ namespace Kli.IO
         /// <summary>
         /// Marcadores para texto de saída para o usuário.
         /// </summary>
-        private readonly IOutputMarkers _markers;
+        private readonly IOutputMarkers _outputMarkers;
 
         /// <summary>
         /// Construtor.
         /// </summary>
-        /// <param name="markers">Marcadores para texto de saída para o usuário.</param>
-        public OutputWriter(IOutputMarkers markers)
+        /// <param name="outputMarkers">Marcadores para texto de saída para o usuário.</param>
+        public OutputWriter(IOutputMarkers outputMarkers)
         {
-            _markers = markers;
+            _outputMarkers = outputMarkers;
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace Kli.IO
             var parts = new List<Tuple<string, char>>();
 
             // Posições onde há marcadores.
-            var indexes = Regex.Matches(text, $"[{_markers.MarkersEscapedForRegexJoined}]", RegexOptions.Singleline).Select(a => a.Index).ToList();
+            var indexes = Regex.Matches(text, $"[{_outputMarkers.MarkersEscapedForRegexJoined}]", RegexOptions.Singleline).Select(a => a.Index).ToList();
 
             if (indexes.Count == 0)
             {
@@ -128,16 +128,16 @@ namespace Kli.IO
         private string RemoveAllMarkers(string text)
         {
             // Não possui marcadores, então sai.
-            if (!Regex.IsMatch(text, $@"[{_markers.MarkersEscapedForRegexJoined}]", RegexOptions.Singleline)) return text;
+            if (!Regex.IsMatch(text, $@"[{_outputMarkers.MarkersEscapedForRegexJoined}]", RegexOptions.Singleline)) return text;
 
-            for (var i = 0; i < _markers.Markers.Length; i++)
+            for (var i = 0; i < _outputMarkers.Markers.Length; i++)
             {
-                var marker = _markers.Markers[i];
+                var marker = _outputMarkers.Markers[i];
 
                 // Não tem esse marcador, passa para o próximo.
                 if (!text.Contains(marker)) continue;
 
-                var markerEscaped = _markers.MarkersEscapedForRegexSeparated[i];
+                var markerEscaped = _outputMarkers.MarkersEscapedForRegexSeparated[i];
 
                 // Remove marcador simples como _aqui_ dessa forma.
                 text = Regex.Replace(text, $@"(?<!{markerEscaped})({markerEscaped})(?!{markerEscaped})", string.Empty, RegexOptions.Singleline);

@@ -17,6 +17,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Kli\Kli.csproj" />
+        <ProjectReference Include="..\Kli.Output.Console\Kli.Output.Console.csproj" />
     </ItemGroup>
 
 </Project>

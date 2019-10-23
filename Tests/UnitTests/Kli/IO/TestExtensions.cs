@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Tests.UnitTests.Kli.IO
 {
-    public class ExtensionsTest: Test
+    public class TestExtensions: Test
     {
         [Fact]
         public void verifica_se_método_EscapeForOutput_faz_uso_classe_OutputMarkers()

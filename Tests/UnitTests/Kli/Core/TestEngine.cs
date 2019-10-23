@@ -5,10 +5,17 @@ using Xunit;
 
 namespace Tests.UnitTests.Kli.Core
 {
-    public class EngineTest: Test
+    public class TestEngine: Test
     {
+        [Theory]
+        [InlineData(typeof(Engine), typeof(IEngine))]
+        public void verifica_se_classe_implementa_tipos(Type tipoDaClasse, Type tipoQueDeveSerImplementado)
+        {
+            verifica_se_classe_implementa_tipo(tipoDaClasse, tipoQueDeveSerImplementado);
+        }
+        
         [Fact]
-        public void método_principal_Run_deve_rodar_sem_error()
+        public void método_principal_Run_deve_rodar_sem_erros()
         {
             // Arrange, Given
 

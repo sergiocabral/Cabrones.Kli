@@ -2,6 +2,9 @@
 
 namespace Kli.IO
 {
+    /// <summary>
+    /// Interface para classe capaz de escrever o texto com a devida formatação.
+    /// </summary>
     public interface IOutputWriter
     {
         /// <summary>

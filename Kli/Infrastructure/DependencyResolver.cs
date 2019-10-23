@@ -37,10 +37,20 @@ namespace Kli.Infrastructure
         /// </summary>
         private void RegisterAssemblies()
         {
-            _container.Register<IOutputWriter, OutputWriter>(new PerContainerLifetime());
-            _container.Register<IOutputMarkers, OutputMarkers>(new PerContainerLifetime());
-            _container.Register<IEngine, Engine>(new PerContainerLifetime());
-            _container.Register<IDependencyResolver, DependencyResolver>(new PerContainerLifetime());
+            Register<IOutputWriter, OutputWriter>();
+            Register<IOutputMarkers, OutputMarkers>();
+            Register<IEngine, Engine>();
+            Register<IDependencyResolver, DependencyResolver>();
+        }
+
+        /// <summary>
+        /// Registrar um serviço com sua respectiva implementação.
+        /// </summary>
+        /// <typeparam name="TService">Serviço.</typeparam>
+        /// <typeparam name="TImplementation">Implementação.</typeparam>
+        public void Register<TService, TImplementation>() where TImplementation : TService where TService : class
+        {
+            _container.Register<TService, TImplementation>(new PerContainerLifetime());
         }
     }
 }

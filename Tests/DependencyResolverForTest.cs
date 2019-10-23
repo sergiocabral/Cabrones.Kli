@@ -18,11 +18,19 @@ namespace Tests
         /// <returns>Instância encontrada.</returns>
         public TService GetInstance<TService>() where TService : class
         {
-            if (!_instances.ContainsKey(typeof(TService)))
-            {
-                _instances.Add(typeof(TService), Substitute.For<TService>());
-            }
+            Register<TService, TService>();
             return (TService)_instances[typeof(TService)];
+        }
+
+        /// <summary>
+        /// Registrar um serviço com sua respectiva implementação.
+        /// </summary>
+        /// <typeparam name="TService"></typeparam>
+        /// <typeparam name="TImplementation"></typeparam>
+        public void Register<TService, TImplementation>() where TService : class where TImplementation : TService
+        {
+            if (_instances.ContainsKey(typeof(TService))) return;
+            _instances.Add(typeof(TService), Substitute.For<TService>());
         }
 
         /// <summary>

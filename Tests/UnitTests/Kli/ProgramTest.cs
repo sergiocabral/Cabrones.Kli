@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using FluentAssertions;
+﻿using System;
 using Kli;
 using Kli.Core;
 using NSubstitute;
@@ -9,22 +8,14 @@ namespace Tests.UnitTests.Kli
 {
     public class ProgramTest: Test
     {
-        [Fact]
-        public void sendo_um_programa_console_deve_existir_o_metodo_estático_main()
+        [Theory]
+        [InlineData(typeof(Program), "IDependencyResolver get_DependencyResolver()")]
+        [InlineData(typeof(Program), "Void Main()")]
+        public void verifica_se_assinatura_de_métodos_existe(Type tipo, string assinaturaEsperada)
         {
-            // Arrange, Given
-            
-            var tipoDaClassQueContemOMétodoMain = typeof(Program);
-
-            // Act, When
-            
-            var métodoMain = tipoDaClassQueContemOMétodoMain.GetMethod("Main", BindingFlags.Static | BindingFlags.Public);
-
-            // Assert, Then
-            
-            métodoMain.Should().NotBeNull();
+            verifica_se_assinatura_de_método_existe(tipo, assinaturaEsperada);
         }
-
+        
         [Fact]
         public void verifica_se_o_programa_chama_a_classe_com_a_lógica_principal()
         {
@@ -40,6 +31,5 @@ namespace Tests.UnitTests.Kli
 
             dependencyResolver.GetInstance<IEngine>().Received(1).Run();
         }
-
     }
 }
