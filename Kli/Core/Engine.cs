@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Kli.IO;
 
 namespace Kli.Core
 {
@@ -7,13 +7,27 @@ namespace Kli.Core
     /// </summary>
     public class Engine: IEngine
     {
+        /// <summary>
+        /// Define as cores padrão no console.
+        /// </summary>
+        private readonly IConsole _console;
+
+        /// <summary>
+        /// Construtor.
+        /// </summary>
+        /// <param name="console">Define as cores padrão no console.</param>
+        public Engine(IConsole console)
+        {
+            _console = console;
+        }
+        
         public void Run()
         {
-            Console.ResetColor();
+            _console.ResetColor();
             
-            Console.WriteLine("Hello!!!");
+            _console.WriteLine("Hello!!!");
             
-            Console.ResetColor();
+            _console.ResetColor();
         }
     }
 }

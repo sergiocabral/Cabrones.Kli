@@ -20,8 +20,9 @@ namespace Tests.UnitTests.Kli.Infrastructure
         [Theory]
         [InlineData(typeof(IOutputWriter))]
         [InlineData(typeof(IOutputMarkers))]
-        [InlineData(typeof(ICache))]
         [InlineData(typeof(IEngine))]
+        [InlineData(typeof(ICache))]
+        [InlineData(typeof(IConsole))]
         [InlineData(typeof(IDependencyResolver))]
         public void verifica_se_o_serviço_está_sendo_resolvido(Type tipoDoServiço)
         {

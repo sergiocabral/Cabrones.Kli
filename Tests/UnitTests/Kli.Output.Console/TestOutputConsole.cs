@@ -11,7 +11,8 @@ namespace Tests.UnitTests.Kli.Output.Console
     {
         public TestOutputConsole()
         {
-            DependencyResolverFromProgram.Register<IOutputConsole, OutputConsole>();    
+            DependencyResolverFromProgram.Register<IOutputConsole, OutputConsole>();
+            DependencyResolverFromProgram.Register<IOutputMarkersToConsoleColor, OutputMarkersToConsoleColor>();
         }
         
         [Theory]
@@ -29,7 +30,8 @@ namespace Tests.UnitTests.Kli.Output.Console
             var outputWriter = Substitute.For<IOutputWriter>();
             var outputConsole = new OutputConsole(
                 outputWriter,
-                Substitute.For<IOutputMarkersToConsoleColor>());
+                Substitute.For<IOutputMarkersToConsoleColor>(),
+                Substitute.For<IConsole>());
             var textoDeExemplo = Fixture.Create<string>();
             
             // Act, When
@@ -51,7 +53,8 @@ namespace Tests.UnitTests.Kli.Output.Console
             var outputMarkersToConsoleColor = Substitute.For<IOutputMarkersToConsoleColor>();
             var outputConsole = new OutputConsole(
                 DependencyResolverFromProgram.GetInstance<IOutputWriter>(),
-                outputMarkersToConsoleColor);
+                outputMarkersToConsoleColor,
+                Substitute.For<IConsole>());
             
             var marcadorDeExemplo = Fixture.Create<char>();
             
@@ -67,6 +70,63 @@ namespace Tests.UnitTests.Kli.Output.Console
             // Assert, Then
 
             outputMarkersToConsoleColor.Received(1).Convert(marcadorDeExemplo);
+        }
+
+        [Fact]
+        public void o_método_WriteToConsole_deve_escrever_no_console_em_cores_correspondentes_aos_marcadores()
+        {
+            // Arrange, Given
+
+            var outputMarkers = DependencyResolverFromProgram.GetInstance<IOutputMarkers>();
+            var outputMarkersToConsoleColor = DependencyResolverFromProgram.GetInstance<IOutputMarkersToConsoleColor>();
+            var console = Substitute.For<IConsole>();
+            var outputConsole = new OutputConsole(
+                DependencyResolverFromProgram.GetInstance<IOutputWriter>(),
+                outputMarkersToConsoleColor,
+                console);
+
+            foreach (var marcador in outputMarkers.Markers)
+            {
+                console.ClearReceivedCalls();
+                    
+                // Act, When
+
+                var (esperadoParaForeground, esperadoParaBackground) = outputMarkersToConsoleColor.Convert(marcador);
+                outputConsole.WriteToConsole(Fixture.Create<string>(), marcador);
+            
+                // Assert, Then
+
+                console.Received(1).BackgroundColor = esperadoParaBackground;
+                console.Received(1).ForegroundColor = esperadoParaForeground;
+            }
+        }
+
+        [Fact]
+        public void o_método_WriteToConsole_deve_usar_IConsole_para_escrever_de_fato_no_console()
+        {
+            // Arrange, Given
+
+            var console = Substitute.For<IConsole>();
+            var outputMarkersToConsoleColor = Substitute.For<IOutputMarkersToConsoleColor>();
+            var outputConsole = new OutputConsole(
+                DependencyResolverFromProgram.GetInstance<IOutputWriter>(),
+                outputMarkersToConsoleColor,
+                console);
+            
+            outputMarkersToConsoleColor.Convert((char)0).Returns(
+                info => new Tuple<ConsoleColor, ConsoleColor>(
+                    Fixture.Create<ConsoleColor>(),
+                    Fixture.Create<ConsoleColor>()));
+            
+            var textoDeExemplo = Fixture.Create<string>();
+            
+            // Act, When
+
+            outputConsole.WriteToConsole(textoDeExemplo);
+            
+            // Assert, Then
+
+            console.Received(1).Write(textoDeExemplo);
         }
     }
 }

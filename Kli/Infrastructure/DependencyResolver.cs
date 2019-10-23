@@ -39,8 +39,9 @@ namespace Kli.Infrastructure
         {
             Register<IOutputWriter, OutputWriter>();
             Register<IOutputMarkers, OutputMarkers>();
-            Register<ICache, Cache>();
             Register<IEngine, Engine>();
+            Register<ICache, Cache>();
+            Register<IConsole, Console>();
             Register<IDependencyResolver, DependencyResolver>();
         }
 
