@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using AutoFixture;
 using FluentAssertions;
-using FluentAssertions.Common;
 using Kli;
 using Kli.Infrastructure;
+using NSubstitute;
 
 namespace Tests
 {
@@ -40,7 +41,7 @@ namespace Tests
         /// Resolvedor de dependências ajustado para atender os testes com Substitute.
         /// </summary>
         protected static DependencyResolverForTest DependencyResolverForTest { get; } = new DependencyResolverForTest();
-
+        
         /// <summary>
         /// Método para testar se um tipo implementa determinada classe ou interface.
         /// </summary>
@@ -52,9 +53,11 @@ namespace Tests
             
             // Act, When
 
+            var implementa = tipoQueDeveSerImplementado.IsAssignableFrom(tipoDaClasse);
+
             // Assert, Then
-            
-            tipoDaClasse.Implements(tipoQueDeveSerImplementado);
+
+            implementa.Should().BeTrue();
         }
         
         /// <summary>
@@ -117,6 +120,68 @@ namespace Tests
             // Assert, Then
 
             assinaturasEncontrada.Should().Contain(assinaturaEsperada);
+        }
+        
+        /// <summary>
+        /// Verifica se o cache está sendo usado ao consulta uma propriedade.
+        /// A evidência é o tempo menor na segunda consulta.
+        /// </summary>
+        /// <param name="tipo">Tipo.</param>
+        /// <param name="nomeDePropriedade">Nome da propriedade.</param>
+        protected static void verifica_se_o_cache_está_sendo_usado_na_consulta(Type tipo, string nomeDePropriedade)
+        {
+            // Arrange, Given
+            
+            var métodoGetInstance =
+                DependencyResolverFromProgram.GetType()
+                    .GetMethod("GetInstance", 
+                        BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static) ??
+                Substitute.For<MethodInfo>();
+            var métodoGetInstanceGeneric = métodoGetInstance.MakeGenericMethod(tipo);
+            var instânciaDoTipo = métodoGetInstanceGeneric.Invoke(DependencyResolverFromProgram, new object[0]);
+            var propriedade = tipo.GetProperty(nomeDePropriedade,
+                BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
+           
+            // Act, When
+
+            var (tempo1, valor1, tempo2, valor2) = cronometrar_consulta_dupla(() => propriedade?.GetValue(instânciaDoTipo));
+
+            // Assert, Then
+            
+            valor2.Should().BeEquivalentTo(valor1);
+            tempo2.Should().BeLessThan(tempo1);
+        }
+
+        /// <summary>
+        /// Faz uma consulta qualquer e cronometra o tempo.
+        /// </summary>
+        /// <param name="consulta">Função de consulta.</param>
+        /// <typeparam name="T">Tipo de retorno.</typeparam>
+        /// <returns>Tempo e valores.</returns>
+        protected static Tuple<long, T> cronometrar_consulta<T>(Func<T> consulta)
+        {
+            var cronômetro = new Stopwatch();
+                
+            cronômetro.Start();
+            var valores = consulta();
+            cronômetro.Stop();
+            var tempo = cronômetro.ElapsedTicks;
+            
+            return new Tuple<long, T>(tempo, valores);
+        }
+        
+        /// <summary>
+        /// Faz uma consulta qualquer e cronometra o tempo. Executa duas vezes.
+        /// </summary>
+        /// <param name="consulta">Função de consulta.</param>
+        /// <typeparam name="T">Tipo de retorno.</typeparam>
+        /// <returns>Tempo e valores duas vezes.</returns>
+        private static Tuple<long, T, long, T> cronometrar_consulta_dupla<T>(Func<T> consulta)
+        {
+            var (tempo1, valores1) = cronometrar_consulta(consulta);
+            var (tempo2, valores2) = cronometrar_consulta(consulta);
+            
+            return new Tuple<long, T, long, T>(tempo1, valores1, tempo2, valores2);
         }
     }
 }

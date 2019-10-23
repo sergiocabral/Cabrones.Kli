@@ -30,8 +30,8 @@ namespace Tests.UnitTests.Kli.IO
         {
             // Arrange, Given
 
-            Program.DependencyResolver = DependencyResolverFromProgram;
-            var outputFormatter = DependencyResolverFromProgram.GetInstance<IOutputMarkers>();
+            var dependencyResolver = Program.DependencyResolver = DependencyResolverFromProgram;
+            var outputFormatter = dependencyResolver.GetInstance<IOutputMarkers>();
 
             foreach (var marcador in outputFormatter.Markers)
             {

@@ -1,8 +1,8 @@
 ﻿using System;
-using Kli.IO;
+using Kli.Wrappers;
 using Xunit;
 
-namespace Tests.UnitTests.Kli.IO
+namespace Tests.UnitTests.Kli.Wrappers
 {
     public class TestIConsole: Test
     {

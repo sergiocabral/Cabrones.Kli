@@ -26,8 +26,8 @@ namespace Tests.UnitTests.Kli.Infrastructure
 
             // Act, When
 
-            var valorRetornado = cache.Save(identificador, valorGravado);
-            var valorLido = cache.Read<string>(identificador);
+            var valorRetornado = cache.Set(identificador, valorGravado);
+            var valorLido = cache.Get<string>(identificador);
 
             // Assert, Then
             
@@ -46,9 +46,9 @@ namespace Tests.UnitTests.Kli.Infrastructure
 
             // Act, When
 
-            cache.Save(identificador, valorGravado);
-            cache.Save<string>(identificador, null);
-            var valorLido = cache.Read<string>(identificador);
+            cache.Set(identificador, valorGravado);
+            cache.Set<string>(identificador, null);
+            var valorLido = cache.Get<string>(identificador);
 
             // Assert, Then
 
@@ -71,7 +71,7 @@ namespace Tests.UnitTests.Kli.Infrastructure
 
             // Act, When
 
-            var método = cache.GetType().GetMethod("Read", BindingFlags.Instance | BindingFlags.Public) ?? Substitute.For<MethodInfo>();
+            var método = cache.GetType().GetMethod("Get", BindingFlags.Instance | BindingFlags.Public) ?? Substitute.For<MethodInfo>();
             var métodoComGeneric = método.MakeGenericMethod(tipo);
 
             var valorLido = métodoComGeneric.Invoke(cache, new object[] { identificador });
@@ -79,6 +79,26 @@ namespace Tests.UnitTests.Kli.Infrastructure
             // Assert, Then
 
             valorLido.Should().Be(tipo.IsValueType ? Activator.CreateInstance(tipo) : null);
+        }
+        
+        [Fact]
+        public void verifica_se_cache_está_sendo_limpo()
+        {
+            // Arrange, Given
+
+            var cache = DependencyResolverFromProgram.GetInstance<ICache>();
+            var identificador = Fixture.Create<string>();
+            var valor = Fixture.Create<string>();
+
+            // Act, When
+
+            cache.Set(identificador, valor);
+            cache.Clear();
+            var valorLido = cache.Get<string>(identificador);
+
+            // Assert, Then
+
+            valorLido.Should().BeNull();
         }
     }
 }

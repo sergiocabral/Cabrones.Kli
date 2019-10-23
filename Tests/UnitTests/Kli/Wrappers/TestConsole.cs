@@ -1,11 +1,11 @@
 ﻿using System;
 using AutoFixture;
 using FluentAssertions;
-using Kli.IO;
+using Kli.Wrappers;
 using Xunit;
-using Console = System.Console;
+using Console = Kli.Wrappers.Console;
 
-namespace Tests.UnitTests.Kli.IO
+namespace Tests.UnitTests.Kli.Wrappers
 {
     public class TestConsole: Test
     {

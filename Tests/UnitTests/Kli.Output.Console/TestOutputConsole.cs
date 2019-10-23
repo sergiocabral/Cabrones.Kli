@@ -1,7 +1,9 @@
 ﻿using System;
 using AutoFixture;
+using FluentAssertions;
 using Kli.IO;
 using Kli.Output.Console;
+using Kli.Wrappers;
 using NSubstitute;
 using Xunit;
 
@@ -29,7 +31,7 @@ namespace Tests.UnitTests.Kli.Output.Console
             var outputConsole = new OutputConsole(
                 outputWriter,
                 Substitute.For<IOutputMarkersToConsoleColor>(),
-                Substitute.For<IConsole>());
+                Substitute.For<IConsole>()) as IOutputConsole;
             var textoDeExemplo = Fixture.Create<string>();
             
             // Act, When
@@ -52,14 +54,12 @@ namespace Tests.UnitTests.Kli.Output.Console
             var outputConsole = new OutputConsole(
                 DependencyResolverFromProgram.GetInstance<IOutputWriter>(),
                 outputMarkersToConsoleColor,
-                Substitute.For<IConsole>());
+                Substitute.For<IConsole>()) as IOutputConsole;
             
             var marcadorDeExemplo = Fixture.Create<char>();
             
             outputMarkersToConsoleColor.Convert(marcadorDeExemplo).Returns(
-                info => new Tuple<ConsoleColor, ConsoleColor>(
-                    Fixture.Create<ConsoleColor>(),
-                    Fixture.Create<ConsoleColor>()));
+                info => Fixture.Create<Tuple<ConsoleColor, ConsoleColor>>());
             
             // Act, When
 
@@ -81,7 +81,7 @@ namespace Tests.UnitTests.Kli.Output.Console
             var outputConsole = new OutputConsole(
                 DependencyResolverFromProgram.GetInstance<IOutputWriter>(),
                 outputMarkersToConsoleColor,
-                console);
+                console) as IOutputConsole;
 
             foreach (var marcador in outputMarkers.Markers)
             {
@@ -109,12 +109,10 @@ namespace Tests.UnitTests.Kli.Output.Console
             var outputConsole = new OutputConsole(
                 DependencyResolverFromProgram.GetInstance<IOutputWriter>(),
                 outputMarkersToConsoleColor,
-                console);
+                console) as IOutputConsole;
             
             outputMarkersToConsoleColor.Convert((char)0).Returns(
-                info => new Tuple<ConsoleColor, ConsoleColor>(
-                    Fixture.Create<ConsoleColor>(),
-                    Fixture.Create<ConsoleColor>()));
+                info => Fixture.Create<Tuple<ConsoleColor, ConsoleColor>>());
             
             var textoDeExemplo = Fixture.Create<string>();
             
@@ -125,6 +123,27 @@ namespace Tests.UnitTests.Kli.Output.Console
             // Assert, Then
 
             console.Received(1).Write(textoDeExemplo);
+        }
+        
+        [Fact]
+        public void os_métodos_de_escrita_devem_retornar_uma_auto_referência()
+        {
+            // Arrange, Given
+
+            var outputConsole = new OutputConsole(
+                Substitute.For<IOutputWriter>(),
+                Substitute.For<IOutputMarkersToConsoleColor>(),
+                Substitute.For<IConsole>()) as IOutputConsole;
+            
+            // Act, When
+
+            var retornoDeWrite = outputConsole.Write(null);
+            var retornoDeWriteLine = outputConsole.WriteLine(null);
+            
+            // Assert, Then
+
+            retornoDeWrite.Should().BeSameAs(outputConsole);
+            retornoDeWriteLine.Should().BeSameAs(outputConsole);
         }
     }
 }

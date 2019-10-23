@@ -1,5 +1,6 @@
 ﻿using System;
 using Kli.IO;
+using Kli.Wrappers;
 
 namespace Kli.Output.Console
 {

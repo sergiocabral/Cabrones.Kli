@@ -2,8 +2,10 @@
 using System.Reflection;
 using FluentAssertions;
 using Kli.Core;
+using Kli.i18n;
 using Kli.Infrastructure;
 using Kli.IO;
+using Kli.Wrappers;
 using Xunit;
 
 namespace Tests.UnitTests.Kli.Infrastructure
@@ -21,6 +23,8 @@ namespace Tests.UnitTests.Kli.Infrastructure
         [InlineData(typeof(IEngine))]
         [InlineData(typeof(ICache))]
         [InlineData(typeof(IConsole))]
+        [InlineData(typeof(IEnvironment))]
+        [InlineData(typeof(ILanguage))]
         [InlineData(typeof(IDependencyResolver))]
         public void verifica_se_o_serviço_está_sendo_resolvido(Type tipoDoServiço)
         {

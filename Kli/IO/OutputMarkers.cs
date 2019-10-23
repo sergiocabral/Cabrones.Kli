@@ -57,14 +57,14 @@ namespace Kli.IO
         /// <summary>
         /// Chave identificador do valor de cache para a propriedade: Markers
         /// </summary>
-        private const string CacheKeyMarkers = "Markers";
+        private const string CacheKeyMarkers = "OutputMarkers.OutputMarkersMarkers";
         
         /// <summary>
         /// Lista de todos os caracteres especiais.
         /// </summary>
         public string Markers =>
-            _cache.Read<string>(CacheKeyMarkers) ??
-            _cache.Save(CacheKeyMarkers,
+            _cache.Get<string>(CacheKeyMarkers) ??
+            _cache.Set(CacheKeyMarkers,
                 string.Join("", (
                     from property in GetType().GetProperties()
                     where property.PropertyType == typeof(char)
@@ -77,27 +77,27 @@ namespace Kli.IO
         /// <summary>
         /// Chave identificador do valor de cache para a propriedade: Markers
         /// </summary>
-        private const string CacheKeyMarkersEscapedForRegexJoined = "MarkersEscapedForRegexJoined";
+        private const string CacheKeyMarkersEscapedForRegexJoined = "OutputMarkers.MarkersEscapedForRegexJoined";
         
         /// <summary>
         /// Lista de marcadores devidamente escapados para Regex.
         /// </summary>
         public string MarkersEscapedForRegexJoined =>
-            _cache.Read<string>(CacheKeyMarkersEscapedForRegexJoined) ??
-            _cache.Save(CacheKeyMarkersEscapedForRegexJoined,
+            _cache.Get<string>(CacheKeyMarkersEscapedForRegexJoined) ??
+            _cache.Set(CacheKeyMarkersEscapedForRegexJoined,
                 string.Join("", MarkersEscapedForRegexSeparated));
 
         /// <summary>
         /// Chave identificador do valor de cache para a propriedade: Markers
         /// </summary>
-        private const string CacheKeyMarkersEscapedForRegexSeparated = "MarkersEscapedForRegexSeparated";
+        private const string CacheKeyMarkersEscapedForRegexSeparated = "OutputMarkers.MarkersEscapedForRegexSeparated";
         
         /// <summary>
         /// Lista de marcadores devidamente escapados para Regex.
         /// </summary>
         public string[] MarkersEscapedForRegexSeparated =>
-            _cache.Read<string[]>(CacheKeyMarkersEscapedForRegexSeparated) ??
-            _cache.Save(CacheKeyMarkersEscapedForRegexSeparated,
+            _cache.Get<string[]>(CacheKeyMarkersEscapedForRegexSeparated) ??
+            _cache.Set(CacheKeyMarkersEscapedForRegexSeparated,
                 Markers.Select(marker => Regex.Escape(marker.ToString())).ToArray());
 
         /// <summary>

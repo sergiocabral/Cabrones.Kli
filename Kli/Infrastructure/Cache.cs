@@ -19,7 +19,7 @@ namespace Kli.Infrastructure
         /// <param name="value">Valor.</param>
         /// <typeparam name="T">Tipo de valor.</typeparam>
         /// <returns>O mesmo valor é retornado.</returns>
-        public T Save<T>(string key, T value)
+        public T Set<T>(string key, T value)
         {
             if (value == null)
             {
@@ -41,10 +41,15 @@ namespace Kli.Infrastructure
         /// <param name="key">Identificador.</param>
         /// <typeparam name="T">Tipo de valor.</typeparam>
         /// <returns>Valor.</returns>
-        public T Read<T>(string key)
+        public T Get<T>(string key)
         {
             if (_cache.ContainsKey(key)) return (T) _cache[key];
             return default !;
         }
+
+        /// <summary>
+        /// Limpa os valores do cache.
+        /// </summary>
+        public void Clear() => _cache.Clear();
     }
 }

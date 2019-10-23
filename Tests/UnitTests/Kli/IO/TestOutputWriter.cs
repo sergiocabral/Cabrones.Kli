@@ -39,19 +39,20 @@ namespace Tests.UnitTests.Kli.IO
         }
         
         [Fact]
-        public void o_parse_não_precisa_fazer_análise_de_texto_vazio()
+        public void o_parse_não_precisa_fazer_análise_de_texto_vazio_ou_nulo()
         {
             // Arrange, Given
 
             var outputWriter = DependencyResolverFromProgram.GetInstance<IOutputWriter>();
-            var textoVazioEnviado = string.Empty;
             var escritorIgnorandoMarcadores = Substitute.For<Action<string>>();
             var escritorConsiderandoMarcadores = Substitute.For<Action<string, char>>();
             
             // Act, When
 
-            outputWriter.Parse(textoVazioEnviado, escritorIgnorandoMarcadores);
-            outputWriter.Parse(textoVazioEnviado, escritorConsiderandoMarcadores);
+            outputWriter.Parse(string.Empty, escritorIgnorandoMarcadores);
+            outputWriter.Parse(null, escritorIgnorandoMarcadores);
+            outputWriter.Parse(string.Empty, escritorConsiderandoMarcadores);
+            outputWriter.Parse(null, escritorConsiderandoMarcadores);
                
             // Assert, Then
 

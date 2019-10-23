@@ -32,7 +32,7 @@ namespace Kli.IO
         /// <param name="writer">Recebe o texto para escrita. Informa o marcador a ser aplicado.</param>
         public void Parse(string text, Action<string, char> writer)
         {
-            if (text == string.Empty) return;
+            if (string.IsNullOrEmpty(text)) return;
             
             text = NormalizeNewLine(text);
             foreach (var (part, mark) in ExtractParts(text))
@@ -48,7 +48,7 @@ namespace Kli.IO
         /// <param name="writer">Recebe o texto para escrita.</param>
         public void Parse(string text, Action<string> writer)
         {
-            if (text == string.Empty) return;
+            if (string.IsNullOrEmpty(text)) return;
             
             text = NormalizeNewLine(text);
             text = RemoveAllMarkers(text);

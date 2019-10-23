@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Kli.IO
+namespace Kli.Wrappers
 {
     /// <summary>
     /// Facade para System.Console.

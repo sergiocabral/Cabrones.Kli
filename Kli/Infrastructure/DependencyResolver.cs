@@ -1,5 +1,7 @@
 ﻿using Kli.Core;
+using Kli.i18n;
 using Kli.IO;
+using Kli.Wrappers;
 using LightInject;
 
 namespace Kli.Infrastructure
@@ -41,7 +43,9 @@ namespace Kli.Infrastructure
             Register<IOutputMarkers, OutputMarkers>();
             Register<IEngine, Engine>();
             Register<ICache, Cache>();
+            Register<ILanguage, Language>();
             Register<IConsole, Console>();
+            Register<IEnvironment, Environment>();
             Register<IDependencyResolver, DependencyResolver>();
         }
 

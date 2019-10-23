@@ -12,7 +12,7 @@
         /// <param name="value">Valor.</param>
         /// <typeparam name="T">Tipo de valor.</typeparam>
         /// <returns>O mesmo valor é retornado.</returns>
-        T Save<T>(string key, T value);
+        T Set<T>(string key, T value);
 
         /// <summary>
         /// LÊ um valor do cache.
@@ -20,6 +20,11 @@
         /// <param name="key">Identificador.</param>
         /// <typeparam name="T">Tipo de valor.</typeparam>
         /// <returns>Valor.</returns>
-        T Read<T>(string key);
+        T Get<T>(string key);
+
+        /// <summary>
+        /// Limpa os valores do cache.
+        /// </summary>
+        void Clear();
     }
 }

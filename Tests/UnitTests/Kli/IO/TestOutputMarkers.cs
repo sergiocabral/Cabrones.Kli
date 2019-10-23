@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
-using AutoFixture;
 using FluentAssertions;
 using Kli.IO;
 using Xunit;
@@ -14,6 +12,13 @@ namespace Tests.UnitTests.Kli.IO
         [InlineData(typeof(OutputMarkers), typeof(IOutputMarkers))]
         public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, Type tipoQueDeveSerImplementado) =>
             verifica_se_classe_implementa_o_tipo(tipoDaClasse, tipoQueDeveSerImplementado);
+        
+        [Theory]
+        [InlineData(typeof(IOutputMarkers), "Markers")]
+        [InlineData(typeof(IOutputMarkers), "MarkersEscapedForRegexJoined")]
+        [InlineData(typeof(IOutputMarkers), "MarkersEscapedForRegexSeparated")]
+        public void verifica_se_o_cache_está_sendo_usado_nas_consultas(Type tipo, string nomeDePropriedade) =>
+            verifica_se_o_cache_está_sendo_usado_na_consulta(tipo, nomeDePropriedade);
         
         [Fact]
         public void verifica_se_os_valores_dos_marcadores_estao_corretos()
@@ -62,48 +67,6 @@ namespace Tests.UnitTests.Kli.IO
             markers.Should().Contain(outputFormatter.Low);
             markers.Should().HaveCount(6);
         }
-        
-        [Fact]
-        public void a_consulta_da_lista_de_marcadores_deve_usar_o_cache_nas_proximas_vezes()
-        {
-            // Arrange, Given
-
-            var outputFormatter = DependencyResolverFromProgram.GetInstance<IOutputMarkers>();
-
-            Tuple<T, long, T, long> Consultar<T>(Func<T> propriedade)
-            {
-                var cronômetro = new Stopwatch();
-                
-                cronômetro.Start();
-                var valores1 = propriedade();
-                cronômetro.Stop();
-                var tempo1 = cronômetro.ElapsedTicks;
-                
-                cronômetro.Restart();
-                var valores2 = propriedade();
-                cronômetro.Stop();
-                var tempo2 = cronômetro.ElapsedTicks;
-                
-                return new Tuple<T, long, T, long>(valores1, tempo1, valores2, tempo2);
-            }
-
-            // Act, When
-
-            var (markersValores1, markersTempo1, markersValores2, markersTempo2) = Consultar<string>(() => outputFormatter.Markers);
-            var (markersEscapedForRegexJoinedValores1, markersEscapedForRegexJoinedTempo1, markersEscapedForRegexJoinedValores2, markersEscapedForRegexJoinedTempo2) = Consultar<string>(() => outputFormatter.MarkersEscapedForRegexJoined);
-            var (markersEscapedForRegexSeparatedValores1, markersEscapedForRegexSeparatedTempo1, markersEscapedForRegexSeparatedValores2, markersEscapedForRegexSeparatedTempo2) = Consultar<string[]>(() => outputFormatter.MarkersEscapedForRegexSeparated);
-
-            // Assert, Then
-
-            markersValores2.Should().Be(markersValores1);
-            markersTempo2.Should().BeLessThan(markersTempo1);
-            
-            markersEscapedForRegexJoinedValores2.Should().Be(markersEscapedForRegexJoinedValores1);
-            markersEscapedForRegexJoinedTempo2.Should().BeLessThan(markersEscapedForRegexJoinedTempo1);
-
-            markersEscapedForRegexSeparatedValores2.Should().BeEquivalentTo(markersEscapedForRegexSeparatedValores1);
-            markersEscapedForRegexSeparatedTempo2.Should().BeLessThan(markersEscapedForRegexSeparatedTempo1);
-        }
 
         [Fact]
         public void verifica_se_os_caracteres_tipo_marcadores_podem_ser_escapados()
@@ -133,22 +96,13 @@ namespace Tests.UnitTests.Kli.IO
             // Arrange, Given
 
             var outputFormatter = DependencyResolverFromProgram.GetInstance<IOutputMarkers>();
-
-            long TempoGastoParaEscapar(string texto)
-            {
-                var cronômetro = new Stopwatch();
-                cronômetro.Start();
-                outputFormatter.Escape(texto);
-                cronômetro.Stop();
-                return cronômetro.ElapsedTicks;
-            }
                 
             // Act, When
 
-            var tempoParaTextoComMarcador = TempoGastoParaEscapar(outputFormatter.MarkersEscapedForRegexJoined);
-            var tempoParaTextoSemMarcador = TempoGastoParaEscapar(Fixture.Create<string>().Substring(0, 10));
-            var tempoParaTextoVazio = TempoGastoParaEscapar(string.Empty);
-            var tempoParaTextoEmBranco = TempoGastoParaEscapar("          ");
+            var tempoParaTextoComMarcador = cronometrar_consulta(() => outputFormatter.Escape(outputFormatter.MarkersEscapedForRegexJoined)).Item1;
+            var tempoParaTextoSemMarcador = cronometrar_consulta(() => outputFormatter.Escape("12345")).Item1;
+            var tempoParaTextoVazio = cronometrar_consulta(() => outputFormatter.Escape(string.Empty)).Item1;
+            var tempoParaTextoEmBranco = cronometrar_consulta(() => outputFormatter.Escape("     ")).Item1;
             
             // Assert, Then
 

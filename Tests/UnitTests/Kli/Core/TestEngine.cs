@@ -1,7 +1,7 @@
 ﻿using System;
 using FluentAssertions;
 using Kli.Core;
-using Kli.IO;
+using Kli.Wrappers;
 using NSubstitute;
 using Xunit;
 
@@ -36,7 +36,7 @@ namespace Tests.UnitTests.Kli.Core
             // Arrange, Given
 
             var console = Substitute.For<IConsole>();
-            var engine = new Engine(console);
+            var engine = new Engine(console) as IEngine;
             
             // Act, When
             
