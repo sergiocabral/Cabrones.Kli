@@ -12,10 +12,8 @@ namespace Tests.UnitTests.Kli.Infrastructure
     {
         [Theory]
         [InlineData(typeof(Cache), typeof(ICache))]
-        public void verifica_se_classe_implementa_tipos(Type tipoDaClasse, Type tipoQueDeveSerImplementado)
-        {
-            verifica_se_classe_implementa_tipo(tipoDaClasse, tipoQueDeveSerImplementado);
-        }
+        public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, Type tipoQueDeveSerImplementado) =>
+            verifica_se_classe_implementa_o_tipo(tipoDaClasse, tipoQueDeveSerImplementado);
 
         [Fact]
         public void um_valor_de_cache_deve_ser_gravado_e_lido_corretamente()

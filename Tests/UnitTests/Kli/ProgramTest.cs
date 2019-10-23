@@ -11,10 +11,8 @@ namespace Tests.UnitTests.Kli
         [Theory]
         [InlineData(typeof(Program), "IDependencyResolver get_DependencyResolver()")]
         [InlineData(typeof(Program), "Void Main()")]
-        public void verifica_se_assinatura_de_métodos_existe(Type tipo, string assinaturaEsperada)
-        {
-            verifica_se_assinatura_de_método_existe(tipo, assinaturaEsperada);
-        }
+        public void verifica_se_os_métodos_existem_com_base_na_assinatura(Type tipo, string assinaturaEsperada) =>
+            verifica_se_o_método_existe_com_base_na_assinatura(tipo, assinaturaEsperada);
         
         [Fact]
         public void verifica_se_o_programa_chama_a_classe_com_a_lógica_principal()

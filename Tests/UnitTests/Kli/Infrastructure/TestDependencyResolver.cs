@@ -12,10 +12,8 @@ namespace Tests.UnitTests.Kli.Infrastructure
     {
         [Theory]
         [InlineData(typeof(DependencyResolver), typeof(IDependencyResolver))]
-        public void verifica_se_classe_implementa_tipos(Type tipoDaClasse, Type tipoQueDeveSerImplementado)
-        {
-            verifica_se_classe_implementa_tipo(tipoDaClasse, tipoQueDeveSerImplementado);
-        }
+        public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, Type tipoQueDeveSerImplementado) =>
+            verifica_se_classe_implementa_o_tipo(tipoDaClasse, tipoQueDeveSerImplementado);
         
         [Theory]
         [InlineData(typeof(IOutputWriter))]

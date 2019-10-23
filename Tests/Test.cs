@@ -46,7 +46,7 @@ namespace Tests
         /// </summary>
         /// <param name="tipoDaClasse">Tipo da classe.</param>
         /// <param name="tipoQueDeveSerImplementado">Tipo que deve ser implementado.</param>
-        protected static void verifica_se_classe_implementa_tipo(Type tipoDaClasse, Type tipoQueDeveSerImplementado)
+        protected static void verifica_se_classe_implementa_o_tipo(Type tipoDaClasse, Type tipoQueDeveSerImplementado)
         {
             // Arrange, Given
             
@@ -62,7 +62,7 @@ namespace Tests
         /// </summary>
         /// <param name="tipo">Tipo a ser consultado.</param>
         /// <param name="assinaturaEsperada">Assinatura esperada.</param>
-        protected static void verifica_se_assinatura_de_método_existe(Type tipo, string assinaturaEsperada)
+        protected static void verifica_se_o_método_existe_com_base_na_assinatura(Type tipo, string assinaturaEsperada)
         {
             // Arrange, Given
 

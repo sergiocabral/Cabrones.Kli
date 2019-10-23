@@ -13,10 +13,8 @@ namespace Tests.UnitTests.Kli.IO
     {
         [Theory]
         [InlineData(typeof(OutputWriter), typeof(IOutputWriter))]
-        public void verifica_se_classe_implementa_tipos(Type tipoDaClasse, Type tipoQueDeveSerImplementado)
-        {
-            verifica_se_classe_implementa_tipo(tipoDaClasse, tipoQueDeveSerImplementado);
-        }
+        public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, Type tipoQueDeveSerImplementado) =>
+            verifica_se_classe_implementa_o_tipo(tipoDaClasse, tipoQueDeveSerImplementado);
         
         [Fact]
         public void o_parse_deve_enviar_o_texto_para_ser_escrito()

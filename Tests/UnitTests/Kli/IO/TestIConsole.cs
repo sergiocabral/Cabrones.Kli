@@ -14,9 +14,7 @@ namespace Tests.UnitTests.Kli.IO
         [InlineData(typeof(IConsole), "Void ResetColor()")]
         [InlineData(typeof(IConsole), "Void Write(String)")]
         [InlineData(typeof(IConsole), "Void WriteLine(String)")]
-        public void verifica_se_assinatura_de_métodos_existe(Type tipo, string assinaturaEsperada)
-        {
-            verifica_se_assinatura_de_método_existe(tipo, assinaturaEsperada);
-        }
+        public void verifica_se_os_métodos_existem_com_base_na_assinatura(Type tipo, string assinaturaEsperada) =>
+            verifica_se_o_método_existe_com_base_na_assinatura(tipo, assinaturaEsperada);
     }
 }

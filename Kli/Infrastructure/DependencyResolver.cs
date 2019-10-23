@@ -10,7 +10,7 @@ namespace Kli.Infrastructure
     public class DependencyResolver: IDependencyResolver
     {
         /// <summary>
-        /// Construtor estático. Configuração inicial.
+        /// Construtor.
         /// </summary>
         public DependencyResolver()
         {
