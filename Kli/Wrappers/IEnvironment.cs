@@ -10,6 +10,6 @@
         /// </summary>
         /// <param name="variable">Nome da variável.</param>
         /// <returns>Valor da variável.</returns>
-        string GetEnvironmentVariable(string variable);
+        string? GetEnvironmentVariable(string variable);
     }
 }

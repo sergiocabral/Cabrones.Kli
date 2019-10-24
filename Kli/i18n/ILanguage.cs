@@ -2,6 +2,9 @@
 
 namespace Kli.i18n
 {
+    /// <summary>
+    /// Informações do idioma do usuário.
+    /// </summary>
     public interface ILanguage
     {
         /// <summary>
@@ -12,7 +15,7 @@ namespace Kli.i18n
         /// <summary>
         /// Idioma obtido do ambiente.
         /// </summary>
-        string FromEnvironment();
+        string? FromEnvironment();
 
         /// <summary>
         /// Idioma obtido do sistema.

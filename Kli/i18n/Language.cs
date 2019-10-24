@@ -6,6 +6,9 @@ using Kli.Wrappers;
 
 namespace Kli.i18n
 {
+    /// <summary>
+    /// Informações do idioma do usuário.
+    /// </summary>
     public class Language: ILanguage
     {
         /// <summary>
@@ -41,7 +44,7 @@ namespace Kli.i18n
         /// <summary>
         /// Idioma obtido do ambiente.
         /// </summary>
-        public string FromEnvironment() =>
+        public string? FromEnvironment() =>
             NormalizeLanguageName(
                 EnvironmentVariables.Select(environmentVariable => 
                     _environment.GetEnvironmentVariable(environmentVariable))
@@ -69,9 +72,9 @@ namespace Kli.i18n
         /// </summary>
         /// <param name="culture">Nome.</param>
         /// <returns>Nome válido.</returns>
-        private static string NormalizeLanguageName(string culture)
+        private static string? NormalizeLanguageName(string? culture)
         {
-            if (string.IsNullOrWhiteSpace(culture)) return null!;
+            if (string.IsNullOrWhiteSpace(culture)) return null;
             
             try
             {

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <Version>4.0.0.458</Version>
+        <Version>4.0.0.564</Version>
         <Nullable>enable</Nullable>
         <TargetFramework>netcoreapp3.0</TargetFramework>
         <OutputType>Exe</OutputType>
@@ -18,6 +18,11 @@
 
     <ItemGroup>
         <PackageReference Include="LightInject" Version="6.2.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Properties\translates.json" />
+      <EmbeddedResource Include="Properties\translates.json" />
     </ItemGroup>
 
     <PropertyGroup>

@@ -1,0 +1,47 @@
+﻿[
+  {
+    "Key": "MM/dd/yyyy hh:mm tt",
+    "Value": [
+      {
+        "Key": "pt",
+        "Value": "dd/MM/yyyy HH:mm"
+      }
+    ]
+  },
+  {
+    "Key": "MM/dd/yyyy",
+    "Value": [
+      {
+        "Key": "pt",
+        "Value": "dd/MM/yyyy"
+      }
+    ]
+  },
+  {
+    "Key": "hh:mm tt",
+    "Value": [
+      {
+        "Key": "pt",
+        "Value": "HH:mm"
+      }
+    ]
+  },
+  {
+    "Key": "Yes",
+    "Value": [
+      {
+        "Key": "pt",
+        "Value": "Sim"
+      }
+    ]
+  },
+  {
+    "Key": "No",
+    "Value": [
+      {
+        "Key": "pt",
+        "Value": "Não"
+      }
+    ]
+  }
+]

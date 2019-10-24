@@ -20,4 +20,15 @@
         <ProjectReference Include="..\Kli.Output.Console\Kli.Output.Console.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <None Remove="UnitTests\Kli\i18n\TestTranslateValido1.json" />
+        <EmbeddedResource Include="UnitTests\Kli\i18n\TestTranslateValido1.json" />
+        <None Remove="UnitTests\Kli\i18n\TestTranslateValido2.json" />
+        <EmbeddedResource Include="UnitTests\Kli\i18n\TestTranslateValido2.json" />
+        <None Remove="UnitTests\Kli\i18n\TestTranslateInvalido.json" />
+        <EmbeddedResource Include="UnitTests\Kli\i18n\TestTranslateInvalido.json" />
+        <None Remove="UnitTests\Kli\i18n\TestTranslateIncompleto.json" />
+        <EmbeddedResource Include="UnitTests\Kli\i18n\TestTranslateIncompleto.json" />
+    </ItemGroup>
+
 </Project>

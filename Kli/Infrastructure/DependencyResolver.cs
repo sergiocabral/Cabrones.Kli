@@ -44,6 +44,7 @@ namespace Kli.Infrastructure
             Register<IEngine, Engine>();
             Register<ICache, Cache>();
             Register<ILanguage, Language>();
+            Register<ITranslate, Translate>();
             Register<IConsole, Console>();
             Register<IEnvironment, Environment>();
             Register<IDependencyResolver, DependencyResolver>();

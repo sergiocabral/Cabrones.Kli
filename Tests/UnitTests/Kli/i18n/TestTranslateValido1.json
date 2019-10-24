@@ -1,0 +1,20 @@
+﻿[
+  {
+    "Key": "word 1",
+    "Value": [
+      {
+        "Key": "pt",
+        "Value": "palavra 1"
+      }
+    ]
+  },
+  {
+    "Key": "word 2",
+    "Value": [
+      {
+        "Key": "pt",
+        "Value": "palavra 2"
+      }
+    ]
+  }
+]

@@ -44,7 +44,7 @@ namespace Kli.Infrastructure
         public T Get<T>(string key)
         {
             if (_cache.ContainsKey(key)) return (T) _cache[key];
-            return default !;
+            return default!;
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿using System;
 using FluentAssertions;
 using Kli.Core;
+using Kli.i18n;
 using Kli.Wrappers;
 using NSubstitute;
 using Xunit;
@@ -36,7 +37,7 @@ namespace Tests.UnitTests.Kli.Core
             // Arrange, Given
 
             var console = Substitute.For<IConsole>();
-            var engine = new Engine(console) as IEngine;
+            var engine = new Engine(console, Substitute.For<ITranslate>()) as IEngine;
             
             // Act, When
             
@@ -45,6 +46,40 @@ namespace Tests.UnitTests.Kli.Core
             // Assert, Then
             
             console.Received(2).ResetColor();
+        }
+        
+        [Fact]
+        public void método_principal_Run_deve_carregar_as_traduções_do_recurso_embutido()
+        {
+            // Arrange, Given
+
+            var translate = Substitute.For<ITranslate>();
+            var engine = new Engine(Substitute.For<IConsole>(), translate) as IEngine;
+            
+            // Act, When
+            
+            engine.Run();
+
+            // Assert, Then
+
+            translate.ReceivedWithAnyArgs().LoadFromResource(null, null);
+        }
+        
+        [Fact]
+        public void após_chamada_do_método_principal_Run_as_traduções_devem_estar_funcionando()
+        {
+            // Arrange, Given
+
+            var engine = DependencyResolverFromProgram.GetInstance<IEngine>();
+            engine.Run();
+            
+            // Act, When
+
+            var traduçãoDeYes = "Yes".Translate("pt");
+            
+            // Assert, Then
+
+            traduçãoDeYes.Should().Be("Sim");
         }
     }
 }

@@ -25,6 +25,7 @@ namespace Tests.UnitTests.Kli.Infrastructure
         [InlineData(typeof(IConsole))]
         [InlineData(typeof(IEnvironment))]
         [InlineData(typeof(ILanguage))]
+        [InlineData(typeof(ITranslate))]
         [InlineData(typeof(IDependencyResolver))]
         public void verifica_se_o_serviço_está_sendo_resolvido(Type tipoDoServiço)
         {

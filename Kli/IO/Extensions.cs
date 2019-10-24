@@ -10,9 +10,7 @@
         /// </summary>
         /// <param name="text">Texto.</param>
         /// <returns>Texto devidamente escapado.</returns>
-        public static string EscapeForOutput(this string text)
-        {
-            return Program.DependencyResolver.GetInstance<IOutputMarkers>().Escape(text);
-        }
+        public static string EscapeForOutput(this string text) =>
+            Program.DependencyResolver.GetInstance<IOutputMarkers>().Escape(text);
     }
 }

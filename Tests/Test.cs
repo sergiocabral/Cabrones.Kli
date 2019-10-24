@@ -99,7 +99,7 @@ namespace Tests
                 }
 
                 assinatura.Append(parâmetrosDoMétodo.Count > 0
-                    ? $"({parâmetrosDoMétodo.Select(a => $"{NomeDoTipo(a.ParameterType)}{(a.HasDefaultValue ? $" = {(a.ParameterType == typeof(char) && ((char)0).Equals(a.DefaultValue) ? "0" : a.DefaultValue)}": "")}").Aggregate((acumulador, nomeDoTipo) => $"{(string.IsNullOrWhiteSpace(acumulador) ? "" : $"{acumulador}, ")}{nomeDoTipo}")})"
+                    ? $"({parâmetrosDoMétodo.Select(a => $"{NomeDoTipo(a.ParameterType)}{(a.HasDefaultValue ? $" = {(a.DefaultValue == null ? "null" : a.ParameterType == typeof(char) && ((char)0).Equals(a.DefaultValue) ? "''" : $"'{a.DefaultValue}'")}": "")}").Aggregate((acumulador, nomeDoTipo) => $"{(string.IsNullOrWhiteSpace(acumulador) ? "" : $"{acumulador}, ")}{nomeDoTipo}")})"
                     : "()");
 
                 return assinatura.ToString();

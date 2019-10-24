@@ -67,11 +67,11 @@ namespace Tests.UnitTests.Kli.i18n
             
             // Act, When
 
-            var iriomaPelaVariávelDeAmbiente = idioma.FromEnvironment();
+            var idiomaPelaVariávelDeAmbiente = idioma.FromEnvironment();
 
             // Assert, Then
 
-            iriomaPelaVariávelDeAmbiente.Should().BeNull();
+            idiomaPelaVariávelDeAmbiente.Should().BeNull();
         }
         
         [Theory]
