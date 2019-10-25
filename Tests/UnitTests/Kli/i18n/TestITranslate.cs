@@ -7,6 +7,11 @@ namespace Tests.UnitTests.Kli.i18n
     public class TestITranslate: Test
     {
         [Theory]
+        [InlineData(typeof(ITranslate), 8)]
+        public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
+            verifica_se_o_total_de_métodos_públicos_declarados_está_correto_no_tipo(tipo, totalDeMétodosEsperado);
+
+        [Theory]
         [InlineData(typeof(ITranslate), "String get_LanguageDefault()")]
         [InlineData(typeof(ITranslate), "Void set_LanguageDefault(String)")]
         [InlineData(typeof(ITranslate), "String Get(String, String = null)")]

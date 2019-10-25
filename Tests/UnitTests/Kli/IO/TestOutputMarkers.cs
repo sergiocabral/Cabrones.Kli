@@ -9,9 +9,14 @@ namespace Tests.UnitTests.Kli.IO
     public class TestOutputMarkers: Test
     {
         [Theory]
+        [InlineData(typeof(OutputMarkers), 10)]
+        public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
+            verifica_se_o_total_de_métodos_públicos_declarados_está_correto_no_tipo(tipo, totalDeMétodosEsperado);
+
+        [Theory]
         [InlineData(typeof(OutputMarkers), typeof(IOutputMarkers))]
-        public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, Type tipoQueDeveSerImplementado) =>
-            verifica_se_classe_implementa_o_tipo(tipoDaClasse, tipoQueDeveSerImplementado);
+        public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
+            verifica_se_classe_implementa_o_tipo(tipoDaClasse, tiposQueDeveSerImplementado);
         
         [Theory]
         [InlineData(typeof(IOutputMarkers), "Markers")]

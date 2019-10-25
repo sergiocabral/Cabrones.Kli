@@ -9,7 +9,6 @@ using AutoFixture;
 using FluentAssertions;
 using Kli;
 using Kli.Infrastructure;
-using NSubstitute;
 
 namespace Tests
 {
@@ -46,18 +45,51 @@ namespace Tests
         /// Método para testar se um tipo implementa determinada classe ou interface.
         /// </summary>
         /// <param name="tipoDaClasse">Tipo da classe.</param>
-        /// <param name="tipoQueDeveSerImplementado">Tipo que deve ser implementado.</param>
-        protected static void verifica_se_classe_implementa_o_tipo(Type tipoDaClasse, Type tipoQueDeveSerImplementado)
+        /// <param name="tiposQueDeveSerImplementado">TipoS que deve ser implementado.</param>
+        protected static void verifica_se_classe_implementa_o_tipo(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado)
         {
             // Arrange, Given
             
+            var métodosDoTipoDaClasse = tipoDaClasse.GetMethods().Where(a => a.IsPublic && a.DeclaringType?.Assembly == tipoDaClasse.Assembly).ToList();
+            var métodosDosTiposQueDeveSerImplementado = new List<MethodInfo>();
+
+            foreach (var tipoQueDeveSerImplementado in tiposQueDeveSerImplementado)
+            {
+                métodosDosTiposQueDeveSerImplementado.AddRange(tipoQueDeveSerImplementado.GetMethods()
+                    .Where(a => a.IsPublic && a.DeclaringType?.Assembly == tipoQueDeveSerImplementado.Assembly)
+                    .ToList());
+            }
+            
             // Act, When
 
-            var implementa = tipoQueDeveSerImplementado.IsAssignableFrom(tipoDaClasse);
+            var tiposQueForamImplementados = tiposQueDeveSerImplementado.Count(a => a.IsAssignableFrom(tipoDaClasse));
+            var totalDeMétodosNoTipoDaClasse = métodosDoTipoDaClasse.Count;
+            var totalDeMétodosNosTiposQueDeveSerImplementado = métodosDosTiposQueDeveSerImplementado.Count;
 
             // Assert, Then
 
-            implementa.Should().BeTrue();
+            tiposQueForamImplementados.Should().Be(tiposQueDeveSerImplementado.Length);
+            totalDeMétodosNoTipoDaClasse.Should().Be(totalDeMétodosNosTiposQueDeveSerImplementado);
+        }
+
+        /// <summary>
+        /// Método para testar se um método existe com base na sua assinatura.
+        /// </summary>
+        /// <param name="tipo">Tipo a ser consultado.</param>
+        /// <param name="totalDeMétodosEsperado">Total de métodos esperados.</param>
+        protected static void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_no_tipo(Type tipo, int totalDeMétodosEsperado)
+        {
+            // Arrange, Given
+
+            var métodos = tipo.GetMethods();
+
+            // Act, When
+
+            var métodosPrópriosDoTipo = métodos.Where(a => a.IsPublic && a.DeclaringType?.Assembly == tipo.Assembly).ToList();
+
+            // Assert, Then
+
+            métodosPrópriosDoTipo.Count.Should().Be(totalDeMétodosEsperado);
         }
         
         /// <summary>
@@ -132,13 +164,7 @@ namespace Tests
         {
             // Arrange, Given
             
-            var métodoGetInstance =
-                DependencyResolverFromProgram.GetType()
-                    .GetMethod("GetInstance", 
-                        BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static) ??
-                Substitute.For<MethodInfo>();
-            var métodoGetInstanceGeneric = métodoGetInstance.MakeGenericMethod(tipo);
-            var instânciaDoTipo = métodoGetInstanceGeneric.Invoke(DependencyResolverFromProgram, new object[0]);
+            var instânciaDoTipo = DependencyResolverFromProgram.GetInstance(tipo);
             var propriedade = tipo.GetProperty(nomeDePropriedade,
                 BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
            

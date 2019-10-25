@@ -12,9 +12,14 @@ namespace Tests.UnitTests.Kli.IO
     public class TestOutputWriter: Test
     {
         [Theory]
+        [InlineData(typeof(OutputWriter), 2)]
+        public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
+            verifica_se_o_total_de_métodos_públicos_declarados_está_correto_no_tipo(tipo, totalDeMétodosEsperado);
+
+        [Theory]
         [InlineData(typeof(OutputWriter), typeof(IOutputWriter))]
-        public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, Type tipoQueDeveSerImplementado) =>
-            verifica_se_classe_implementa_o_tipo(tipoDaClasse, tipoQueDeveSerImplementado);
+        public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
+            verifica_se_classe_implementa_o_tipo(tipoDaClasse, tiposQueDeveSerImplementado);
         
         [Fact]
         public void o_parse_deve_enviar_o_texto_para_ser_escrito()
