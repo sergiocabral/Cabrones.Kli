@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Kli.IO;
 
 namespace Kli.Output.Console
 {

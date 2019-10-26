@@ -1,6 +1,4 @@
-﻿using Kli.IO;
-
-namespace Kli.Output.Console
+﻿namespace Kli.Output.Console
 {
     /// <summary>
     /// Envia dados para o usuário via console.

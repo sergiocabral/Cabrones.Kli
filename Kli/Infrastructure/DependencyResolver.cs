@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Kli.Core;
 using Kli.i18n;
-using Kli.IO;
+using Kli.Output;
 using Kli.Wrappers;
 using LightInject;
 using Console = Kli.Wrappers.Console;
