@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Kli.Core;
 using Kli.i18n;
+using Kli.Input;
 using Kli.Output;
 using Kli.Wrappers;
 using LightInject;
@@ -33,13 +34,13 @@ namespace Kli.Infrastructure
         {
             ValidateScope(parentScope);
             var id = Guid.NewGuid();
-            var scope = parentScope.HasValue ? _scopes[parentScope.Value].BeginScope() : _container.BeginScope();
-            _scopes.Add(id, scope);
+            var scope = parentScope.HasValue ? Scopes[parentScope.Value].BeginScope() : Container.BeginScope();
+            Scopes.Add(id, scope);
             scope.Completed += (sender, args) =>
             {
-                foreach (var (childId, _) in _scopes.Where(a => a.Value.ParentScope == _scopes[id]))
+                foreach (var (childId, _) in Scopes.Where(a => a.Value.ParentScope == Scopes[id]))
                     DisposeScope(childId);
-                _scopes.Remove(id);
+                Scopes.Remove(id);
             }; 
             return id;
         }
@@ -51,7 +52,7 @@ namespace Kli.Infrastructure
         public void DisposeScope(Guid scope)
         {
             ValidateScope(scope);
-            _scopes[scope].Dispose();
+            Scopes[scope].Dispose();
         }
 
         /// <summary>
@@ -61,7 +62,7 @@ namespace Kli.Infrastructure
         /// <returns>Indica se está liberado ou não.</returns>
         public bool IsActive(Guid scope)
         {
-            return _scopes.ContainsKey(scope);
+            return Scopes.ContainsKey(scope);
         }
 
         /// <summary>
@@ -81,9 +82,9 @@ namespace Kli.Infrastructure
         /// <returns>Instância encontrada.</returns>
         public object GetInstance(Type service, Guid? scope)
         {
-            if (!scope.HasValue) return _container.GetInstance(service);
+            if (!scope.HasValue) return Container.GetInstance(service);
             ValidateScope(scope.Value);
-            return _scopes[scope.Value].GetInstance(service);
+            return Scopes[scope.Value].GetInstance(service);
         }
 
         /// <summary>
@@ -94,7 +95,7 @@ namespace Kli.Infrastructure
         /// <param name="lifetime">Tempo de vida.</param>
         public void Register<TService, TImplementation>(DependencyResolverLifeTime lifetime) 
             where TImplementation : TService where TService : class =>
-            _container.Register<TService, TImplementation>(GetILifeTime(lifetime));
+            Container.Register<TService, TImplementation>(GetILifeTime(lifetime));
 
         /// <summary>
         /// Registrar um serviço com sua respectiva implementação.
@@ -102,18 +103,27 @@ namespace Kli.Infrastructure
         /// <param name="service">Serviço (interface).</param>
         /// <param name="implementation">Implementação (class).</param>
         /// <param name="lifetime">Tempo de vida.</param>
-        public void Register(Type service, Type implementation, DependencyResolverLifeTime lifetime) =>
-            _container.Register(service, implementation, GetILifeTime(lifetime));
+        public void Register(Type service, Type implementation, DependencyResolverLifeTime lifetime)
+        {
+            if (InterfacesForMultipleImplementation.Contains(service)) throw new ArgumentException();
+            Container.Register(service, implementation, GetILifeTime(lifetime));
+        }
+
+        /// <summary>
+        /// Lista de interfaces que são implementadas múltiplas vezes.
+        /// Essas interfaces não podem ser registradas como serviço.
+        /// </summary>
+        public IEnumerable<Type> InterfacesForMultipleImplementation { get; } = new[] {typeof(IOutput), typeof(IInput)};
 
         /// <summary>
         /// Container de trabalho do LightInject para este projeto.
         /// </summary>
-        private readonly ServiceContainer _container = new ServiceContainer();
+        private static readonly ServiceContainer Container = new ServiceContainer();
         
         /// <summary>
         /// Lista de escopos abertos.
         /// </summary>
-        private readonly IDictionary<Guid, Scope> _scopes = new Dictionary<Guid, Scope>();
+        private static readonly IDictionary<Guid, Scope> Scopes = new Dictionary<Guid, Scope>();
 
         /// <summary>
         /// Registra as interfaces e tipos associados.

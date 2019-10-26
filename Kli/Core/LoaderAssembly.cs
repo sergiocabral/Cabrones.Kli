@@ -85,6 +85,7 @@ namespace Kli.Core
                 {
                     foreach (var interfaceType in type.GetInterfaces())
                     {
+                        if (IsInterfaceForMultipleImplementation(interfaceType)) continue;
                         _dependencyResolver.Register(interfaceType, type, DependencyResolverLifeTime.PerScope);
                         interfaces.Add(interfaceType);
                     }
@@ -105,9 +106,18 @@ namespace Kli.Core
             var scope = _dependencyResolver.CreateScope();
             return new List<TService>(
                 from type in RegisterServices(fileMask) 
-                where typeof(TService) == type 
+                where typeof(TService).IsAssignableFrom(type) 
                 select (TService) _dependencyResolver.GetInstance(type, scope)
             ).ToArray();
         }
+
+        /// <summary>
+        /// Determina se a interface é do tipo que tem múltiplas implementações.
+        /// Por exemplo: IOutput, IInput, IModule.
+        /// </summary>
+        /// <param name="interfaceType">Tipo da interface</param>
+        /// <returns>Indicativo de sim ou não.</returns>
+        private bool IsInterfaceForMultipleImplementation(Type interfaceType) =>
+            _dependencyResolver.InterfacesForMultipleImplementation.Contains(interfaceType);
     }
 }

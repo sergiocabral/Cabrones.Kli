@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Kli.Infrastructure
 {
@@ -61,5 +62,11 @@ namespace Kli.Infrastructure
         /// <param name="lifetime">Tempo de vida.</param>
         void Register(Type service, Type implementation, 
             DependencyResolverLifeTime lifetime = DependencyResolverLifeTime.PerContainer);
+
+        /// <summary>
+        /// Lista de interfaces que são implementadas múltiplas vezes.
+        /// Essas interfaces não podem ser registradas como serviço.
+        /// </summary>
+        IEnumerable<Type> InterfacesForMultipleImplementation { get; }
     }
 }

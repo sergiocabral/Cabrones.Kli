@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <Version>2.0.0.470</Version>
+        <Version>2.0.0.24</Version>
         <Nullable>enable</Nullable>
         <TargetFramework>netcoreapp3.0</TargetFramework>
         <OutputPath>$(SolutionDir)_build</OutputPath>
@@ -19,9 +19,9 @@
     <ItemGroup>
         <ProjectReference Include="..\Kli\Kli.csproj" />
     </ItemGroup>
-    
+
     <PropertyGroup>
         <Copyright>sergiocabral.com</Copyright>
     </PropertyGroup>
-    
+
 </Project>

@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Linq;
+using System.Reflection;
 using Kli.i18n;
 using Kli.Input;
 using Kli.Output;
@@ -46,8 +47,6 @@ namespace Kli.Core
             LoadTranslates();
             LoadAssemblies();
             
-            _console.WriteLine("Yes".Translate("pt"));
-            
             _console.ResetColor();
         }
 
@@ -56,8 +55,18 @@ namespace Kli.Core
         /// </summary>
         private void LoadAssemblies()
         {
-            _loaderAssembly.GetInstances<IOutput>("Kli.Output.*.dll");
+            var inputs = _loaderAssembly.GetInstances<IOutput>("Kli.Output.*.dll").ToList();
             _loaderAssembly.GetInstances<IInput>("Kli.Input.*.dll");
+
+            if (!inputs.Any()) return;
+            inputs[0].Write("Yes".Translate("pt"));
+            inputs[1].Write("Yes".Translate("pt"));
+            inputs[0].WriteLine("Yes".Translate("pt"));
+            inputs[1].WriteLine("Yes".Translate("pt"));
+            inputs[0].Write("Yes".Translate("pt"));
+            inputs[1].Write("Yes".Translate("pt"));
+            inputs[0].Write("Yes".Translate("pt"));
+            inputs[1].Write("Yes".Translate("pt"));
         }
 
         /// <summary>

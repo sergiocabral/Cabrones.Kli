@@ -7,7 +7,7 @@ namespace Kli.Infrastructure
     public class TestIDependencyResolver: BaseForTest
     {
         [Theory]
-        [InlineData(typeof(IDependencyResolver), 7)]
+        [InlineData(typeof(IDependencyResolver), 8)]
         public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
             verifica_se_o_total_de_métodos_públicos_declarados_está_correto_no_tipo(tipo, totalDeMétodosEsperado);
         
@@ -19,6 +19,7 @@ namespace Kli.Infrastructure
         [InlineData(typeof(IDependencyResolver), "Object GetInstance(Type, Nullable<Guid> = null)")]
         [InlineData(typeof(IDependencyResolver), "Void Register<TService, TImplementation>(DependencyResolverLifeTime = 'PerContainer')")]
         [InlineData(typeof(IDependencyResolver), "Void Register(Type, Type, DependencyResolverLifeTime = 'PerContainer')")]
+        [InlineData(typeof(IDependencyResolver), "IEnumerable<Type> get_InterfacesForMultipleImplementation()")]
         public void verifica_se_os_métodos_existem_com_base_na_assinatura(Type tipo, string assinaturaEsperada) =>
             verifica_se_o_método_existe_com_base_na_assinatura(tipo, assinaturaEsperada);
     }

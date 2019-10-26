@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using FluentAssertions;
 using Kli.Infrastructure;
+using Kli.Input;
 using Kli.Output;
 using NSubstitute;
 using Test;
@@ -32,13 +33,14 @@ namespace Kli.Core
 
             // Act, When
 
-            var carregados = loaderAssembly.Load("Kli.Output.*.dll").Where(a => a.Value != null).Select(a => new FileInfo(a.Key).Name).ToList();
+            var carregados = loaderAssembly.Load("Kli.Output.*.dll").Where(a => a.Value != null).Select(a => new FileInfo(a.Key).Name).OrderBy(a => a).ToList();
             
             
             // Assert, Then
 
-            carregados.Should().HaveCount(1);
-            carregados.Single().Should().Be("Kli.Output.Console.dll");
+            carregados.Should().HaveCount(2);
+            carregados[0].Should().Be("Kli.Output.Console.dll");
+            carregados[1].Should().Be("Kli.Output.File.dll");
         }
         
         [Fact]
@@ -55,7 +57,7 @@ namespace Kli.Core
             
             // Assert, Then
 
-            carregados.Should().Be(1);
+            carregados.Should().Be(2);
         }
 
         [Fact]
@@ -89,7 +91,7 @@ namespace Kli.Core
             
             // Assert, Then
 
-            carregados.Should().Be(1);
+            carregados.Should().Be(2);
         }
 
         [Fact]
@@ -160,6 +162,8 @@ namespace Kli.Core
 
             var dependencyResolver = DependencyResolverForTest.GetInstance<IDependencyResolver>();
             var loaderAssembly = new LoaderAssembly(DependencyResolverFromProgram.GetInstance<IDefinition>(), dependencyResolver);
+            dependencyResolver.InterfacesForMultipleImplementation.Returns(info =>
+                DependencyResolverFromProgram.GetInstance<IDependencyResolver>().InterfacesForMultipleImplementation);
 
             // Act, When
 
@@ -167,7 +171,7 @@ namespace Kli.Core
             
             // Assert, Then
 
-            dependencyResolver.ReceivedWithAnyArgs(3).Register(null, null, DependencyResolverLifeTime.PerScope);
+            dependencyResolver.ReceivedWithAnyArgs(2).Register(null, null, DependencyResolverLifeTime.PerScope);
         }
 
         [Fact]
@@ -204,6 +208,27 @@ namespace Kli.Core
 
             arquivo.Exists.Should().BeTrue();
             registrados.Should().HaveCount(0);
+        }
+
+        [Theory]
+        [InlineData(typeof(IOutput), "Kli.Output.Console.dll")]
+        [InlineData(typeof(IInput), "Kli.Input.Console.dll")]
+        public void não_deve_registrar_interfaces_conhecidas_por_múltiplas_implementações(Type tipoDaInterface, string arquivoDoMóduloQueTemEssaInterface)
+        {
+            // Arrange, Given
+
+            var dependencyResolver = DependencyResolverFromProgram.GetInstance<IDependencyResolver>();
+            var loaderAssembly = DependencyResolverFromProgram.GetInstance<ILoaderAssembly>();
+            
+            // Act, When
+
+            var interfacesCarregadas = loaderAssembly.RegisterServices(arquivoDoMóduloQueTemEssaInterface);
+            Action resolverServiço = () => dependencyResolver.GetInstance(tipoDaInterface);
+            
+            // Assert, Then
+
+            interfacesCarregadas.Should().NotContain(tipoDaInterface);
+            resolverServiço.Should().Throw<InvalidOperationException>();
         }
 
         [Fact]

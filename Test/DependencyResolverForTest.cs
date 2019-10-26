@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Kli.Infrastructure;
+using Kli.Input;
+using Kli.Output;
 using NSubstitute;
 
 namespace Test
@@ -26,6 +28,7 @@ namespace Test
         {
             DisposeScope(CreateScope());
             IsActive(Guid.Empty);
+            var _ = InterfacesForMultipleImplementation.ToString();
         }
 
         /// <summary>
@@ -97,6 +100,12 @@ namespace Test
             var métodoComGeneric = método.MakeGenericMethod(service, implementation);
             métodoComGeneric.Invoke(this, new object[] { lifetime });
         }
+        
+        /// <summary>
+        /// Lista de interfaces que são implementadas múltiplas vezes.
+        /// Essas interfaces não podem ser registradas como serviço.
+        /// </summary>
+        public IEnumerable<Type> InterfacesForMultipleImplementation { get; } = new[] {typeof(IOutput), typeof(IInput)};
 
         /// <summary>
         /// Descarta as instâncias já criadas.

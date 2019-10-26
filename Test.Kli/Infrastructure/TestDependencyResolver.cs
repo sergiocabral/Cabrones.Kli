@@ -3,8 +3,10 @@ using AutoFixture;
 using FluentAssertions;
 using Kli.Core;
 using Kli.i18n;
+using Kli.Input;
 using Kli.Output;
 using Kli.Wrappers;
+using NSubstitute;
 using Test;
 using Xunit;
 
@@ -13,7 +15,7 @@ namespace Kli.Infrastructure
     public class TestDependencyResolver: BaseForTest
     {
         [Theory]
-        [InlineData(typeof(DependencyResolver), 7)]
+        [InlineData(typeof(DependencyResolver), 8)]
         public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
             verifica_se_o_total_de_métodos_públicos_declarados_está_correto_no_tipo(tipo, totalDeMétodosEsperado);
 
@@ -470,6 +472,43 @@ namespace Kli.Infrastructure
             // Assert, Then
 
             liberadoQuantasVezes.Should().Be(3);
+        }
+        
+        [Theory]
+        [InlineData(typeof(IInput))]
+        [InlineData(typeof(IOutput))]
+        public void não_permite_registrar_serviços_de_interfaces_com_múltiplas_implementações(Type tipoDaInterfaces)
+        {
+            // Arrange, Given
+            
+            var dependencyResolver = new DependencyResolver() as IDependencyResolver;
+            var exemploDeInstância = Substitute.For(new [] { tipoDaInterfaces }, new object[0]);
+            var tipoDoExemploDeInstância = exemploDeInstância.GetType();
+            
+            // Act, When
+
+            Action registrarInterfaceComoServiço =
+                () => dependencyResolver.Register(tipoDaInterfaces, tipoDoExemploDeInstância);
+                
+            // Assert, Then
+
+            registrarInterfaceComoServiço.Should().Throw<ArgumentException>();
+        }
+
+        [Fact]
+        public void verificar_se_lista_de_interfaces_com_múltiplas_implementações_está_correta()
+        {
+            // Arrange, Given
+            
+            var dependencyResolver = DependencyResolverFromProgram.GetInstance<IDependencyResolver>();
+            
+            // Act, When
+
+            var interfacesComMúltiplasImplementações = dependencyResolver.InterfacesForMultipleImplementation;
+                
+            // Assert, Then
+
+            interfacesComMúltiplasImplementações.Should().BeEquivalentTo(typeof(IOutput), typeof(IInput));
         }
     }
 

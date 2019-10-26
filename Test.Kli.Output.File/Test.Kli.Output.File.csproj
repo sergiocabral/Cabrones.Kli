@@ -3,8 +3,8 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.0</TargetFramework>
         <IsPackable>false</IsPackable>
-        <Version>0.0.0.77</Version>
-        <RootNamespace>Kli.Output.Console</RootNamespace>
+        <Version>0.0.0.27</Version>
+        <RootNamespace>Kli.Output.File</RootNamespace>
         <OutputPath>$(SolutionDir)_test</OutputPath>
     </PropertyGroup>
 
@@ -24,7 +24,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Test\Test.csproj" />
-        <ProjectReference Include="..\Kli.Output.Console\Kli.Output.Console.csproj" />
+        <ProjectReference Include="..\Kli.Output.File\Kli.Output.File.csproj" />
     </ItemGroup>
 
 </Project>
