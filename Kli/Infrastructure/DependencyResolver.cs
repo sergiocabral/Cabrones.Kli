@@ -128,6 +128,7 @@ namespace Kli.Infrastructure
             Register<ITranslate, Translate>(DependencyResolverLifeTime.PerContainer);
             Register<IConsole, Console>(DependencyResolverLifeTime.PerContainer);
             Register<IEnvironment, Environment>(DependencyResolverLifeTime.PerContainer);
+            Register<IDefinition, Definition>(DependencyResolverLifeTime.PerContainer);
             Register<IDependencyResolver, DependencyResolver>(DependencyResolverLifeTime.PerContainer);
         }
 

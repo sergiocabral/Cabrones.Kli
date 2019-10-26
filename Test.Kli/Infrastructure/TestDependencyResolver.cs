@@ -21,16 +21,17 @@ namespace Kli.Infrastructure
         [InlineData(typeof(DependencyResolver), typeof(IDependencyResolver))]
         public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
             verifica_se_classe_implementa_o_tipo(tipoDaClasse, tiposQueDeveSerImplementado);
-        
+
         [Theory]
         [InlineData(typeof(IOutputWriter))]
         [InlineData(typeof(IOutputMarkers))]
         [InlineData(typeof(IEngine))]
         [InlineData(typeof(ICache))]
-        [InlineData(typeof(IConsole))]
-        [InlineData(typeof(IEnvironment))]
         [InlineData(typeof(ILanguage))]
         [InlineData(typeof(ITranslate))]
+        [InlineData(typeof(IConsole))]
+        [InlineData(typeof(IEnvironment))]
+        [InlineData(typeof(IDefinition))]
         [InlineData(typeof(IDependencyResolver))]
         public void verifica_se_o_serviço_está_sendo_resolvido(Type tipoDoServiço)
         {
