@@ -1,6 +1,8 @@
 ﻿using System;
 using FluentAssertions;
 using Kli.i18n;
+using Kli.Input;
+using Kli.Output;
 using Kli.Wrappers;
 using NSubstitute;
 using Test;
@@ -41,8 +43,8 @@ namespace Kli.Core
         {
             // Arrange, Given
 
-            var console = Substitute.For<IConsole>();
-            var engine = new Engine(console, Substitute.For<ITranslate>()) as IEngine;
+            var console = DependencyResolverForTest.GetInstance<IConsole>();
+            var engine = new Engine(console, DependencyResolverForTest.GetInstance<ITranslate>(), DependencyResolverForTest.GetInstance<ILoaderAssembly>()) as IEngine;
             
             // Act, When
             
@@ -58,8 +60,8 @@ namespace Kli.Core
         {
             // Arrange, Given
 
-            var translate = Substitute.For<ITranslate>();
-            var engine = new Engine(Substitute.For<IConsole>(), translate) as IEngine;
+            var translate = DependencyResolverForTest.GetInstance<ITranslate>();
+            var engine = new Engine(DependencyResolverForTest.GetInstance<IConsole>(), translate, DependencyResolverForTest.GetInstance<ILoaderAssembly>()) as IEngine;
             
             // Act, When
             
@@ -85,6 +87,24 @@ namespace Kli.Core
             // Assert, Then
 
             traduçãoDeYes.Should().Be("Sim");
+        }
+        
+        [Fact]
+        public void método_principal_Run_deve_carregar_em_tempo_de_execução_os_arquivos_de_assemblies()
+        {
+            // Arrange, Given
+
+            var assemblyFileLoader = DependencyResolverForTest.GetInstance<ILoaderAssembly>();
+            var engine = new Engine(DependencyResolverForTest.GetInstance<IConsole>(), DependencyResolverForTest.GetInstance<ITranslate>(), assemblyFileLoader) as IEngine;
+
+            // Act, When
+            
+            engine.Run();
+                
+            // Assert, Then
+
+            assemblyFileLoader.Received(1).GetInstances<IOutput>("Kli.Output.*.dll");
+            assemblyFileLoader.Received(1).GetInstances<IInput>("Kli.Input.*.dll");
         }
     }
 }

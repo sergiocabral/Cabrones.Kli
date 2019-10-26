@@ -49,8 +49,8 @@ namespace Kli.Output
             // Arrange, Given
 
             var outputWriter = DependencyResolverFromProgram.GetInstance<IOutputWriter>();
-            var escritorIgnorandoMarcadores = Substitute.For<Action<string>>();
-            var escritorConsiderandoMarcadores = Substitute.For<Action<string, char>>();
+            var escritorIgnorandoMarcadores = DependencyResolverForTest.GetInstance<Action<string>>();
+            var escritorConsiderandoMarcadores = DependencyResolverForTest.GetInstance<Action<string, char>>();
             
             // Act, When
 

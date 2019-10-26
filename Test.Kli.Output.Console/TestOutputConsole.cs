@@ -31,11 +31,11 @@ namespace Kli.Output.Console
         {
             // Arrange, Given
 
-            var outputWriter = Substitute.For<IOutputWriter>();
+            var outputWriter = DependencyResolverForTest.GetInstance<IOutputWriter>();
             var outputConsole = new OutputConsole(
                 outputWriter,
-                Substitute.For<IOutputMarkersToConsoleColor>(),
-                Substitute.For<IConsole>()) as IOutputConsole;
+                DependencyResolverForTest.GetInstance<IOutputMarkersToConsoleColor>(),
+                DependencyResolverForTest.GetInstance<IConsole>()) as IOutputConsole;
             var textoDeExemplo = Fixture.Create<string>();
             
             // Act, When
@@ -54,11 +54,11 @@ namespace Kli.Output.Console
         {
             // Arrange, Given
 
-            var outputMarkersToConsoleColor = Substitute.For<IOutputMarkersToConsoleColor>();
+            var outputMarkersToConsoleColor = DependencyResolverForTest.GetInstance<IOutputMarkersToConsoleColor>();
             var outputConsole = new OutputConsole(
                 DependencyResolverFromProgram.GetInstance<IOutputWriter>(),
                 outputMarkersToConsoleColor,
-                Substitute.For<IConsole>()) as IOutputConsole;
+                DependencyResolverForTest.GetInstance<IConsole>()) as IOutputConsole;
             
             var marcadorDeExemplo = Fixture.Create<char>();
             
@@ -81,7 +81,7 @@ namespace Kli.Output.Console
 
             var outputMarkers = DependencyResolverFromProgram.GetInstance<IOutputMarkers>();
             var outputMarkersToConsoleColor = DependencyResolverFromProgram.GetInstance<IOutputMarkersToConsoleColor>();
-            var console = Substitute.For<IConsole>();
+            var console = DependencyResolverForTest.GetInstance<IConsole>();
             var outputConsole = new OutputConsole(
                 DependencyResolverFromProgram.GetInstance<IOutputWriter>(),
                 outputMarkersToConsoleColor,
@@ -108,8 +108,8 @@ namespace Kli.Output.Console
         {
             // Arrange, Given
 
-            var console = Substitute.For<IConsole>();
-            var outputMarkersToConsoleColor = Substitute.For<IOutputMarkersToConsoleColor>();
+            var console = DependencyResolverForTest.GetInstance<IConsole>();
+            var outputMarkersToConsoleColor = DependencyResolverForTest.GetInstance<IOutputMarkersToConsoleColor>();
             var outputConsole = new OutputConsole(
                 DependencyResolverFromProgram.GetInstance<IOutputWriter>(),
                 outputMarkersToConsoleColor,
@@ -135,9 +135,9 @@ namespace Kli.Output.Console
             // Arrange, Given
 
             var outputConsole = new OutputConsole(
-                Substitute.For<IOutputWriter>(),
-                Substitute.For<IOutputMarkersToConsoleColor>(),
-                Substitute.For<IConsole>()) as IOutputConsole;
+                DependencyResolverForTest.GetInstance<IOutputWriter>(),
+                DependencyResolverForTest.GetInstance<IOutputMarkersToConsoleColor>(),
+                DependencyResolverForTest.GetInstance<IConsole>()) as IOutputConsole;
             
             // Act, When
 

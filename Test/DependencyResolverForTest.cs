@@ -14,9 +14,16 @@ namespace Test
     {
         public DependencyResolverForTest()
         {
-            // Este resolvedor de dependências é usado para Mock de serviços.
-            // Os métodos que lidam com escopo não são necessário no momento.
-            // As duas linhas abaixo servem apenas para garantir que o Unit Test.Kli Coverage seja de 100%. 
+            ForFullUnitTestCoverage();
+        }
+
+        /// <summary>
+        /// O conteúdo deste método existe apenas para garantir que o Unit Test Coverage seja de 100%.
+        /// Seu conteúdo é desnecessário para o funcionamento.
+        /// Trata-se de funções não utilizadas, mas que precisam ser chamadas para Coverage completo.
+        /// </summary>
+        private void ForFullUnitTestCoverage()
+        {
             DisposeScope(CreateScope());
             IsActive(Guid.Empty);
         }
@@ -95,10 +102,7 @@ namespace Test
         /// Descarta as instâncias já criadas.
         /// Causa um reset na contagem do Substitute.
         /// </summary>
-        public void Reset()
-        {
-            _instances.Clear();
-        }
+        public void Reset() => _instances.Clear();
         
         /// <summary>
         /// Histórico de instâncias utilizadas.

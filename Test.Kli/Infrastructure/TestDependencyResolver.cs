@@ -29,6 +29,7 @@ namespace Kli.Infrastructure
         [InlineData(typeof(ICache))]
         [InlineData(typeof(ILanguage))]
         [InlineData(typeof(ITranslate))]
+        [InlineData(typeof(ILoaderAssembly))]
         [InlineData(typeof(IConsole))]
         [InlineData(typeof(IEnvironment))]
         [InlineData(typeof(IDefinition))]

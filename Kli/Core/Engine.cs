@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
 using Kli.i18n;
+using Kli.Input;
+using Kli.Output;
 using Kli.Wrappers;
 
 namespace Kli.Core
@@ -20,14 +22,21 @@ namespace Kli.Core
         private readonly ITranslate _translate;
 
         /// <summary>
+        /// Carregador de assembly em disco para a memória.
+        /// </summary>
+        private readonly ILoaderAssembly _loaderAssembly;
+
+        /// <summary>
         /// Construtor.
         /// </summary>
         /// <param name="console">Define as cores padrão no console.</param>
         /// <param name="translate">Manipula traduções de texto.</param>
-        public Engine(IConsole console, ITranslate translate)
+        /// <param name="loaderAssembly">Carregador de assembly em disco para a memória.</param>
+        public Engine(IConsole console, ITranslate translate, ILoaderAssembly loaderAssembly)
         {
             _console = console;
             _translate = translate;
+            _loaderAssembly = loaderAssembly;
         }
         
         public void Run()
@@ -35,10 +44,20 @@ namespace Kli.Core
             _console.ResetColor();
 
             LoadTranslates();
+            LoadAssemblies();
             
             _console.WriteLine("Yes".Translate("pt"));
             
             _console.ResetColor();
+        }
+
+        /// <summary>
+        /// Carrega os assemblies em tempo de execução.
+        /// </summary>
+        private void LoadAssemblies()
+        {
+            _loaderAssembly.GetInstances<IOutput>("Kli.Output.*.dll");
+            _loaderAssembly.GetInstances<IInput>("Kli.Input.*.dll");
         }
 
         /// <summary>

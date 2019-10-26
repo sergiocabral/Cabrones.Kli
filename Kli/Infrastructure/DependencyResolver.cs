@@ -126,6 +126,7 @@ namespace Kli.Infrastructure
             Register<ICache, Cache>(DependencyResolverLifeTime.PerContainer);
             Register<ILanguage, Language>(DependencyResolverLifeTime.PerContainer);
             Register<ITranslate, Translate>(DependencyResolverLifeTime.PerContainer);
+            Register<ILoaderAssembly, LoaderAssembly>(DependencyResolverLifeTime.PerContainer);
             Register<IConsole, Console>(DependencyResolverLifeTime.PerContainer);
             Register<IEnvironment, Environment>(DependencyResolverLifeTime.PerContainer);
             Register<IDefinition, Definition>(DependencyResolverLifeTime.PerContainer);

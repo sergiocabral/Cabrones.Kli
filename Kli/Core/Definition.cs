@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 
 namespace Kli.Core
@@ -11,6 +12,6 @@ namespace Kli.Core
         /// <summary>
         /// Diretório do programa.
         /// </summary>
-        public string DirectoryOfProgram { get; } = new FileInfo(Assembly.GetExecutingAssembly().Location).FullName;
+        public string DirectoryOfProgram { get; } = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory?.FullName ?? throw new NullReferenceException();
     }
 }
