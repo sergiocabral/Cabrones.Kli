@@ -48,8 +48,8 @@ namespace Kli.i18n
         {
             // Arrange, Given
 
-            var environment = DependencyResolverForTest.GetInstance<IEnvironment>();
-            var idioma = new Language(DependencyResolverForTest.GetInstance<ICache>(), environment) as ILanguage;
+            var environment = Substitute.For<IEnvironment>();
+            var idioma = new Language(Substitute.For<ICache>(), environment) as ILanguage;
             
             // Act, When
 
@@ -65,8 +65,8 @@ namespace Kli.i18n
         {
             // Arrange, Given
 
-            var environment = DependencyResolverForTest.GetInstance<IEnvironment>();
-            var idioma = new Language(DependencyResolverForTest.GetInstance<ICache>(), environment) as ILanguage;
+            var environment = Substitute.For<IEnvironment>();
+            var idioma = new Language(Substitute.For<ICache>(), environment) as ILanguage;
 
             environment.GetEnvironmentVariable(null).ReturnsForAnyArgs(info => null);
             
@@ -92,8 +92,8 @@ namespace Kli.i18n
         {
             // Arrange, Given
 
-            var environment = DependencyResolverForTest.GetInstance<IEnvironment>();
-            var idioma = new Language(DependencyResolverForTest.GetInstance<ICache>(), environment) as ILanguage;
+            var environment = Substitute.For<IEnvironment>();
+            var idioma = new Language(Substitute.For<ICache>(), environment) as ILanguage;
 
             environment.GetEnvironmentVariable(null).ReturnsForAnyArgs(info => valorDaVariávelDeAmbiente);
             
@@ -127,7 +127,7 @@ namespace Kli.i18n
         {
             // Arrange, Given
 
-            var environment = DependencyResolverForTest.GetInstance<IEnvironment>();
+            var environment = Substitute.For<IEnvironment>();
             var cache = DependencyResolverFromProgram.GetInstance<ICache>();
             var idioma = new Language(cache, environment) as ILanguage;
 
@@ -152,7 +152,7 @@ namespace Kli.i18n
         {
             // Arrange, Given
 
-            var environment = DependencyResolverForTest.GetInstance<IEnvironment>();
+            var environment = Substitute.For<IEnvironment>();
             var cache = DependencyResolverFromProgram.GetInstance<ICache>();
             var idioma = new Language(cache, environment) as ILanguage;
 
@@ -181,7 +181,7 @@ namespace Kli.i18n
         {
             // Arrange, Given
 
-            var environment = DependencyResolverForTest.GetInstance<IEnvironment>();
+            var environment = Substitute.For<IEnvironment>();
             var cache = DependencyResolverFromProgram.GetInstance<ICache>();
             var idioma = new Language(cache, environment) as ILanguage;
 

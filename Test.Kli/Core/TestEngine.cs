@@ -2,6 +2,7 @@
 using FluentAssertions;
 using Kli.i18n;
 using Kli.Input;
+using Kli.Module;
 using Kli.Output;
 using Kli.Wrappers;
 using NSubstitute;
@@ -23,7 +24,7 @@ namespace Kli.Core
             verifica_se_classe_implementa_o_tipo(tipoDaClasse, tiposQueDeveSerImplementado);
         
         [Fact]
-        public void método_principal_Run_deve_rodar_sem_erros()
+        public void método_principal_Initialize_deve_rodar_sem_erros()
         {
             // Arrange, Given
 
@@ -31,7 +32,7 @@ namespace Kli.Core
             
             // Act, When
             
-            Action run = () => engine.Run();
+            Action run = () => engine.Initialize();
 
             // Assert, Then
             
@@ -39,16 +40,22 @@ namespace Kli.Core
         }
         
         [Fact]
-        public void método_principal_Run_deve_fazer_reset_nas_cores_do_console_no_início_e_no_final()
+        public void método_principal_Initialize_deve_fazer_reset_nas_cores_do_console_no_início_e_no_final()
         {
             // Arrange, Given
 
-            var console = DependencyResolverForTest.GetInstance<IConsole>();
-            var engine = new Engine(console, DependencyResolverForTest.GetInstance<ITranslate>(), DependencyResolverForTest.GetInstance<ILoaderAssembly>()) as IEngine;
+            var console = Substitute.For<IConsole>();
+            var engine = new Engine(
+                console, 
+                Substitute.For<ITranslate>(), 
+                Substitute.For<ILoaderAssembly>(),
+                Substitute.For<IMultipleInput>(),
+                Substitute.For<IMultipleOutput>(),
+                Substitute.For<IMultipleModule>()) as IEngine;
             
             // Act, When
             
-            engine.Run();
+            engine.Initialize();
 
             // Assert, Then
             
@@ -56,16 +63,22 @@ namespace Kli.Core
         }
         
         [Fact]
-        public void método_principal_Run_deve_carregar_as_traduções_do_recurso_embutido()
+        public void método_principal_Initialize_deve_carregar_as_traduções_do_recurso_embutido()
         {
             // Arrange, Given
 
-            var translate = DependencyResolverForTest.GetInstance<ITranslate>();
-            var engine = new Engine(DependencyResolverForTest.GetInstance<IConsole>(), translate, DependencyResolverForTest.GetInstance<ILoaderAssembly>()) as IEngine;
+            var translate = Substitute.For<ITranslate>();
+            var engine = new Engine(
+                Substitute.For<IConsole>(), 
+                translate, 
+                Substitute.For<ILoaderAssembly>(),
+                Substitute.For<IMultipleInput>(),
+                Substitute.For<IMultipleOutput>(),
+                Substitute.For<IMultipleModule>()) as IEngine;
             
             // Act, When
             
-            engine.Run();
+            engine.Initialize();
 
             // Assert, Then
 
@@ -73,16 +86,17 @@ namespace Kli.Core
         }
         
         [Fact]
-        public void após_chamada_do_método_principal_Run_as_traduções_devem_estar_funcionando()
+        public void após_chamada_do_método_principal_Initialize_as_traduções_devem_estar_funcionando()
         {
             // Arrange, Given
 
             var engine = DependencyResolverFromProgram.GetInstance<IEngine>();
-            engine.Run();
+            engine.Initialize();
+            var translate = DependencyResolverFromProgram.GetInstance<ITranslate>();
             
             // Act, When
 
-            var traduçãoDeYes = "Yes".Translate("pt");
+            var traduçãoDeYes = translate.Get("Yes", "pt");
             
             // Assert, Then
 
@@ -90,21 +104,28 @@ namespace Kli.Core
         }
         
         [Fact]
-        public void método_principal_Run_deve_carregar_em_tempo_de_execução_os_arquivos_de_assemblies()
+        public void método_principal_Initialize_deve_carregar_em_tempo_de_execução_os_arquivos_de_assemblies()
         {
             // Arrange, Given
 
-            var assemblyFileLoader = DependencyResolverForTest.GetInstance<ILoaderAssembly>();
-            var engine = new Engine(DependencyResolverForTest.GetInstance<IConsole>(), DependencyResolverForTest.GetInstance<ITranslate>(), assemblyFileLoader) as IEngine;
+            var assemblyFileLoader = Substitute.For<ILoaderAssembly>();
+            var engine = new Engine(
+                Substitute.For<IConsole>(), 
+                Substitute.For<ITranslate>(), 
+                assemblyFileLoader,
+                Substitute.For<IMultipleInput>(),
+                Substitute.For<IMultipleOutput>(),
+                Substitute.For<IMultipleModule>()) as IEngine;
 
             // Act, When
             
-            engine.Run();
+            engine.Initialize();
                 
             // Assert, Then
 
             assemblyFileLoader.Received(1).GetInstances<IOutput>("Kli.Output.*.dll");
             assemblyFileLoader.Received(1).GetInstances<IInput>("Kli.Input.*.dll");
+            assemblyFileLoader.Received(1).GetInstances<IModule>("Kli.Module.*.dll");
         }
     }
 }

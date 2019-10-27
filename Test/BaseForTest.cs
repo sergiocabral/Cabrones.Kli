@@ -23,7 +23,6 @@ namespace Test
         protected BaseForTest()
         {
             Program.DependencyResolver = DependencyResolverFromProgram;
-            DependencyResolverForTest.Reset();
         }
         
         /// <summary>
@@ -50,15 +49,19 @@ namespace Test
         {
             // Arrange, Given
             
-            var métodosDoTipoDaClasse = tipoDaClasse.GetMethods().Where(a => a.IsPublic && a.DeclaringType?.Assembly == tipoDaClasse.Assembly).ToList();
+            var métodosDoTipoDaClasse = tipoDaClasse.GetMethods().Where(a => a.IsPublic && a.DeclaringType == tipoDaClasse && a.DeclaringType?.Assembly == tipoDaClasse.Assembly).Select(a => a.ToString()).ToList();
             var métodosDosTiposQueDeveSerImplementado = new List<MethodInfo>();
 
             foreach (var tipoQueDeveSerImplementado in tiposQueDeveSerImplementado)
             {
                 métodosDosTiposQueDeveSerImplementado.AddRange(tipoQueDeveSerImplementado.GetMethods()
-                    .Where(a => a.IsPublic && a.DeclaringType?.Assembly == tipoQueDeveSerImplementado.Assembly)
+                    .Where(a => a.IsPublic && a.DeclaringType == tipoQueDeveSerImplementado &&
+                                a.DeclaringType?.Assembly == tipoQueDeveSerImplementado.Assembly)
                     .ToList());
             }
+
+            var métodosDisponíveisNoTipoDaClasse = tipoDaClasse.GetMethods().Where(a => a.IsPublic).Select(a => a.ToString()).ToList();
+            métodosDosTiposQueDeveSerImplementado.RemoveAll(a => !métodosDoTipoDaClasse.Contains(a.ToString()) && métodosDisponíveisNoTipoDaClasse.Contains(a.ToString()));
             
             // Act, When
 
@@ -85,7 +88,7 @@ namespace Test
 
             // Act, When
 
-            var métodosPrópriosDoTipo = métodos.Where(a => a.IsPublic && a.DeclaringType?.Assembly == tipo.Assembly).ToList();
+            var métodosPrópriosDoTipo = métodos.Where(a => a.IsPublic && a.DeclaringType == tipo && a.DeclaringType?.Assembly == tipo.Assembly).ToList();
 
             // Assert, Then
 

@@ -16,6 +16,6 @@ namespace Kli
         /// <summary>
         /// Método de entrada para execução do programa.
         /// </summary>
-        public static void Main() => DependencyResolver.GetInstance<IEngine>().Run();
+        public static void Main() => DependencyResolver.GetInstance<IEngine>().Initialize();
     }
 }

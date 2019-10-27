@@ -64,13 +64,13 @@ namespace Kli.Core
             // Act, When
 
             var inicialmenteODiretórioNãoExiste = Directory.Exists(diretórioDoUsuario.FullName);
-            DependencyResolverFromProgram.GetInstance<IDefinition>();
-            var finalmenteODiretórioNãoExiste = Directory.Exists(diretórioDoUsuario.FullName);
+            var _ = new Definition();
+            var finalmenteODiretórioExiste = Directory.Exists(diretórioDoUsuario.FullName);
 
             // Assert, Then
 
             inicialmenteODiretórioNãoExiste.Should().BeFalse();
-            finalmenteODiretórioNãoExiste.Should().BeTrue();
+            finalmenteODiretórioExiste.Should().BeTrue();
         }
         
         [Fact]

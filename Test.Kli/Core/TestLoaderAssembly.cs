@@ -29,7 +29,7 @@ namespace Kli.Core
         {
             // Arrange, Given
             
-            var loaderAssembly = new LoaderAssembly(DependencyResolverFromProgram.GetInstance<IDefinition>(), DependencyResolverForTest.GetInstance<IDependencyResolver>());
+            var loaderAssembly = new LoaderAssembly(DependencyResolverFromProgram.GetInstance<IDefinition>(), Substitute.For<IDependencyResolver>());
 
             // Act, When
 
@@ -48,7 +48,7 @@ namespace Kli.Core
         {
             // Arrange, Given
             
-            var loaderAssembly = new LoaderAssembly(DependencyResolverFromProgram.GetInstance<IDefinition>(), DependencyResolverForTest.GetInstance<IDependencyResolver>());
+            var loaderAssembly = new LoaderAssembly(DependencyResolverFromProgram.GetInstance<IDefinition>(), Substitute.For<IDependencyResolver>());
 
             // Act, When
 
@@ -82,7 +82,7 @@ namespace Kli.Core
         {
             // Arrange, Given
             
-            var loaderAssembly = new LoaderAssembly(DependencyResolverFromProgram.GetInstance<IDefinition>(), DependencyResolverForTest.GetInstance<IDependencyResolver>());
+            var loaderAssembly = new LoaderAssembly(DependencyResolverFromProgram.GetInstance<IDefinition>(), Substitute.For<IDependencyResolver>());
 
             // Act, When
 
@@ -99,8 +99,8 @@ namespace Kli.Core
         {
             // Arrange, Given
 
-            var definition = DependencyResolverForTest.GetInstance<IDefinition>();
-            var loaderAssembly = new LoaderAssembly(definition, DependencyResolverForTest.GetInstance<IDependencyResolver>());
+            var definition = Substitute.For<IDefinition>();
+            var loaderAssembly = new LoaderAssembly(definition, Substitute.For<IDependencyResolver>());
             var leituraDePropriedade = 0;
             definition.DirectoryOfProgram.Returns(info =>
             {
@@ -122,7 +122,7 @@ namespace Kli.Core
         {
             // Arrange, Given
 
-            var dependencyResolver = DependencyResolverForTest.GetInstance<IDependencyResolver>();
+            var dependencyResolver = Substitute.For<IDependencyResolver>();
             var loaderAssembly = new LoaderAssembly(DependencyResolverFromProgram.GetInstance<IDefinition>(), dependencyResolver);
 
             // Act, When
@@ -140,7 +140,7 @@ namespace Kli.Core
         {
             // Arrange, Given
 
-            var dependencyResolver = DependencyResolverForTest.GetInstance<IDependencyResolver>();
+            var dependencyResolver = Substitute.For<IDependencyResolver>();
             var loaderAssembly = new LoaderAssembly(DependencyResolverFromProgram.GetInstance<IDefinition>(), dependencyResolver);
 
             // Act, When
@@ -160,7 +160,7 @@ namespace Kli.Core
         {
             // Arrange, Given
 
-            var dependencyResolver = DependencyResolverForTest.GetInstance<IDependencyResolver>();
+            var dependencyResolver = Substitute.For<IDependencyResolver>();
             var loaderAssembly = new LoaderAssembly(DependencyResolverFromProgram.GetInstance<IDefinition>(), dependencyResolver);
             dependencyResolver.InterfacesForMultipleImplementation.Returns(info =>
                 DependencyResolverFromProgram.GetInstance<IDependencyResolver>().InterfacesForMultipleImplementation);

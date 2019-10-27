@@ -42,18 +42,7 @@ namespace Kli.Core
         public IDictionary<string, Assembly?> Load(string fileMask)
         {
             var result = new Dictionary<string, Assembly?>();
-            
-            FileInfo[] files;
-            try
-            {
-                files = new DirectoryInfo(_definition.DirectoryOfProgram).GetFiles(fileMask);
-            }
-            catch
-            {
-                return result;
-            }
-            
-            foreach (var file in files)
+            foreach (var file in GetFiles(fileMask))
             {
                 try
                 {
@@ -119,5 +108,22 @@ namespace Kli.Core
         /// <returns>Indicativo de sim ou não.</returns>
         private bool IsInterfaceForMultipleImplementation(Type interfaceType) =>
             _dependencyResolver.InterfacesForMultipleImplementation.Contains(interfaceType);
+        
+        /// <summary>
+        /// Faz a consulta dos arquivos baseados numa máscara de busca.
+        /// </summary>
+        /// <param name="fileMask">Máscara de busca dos arquivos.</param>
+        /// <returns>Lista de arquivos.</returns>
+        private IEnumerable<FileInfo> GetFiles(string fileMask)
+        {
+            try
+            {
+                return new DirectoryInfo(_definition.DirectoryOfProgram).GetFiles(fileMask);
+            }
+            catch
+            {
+                return new FileInfo[0];
+            }
+        }
     }
 }

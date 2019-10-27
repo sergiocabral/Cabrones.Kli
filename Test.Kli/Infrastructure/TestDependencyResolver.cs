@@ -4,6 +4,7 @@ using FluentAssertions;
 using Kli.Core;
 using Kli.i18n;
 using Kli.Input;
+using Kli.Module;
 using Kli.Output;
 using Kli.Wrappers;
 using NSubstitute;
@@ -28,6 +29,16 @@ namespace Kli.Infrastructure
         [InlineData(typeof(IOutputWriter))]
         [InlineData(typeof(IOutputMarkers))]
         [InlineData(typeof(IEngine))]
+        [InlineData(typeof(IInteraction))]
+        [InlineData(typeof(IMultipleInput))]
+        [InlineData(typeof(IMultiple<IInput>))]
+        [InlineData(typeof(Multiple<IInput>))]
+        [InlineData(typeof(IMultipleOutput))]
+        [InlineData(typeof(IMultiple<IOutput>))]
+        [InlineData(typeof(Multiple<IOutput>))]
+        [InlineData(typeof(IMultipleModule))]
+        [InlineData(typeof(IMultiple<IModule>))]
+        [InlineData(typeof(Multiple<IModule>))]
         [InlineData(typeof(ICache))]
         [InlineData(typeof(ILanguage))]
         [InlineData(typeof(ITranslate))]
@@ -477,6 +488,7 @@ namespace Kli.Infrastructure
         [Theory]
         [InlineData(typeof(IInput))]
         [InlineData(typeof(IOutput))]
+        [InlineData(typeof(IModule))]
         public void não_permite_registrar_serviços_de_interfaces_com_múltiplas_implementações(Type tipoDaInterfaces)
         {
             // Arrange, Given
@@ -508,7 +520,7 @@ namespace Kli.Infrastructure
                 
             // Assert, Then
 
-            interfacesComMúltiplasImplementações.Should().BeEquivalentTo(typeof(IOutput), typeof(IInput));
+            interfacesComMúltiplasImplementações.Should().BeEquivalentTo(typeof(IOutput), typeof(IInput), typeof(IModule));
         }
     }
 
@@ -520,7 +532,7 @@ namespace Kli.Infrastructure
         /// <summary>
         /// Identificador da instância.
         /// </summary>
-        string Identificador { get; }
+        long Identificador { get; }
 
         /// <summary>
         /// Evento disparado quando Dispose é chamado.
@@ -531,17 +543,17 @@ namespace Kli.Infrastructure
     /// <summary>
     /// Classe usada como insumo para testar o DependencyResolver.
     /// </summary>
-    internal class Teste: BaseForTest, ITeste
+    internal class Teste: ITeste
     {
         /// <summary>
         /// Construtor. Define o identificador.
         /// </summary>
-        public Teste() => Identificador = Fixture.Create<string>();
+        public Teste() => Identificador = DateTime.Now.Ticks;
         
         /// <summary>
         /// Identificador da instância.
         /// </summary>
-        public string Identificador { get; }
+        public long Identificador { get; }
 
         /// <summary>
         /// Evento disparado quando Dispose é chamado.

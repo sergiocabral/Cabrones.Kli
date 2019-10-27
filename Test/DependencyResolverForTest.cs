@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Kli.Infrastructure;
-using Kli.Input;
-using Kli.Output;
 using NSubstitute;
 
 namespace Test
@@ -16,19 +14,8 @@ namespace Test
     {
         public DependencyResolverForTest()
         {
+            Instances.Clear();
             ForFullUnitTestCoverage();
-        }
-
-        /// <summary>
-        /// O conteúdo deste método existe apenas para garantir que o Unit Test Coverage seja de 100%.
-        /// Seu conteúdo é desnecessário para o funcionamento.
-        /// Trata-se de funções não utilizadas, mas que precisam ser chamadas para Coverage completo.
-        /// </summary>
-        private void ForFullUnitTestCoverage()
-        {
-            DisposeScope(CreateScope());
-            IsActive(Guid.Empty);
-            var _ = InterfacesForMultipleImplementation.ToString();
         }
 
         /// <summary>
@@ -69,7 +56,7 @@ namespace Test
         public object GetInstance(Type service, Guid? scope = null)
         {
             Register(service, service, DependencyResolverLifeTime.PerContainer);
-            return _instances[service];
+            return Instances[service];
         }
 
         /// <summary>
@@ -81,8 +68,8 @@ namespace Test
         public void Register<TService, TImplementation>(DependencyResolverLifeTime lifetime)
             where TImplementation : TService where TService : class
         {
-            if (_instances.ContainsKey(typeof(TService))) return;
-            _instances.Add(typeof(TService), Substitute.For<TService>());
+            if (Instances.ContainsKey(typeof(TService))) return;
+            Instances.Add(typeof(TService), Substitute.For<TService>());
         }
 
         /// <summary>
@@ -105,17 +92,23 @@ namespace Test
         /// Lista de interfaces que são implementadas múltiplas vezes.
         /// Essas interfaces não podem ser registradas como serviço.
         /// </summary>
-        public IEnumerable<Type> InterfacesForMultipleImplementation { get; } = new[] {typeof(IOutput), typeof(IInput)};
+        public IEnumerable<Type> InterfacesForMultipleImplementation { get; } = new Type[0];
 
-        /// <summary>
-        /// Descarta as instâncias já criadas.
-        /// Causa um reset na contagem do Substitute.
-        /// </summary>
-        public void Reset() => _instances.Clear();
-        
         /// <summary>
         /// Histórico de instâncias utilizadas.
         /// </summary>
-        private readonly Dictionary<Type, object> _instances = new Dictionary<Type, object>();
+        private static readonly Dictionary<Type, object> Instances = new Dictionary<Type, object>();
+
+        /// <summary>
+        /// O conteúdo deste método existe apenas para garantir que o Unit Test Coverage seja de 100%.
+        /// Seu conteúdo é desnecessário para o funcionamento.
+        /// Trata-se de funções não utilizadas, mas que precisam ser chamadas para Coverage completo.
+        /// </summary>
+        private void ForFullUnitTestCoverage()
+        {
+            DisposeScope(CreateScope());
+            IsActive(Guid.Empty);
+            var _ = InterfacesForMultipleImplementation.ToString();
+        }
     }
 }

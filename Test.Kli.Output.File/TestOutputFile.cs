@@ -30,7 +30,7 @@ namespace Kli.Output.File
         {
             // Arrange, Given
 
-            var outputWriter = DependencyResolverForTest.GetInstance<IOutputWriter>();
+            var outputWriter = Substitute.For<IOutputWriter>();
             var outputFile = new OutputFile(outputWriter, DependencyResolverFromProgram.GetInstance<IDefinition>()) as IOutputFile;
             var textoDeExemplo = Fixture.Create<string>();
             
@@ -50,7 +50,7 @@ namespace Kli.Output.File
         {
             // Arrange, Given
 
-            var outputFile = new OutputFile(DependencyResolverForTest.GetInstance<IOutputWriter>(), 
+            var outputFile = new OutputFile(Substitute.For<IOutputWriter>(), 
                 DependencyResolverFromProgram.GetInstance<IDefinition>()) as IOutputFile;
             var textoEscrito = Fixture.Create<string>();
             
@@ -68,9 +68,9 @@ namespace Kli.Output.File
         {
             // Arrange, Given
 
-            var definition = DependencyResolverForTest.GetInstance<IDefinition>();
+            var definition = Substitute.For<IDefinition>();
             definition.CanWriteIntoDirectoryOfUser.Returns(info => false);
-            var outputFile = new OutputFile(DependencyResolverForTest.GetInstance<IOutputWriter>(), definition) as IOutputFile;
+            var outputFile = new OutputFile(Substitute.For<IOutputWriter>(), definition) as IOutputFile;
             
             // Act, When
             
@@ -87,7 +87,7 @@ namespace Kli.Output.File
             // Arrange, Given
 
             var outputFile = new OutputFile(
-                DependencyResolverForTest.GetInstance<IOutputWriter>(),
+                Substitute.For<IOutputWriter>(),
                 DependencyResolverFromProgram.GetInstance<IDefinition>()) as IOutputFile;
             
             // Act, When

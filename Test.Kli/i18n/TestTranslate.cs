@@ -635,7 +635,7 @@ namespace Kli.i18n
         {
             // Arrange, Given
 
-            var idioma = DependencyResolverForTest.GetInstance<ILanguage>();
+            var idioma = Substitute.For<ILanguage>();
             var idiomaAtualConsultado = 0;
             idioma.Current.ReturnsForAnyArgs(info => idiomaAtualConsultado++.ToString());
             

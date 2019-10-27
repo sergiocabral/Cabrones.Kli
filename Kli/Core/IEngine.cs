@@ -5,6 +5,9 @@
     /// </summary>
     public interface IEngine
     {
-        void Run();
+        /// <summary>
+        /// Preparação inicial para então executar os módulos.
+        /// </summary>
+        void Initialize();
     }
 }

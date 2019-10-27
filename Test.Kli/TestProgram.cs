@@ -32,7 +32,7 @@ namespace Kli
 
             // Assert, Then
 
-            dependencyResolver.GetInstance<IEngine>().Received(1).Run();
+            dependencyResolver.GetInstance<IEngine>().Received(1).Initialize();
         }
     }
 }

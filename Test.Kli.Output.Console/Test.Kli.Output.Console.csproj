@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.0</TargetFramework>
         <IsPackable>false</IsPackable>
-        <Version>0.0.0.77</Version>
+        <Version>0.0.0.143</Version>
         <RootNamespace>Kli.Output.Console</RootNamespace>
         <OutputPath>$(SolutionDir)_test</OutputPath>
     </PropertyGroup>

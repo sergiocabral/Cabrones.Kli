@@ -4,6 +4,7 @@ using System.Linq;
 using Kli.Core;
 using Kli.i18n;
 using Kli.Input;
+using Kli.Module;
 using Kli.Output;
 using Kli.Wrappers;
 using LightInject;
@@ -83,7 +84,9 @@ namespace Kli.Infrastructure
         public object GetInstance(Type service, Guid? scope)
         {
             if (!scope.HasValue) return Container.GetInstance(service);
+            
             ValidateScope(scope.Value);
+            
             return Scopes[scope.Value].GetInstance(service);
         }
 
@@ -113,7 +116,7 @@ namespace Kli.Infrastructure
         /// Lista de interfaces que são implementadas múltiplas vezes.
         /// Essas interfaces não podem ser registradas como serviço.
         /// </summary>
-        public IEnumerable<Type> InterfacesForMultipleImplementation { get; } = new[] {typeof(IOutput), typeof(IInput)};
+        public IEnumerable<Type> InterfacesForMultipleImplementation { get; } = new[] {typeof(IOutput), typeof(IInput), typeof(IModule)};
 
         /// <summary>
         /// Container de trabalho do LightInject para este projeto.
@@ -133,6 +136,16 @@ namespace Kli.Infrastructure
             Register<IOutputWriter, OutputWriter>(DependencyResolverLifeTime.PerContainer);
             Register<IOutputMarkers, OutputMarkers>(DependencyResolverLifeTime.PerContainer);
             Register<IEngine, Engine>(DependencyResolverLifeTime.PerContainer);
+            Register<IInteraction, Interaction>(DependencyResolverLifeTime.PerContainer);
+            Register<IMultipleInput, MultipleInput>(DependencyResolverLifeTime.PerContainer);
+            Register<IMultiple<IInput>, MultipleInput>(DependencyResolverLifeTime.PerContainer);
+            Register<Multiple<IInput>, MultipleInput>(DependencyResolverLifeTime.PerContainer);
+            Register<IMultipleOutput, MultipleOutput>(DependencyResolverLifeTime.PerContainer);
+            Register<IMultiple<IOutput>, MultipleOutput>(DependencyResolverLifeTime.PerContainer);
+            Register<Multiple<IOutput>, MultipleOutput>(DependencyResolverLifeTime.PerContainer);
+            Register<IMultipleModule, MultipleModule>(DependencyResolverLifeTime.PerContainer);
+            Register<IMultiple<IModule>, MultipleModule>(DependencyResolverLifeTime.PerContainer);
+            Register<Multiple<IModule>, MultipleModule>(DependencyResolverLifeTime.PerContainer);
             Register<ICache, Cache>(DependencyResolverLifeTime.PerContainer);
             Register<ILanguage, Language>(DependencyResolverLifeTime.PerContainer);
             Register<ITranslate, Translate>(DependencyResolverLifeTime.PerContainer);
