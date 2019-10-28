@@ -95,7 +95,7 @@ namespace Kli.i18n
             var environment = Substitute.For<IEnvironment>();
             var idioma = new Language(Substitute.For<ICache>(), environment) as ILanguage;
 
-            environment.GetEnvironmentVariable(null).ReturnsForAnyArgs(info => valorDaVariávelDeAmbiente);
+            environment.GetEnvironmentVariable(null).ReturnsForAnyArgs(valorDaVariávelDeAmbiente);
             
             // Act, When
 
@@ -157,7 +157,7 @@ namespace Kli.i18n
             var idioma = new Language(cache, environment) as ILanguage;
 
             cache.Clear();
-            environment.GetEnvironmentVariable(null).ReturnsForAnyArgs(info => exemploDeValorInválido);
+            environment.GetEnvironmentVariable(null).ReturnsForAnyArgs(exemploDeValorInválido);
             
             // Act, When
 
@@ -186,7 +186,7 @@ namespace Kli.i18n
             var idioma = new Language(cache, environment) as ILanguage;
 
             cache.Clear();
-            environment.GetEnvironmentVariable(null).ReturnsForAnyArgs(info => valorDaVariávelDeAmbiente);
+            environment.GetEnvironmentVariable(null).ReturnsForAnyArgs(valorDaVariávelDeAmbiente);
             
             // Act, When
 

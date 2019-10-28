@@ -7,7 +7,7 @@ namespace Kli.Wrappers
     public class TestIConsole: BaseForTest
     {
         [Theory]
-        [InlineData(typeof(IConsole), 7)]
+        [InlineData(typeof(IConsole), 17)]
         public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
             verifica_se_o_total_de_métodos_públicos_declarados_está_correto_no_tipo(tipo, totalDeMétodosEsperado);
 
@@ -19,6 +19,16 @@ namespace Kli.Wrappers
         [InlineData(typeof(IConsole), "Void ResetColor()")]
         [InlineData(typeof(IConsole), "Void Write(String)")]
         [InlineData(typeof(IConsole), "Void WriteLine(String)")]
+        [InlineData(typeof(IConsole), "String ReadLine()")]
+        [InlineData(typeof(IConsole), "ConsoleKeyInfo ReadKey()")]
+        [InlineData(typeof(IConsole), "Boolean get_KeyAvailable()")]
+        [InlineData(typeof(IConsole), "Int32 get_CursorTop()")]
+        [InlineData(typeof(IConsole), "Void set_CursorTop(Int32)")]
+        [InlineData(typeof(IConsole), "Int32 get_CursorLeft()")]
+        [InlineData(typeof(IConsole), "Void set_CursorLeft(Int32)")]
+        [InlineData(typeof(IConsole), "Int32 get_BufferHeight()")]
+        [InlineData(typeof(IConsole), "Int32 get_BufferWidth()")]
+        [InlineData(typeof(IConsole), "Void SetCursorPosition(Int32, Int32)")]
         public void verifica_se_os_métodos_existem_com_base_na_assinatura(Type tipo, string assinaturaEsperada) =>
             verifica_se_o_método_existe_com_base_na_assinatura(tipo, assinaturaEsperada);
     }

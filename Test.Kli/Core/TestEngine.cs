@@ -24,22 +24,6 @@ namespace Kli.Core
             verifica_se_classe_implementa_o_tipo(tipoDaClasse, tiposQueDeveSerImplementado);
         
         [Fact]
-        public void método_principal_Initialize_deve_rodar_sem_erros()
-        {
-            // Arrange, Given
-
-            var engine = DependencyResolverFromProgram.GetInstance<IEngine>();
-            
-            // Act, When
-            
-            Action run = () => engine.Initialize();
-
-            // Assert, Then
-            
-            run.Should().NotThrow();
-        }
-        
-        [Fact]
         public void método_principal_Initialize_deve_fazer_reset_nas_cores_do_console_no_início_e_no_final()
         {
             // Arrange, Given
@@ -82,7 +66,7 @@ namespace Kli.Core
 
             // Assert, Then
 
-            translate.ReceivedWithAnyArgs().LoadFromResource(null, null);
+            translate.ReceivedWithAnyArgs(1).LoadFromResource(null, null);
         }
         
         [Fact]
@@ -90,9 +74,16 @@ namespace Kli.Core
         {
             // Arrange, Given
 
-            var engine = DependencyResolverFromProgram.GetInstance<IEngine>();
-            engine.Initialize();
             var translate = DependencyResolverFromProgram.GetInstance<ITranslate>();
+            var engine = new Engine(
+                DependencyResolverForTest.GetInstance<IConsole>(),
+                translate,
+                DependencyResolverForTest.GetInstance<ILoaderAssembly>(),
+                DependencyResolverForTest.GetInstance<IMultipleInput>(),
+                DependencyResolverForTest.GetInstance<IMultipleOutput>(),
+                DependencyResolverForTest.GetInstance<IMultipleModule>()
+                ) as IEngine;
+            engine.Initialize();
             
             // Act, When
 
@@ -126,6 +117,54 @@ namespace Kli.Core
             assemblyFileLoader.Received(1).GetInstances<IOutput>("Kli.Output.*.dll");
             assemblyFileLoader.Received(1).GetInstances<IInput>("Kli.Input.*.dll");
             assemblyFileLoader.Received(1).GetInstances<IModule>("Kli.Module.*.dll");
+        }
+        
+        [Fact]
+        public void método_principal_Initialize_deve_carregar_items_pelo_menos_no_IMultipleInput_e_IMultipleOutput()
+        {
+            // Arrange, Given
+
+            var multipleInput = Substitute.For<IMultipleInput>();
+            var multipleOutput = Substitute.For<IMultipleOutput>();
+            var engine = new Engine(
+                Substitute.For<IConsole>(), 
+                Substitute.For<ITranslate>(), 
+                DependencyResolverFromProgram.GetInstance<ILoaderAssembly>(),
+                multipleInput,
+                multipleOutput,
+                Substitute.For<IMultipleModule>()) as IEngine;
+
+            // Act, When
+            
+            engine.Initialize();
+                
+            // Assert, Then
+
+            multipleInput.ReceivedWithAnyArgs().Add(null);
+            multipleOutput.ReceivedWithAnyArgs().Add(null);
+        }
+        
+        [Fact]
+        public void método_principal_Initialize_deve_chamar_a_execução_dos_módulos()
+        {
+            // Arrange, Given
+
+            var multipleModule = Substitute.For<IMultipleModule>();
+            var engine = new Engine(
+                Substitute.For<IConsole>(), 
+                Substitute.For<ITranslate>(),
+                Substitute.For<ILoaderAssembly>(),
+                Substitute.For<IMultipleInput>(),
+                Substitute.For<IMultipleOutput>(),
+                multipleModule) as IEngine;
+            
+            // Act, When
+            
+            engine.Initialize();
+
+            // Assert, Then
+
+            multipleModule.Received(1).Run();
         }
     }
 }

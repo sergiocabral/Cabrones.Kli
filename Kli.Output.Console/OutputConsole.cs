@@ -69,5 +69,11 @@ namespace Kli.Output.Console
 
             _console.Write(text);
         }
+
+        /// <summary>
+        /// Retorna o marcador com base nas cores atuais do console.
+        /// </summary>
+        /// <returns>Marcador.</returns>
+        public char CurrentMarker() => _outputMarkersToConsoleColor.Convert(_console.ForegroundColor, _console.BackgroundColor);
     }
 }

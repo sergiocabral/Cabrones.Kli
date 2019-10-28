@@ -69,7 +69,7 @@ namespace Kli.Output.File
             // Arrange, Given
 
             var definition = Substitute.For<IDefinition>();
-            definition.CanWriteIntoDirectoryOfUser.Returns(info => false);
+            definition.CanWriteIntoDirectoryOfUser.Returns(false);
             var outputFile = new OutputFile(Substitute.For<IOutputWriter>(), definition) as IOutputFile;
             
             // Act, When

@@ -33,5 +33,49 @@ namespace Kli.Wrappers
         /// </summary>
         /// <param name="value">Texto.</param>
         void WriteLine(string value);
+        
+        /// <summary>
+        /// Lê uma entrada de dados do usuário.
+        /// </summary>
+        /// <returns>Valor entrado.</returns>
+        string ReadLine();
+
+        /// <summary>
+        /// Lê uma entrada de tecla de dados do usuário.
+        /// </summary>
+        /// <returns>Caracter digitado.</returns>
+        ConsoleKeyInfo ReadKey();
+
+        /// <summary>
+        /// Verifica se existe tecla disponível para leitura imediata.
+        /// </summary>
+        bool KeyAvailable { get; }
+
+        /// <summary>
+        /// Posição do cursor: topo
+        /// </summary>
+        int CursorTop { get; set; }
+        
+        /// <summary>
+        /// Posição do cursor: esquerda
+        /// </summary>
+        int CursorLeft { get; set; }
+        
+        /// <summary>
+        /// Comprimento do cursor: Altura
+        /// </summary>
+        int BufferHeight { get; }
+        
+        /// <summary>
+        /// Comprimento do cursor: largura
+        /// </summary>
+        int BufferWidth { get; }
+
+        /// <summary>
+        /// Define a posição do cursor.
+        /// </summary>
+        /// <param name="left">Posição do cursor: esquerda</param>
+        /// <param name="top">Posição do cursor: topo</param>
+        void SetCursorPosition(int left, int top);
     }
 }

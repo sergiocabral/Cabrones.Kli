@@ -1,0 +1,63 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Version>2.0.0.88</Version>
+        <Nullable>enable</Nullable>
+        <TargetFramework>netcoreapp3.0</TargetFramework>
+        <OutputPath>$(SolutionDir)_build</OutputPath>
+    </PropertyGroup>
+
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Exec Command="..\IncrementBuildVersion.exe" />
+    </Target>
+
+    <PropertyGroup Condition="'$(Configuration)'=='Release'">
+        <DebugType>embedded</DebugType>
+        <DebugSymbols>true</DebugSymbols>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Kli\Kli.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_UnmanagedRegistrationCache Remove="obj\Kli.Input.Console.csproj.UnmanagedRegistration.cache" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ResolveComReferenceCache Remove="obj\Debug\netcoreapp3.0\Kli.Input.Console.csproj.ResolveComReference.cache" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <IntermediateAssembly Remove="obj\Debug\netcoreapp3.0\Kli.Input.Console.dll" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_DebugSymbolsIntermediatePath Remove="obj\Debug\netcoreapp3.0\Kli.Input.Console.pdb" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_DeploymentManifestEntryPoint Remove="obj\Debug\netcoreapp3.0\Kli.Input.Console.dll" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ApplicationManifest Remove="obj\Debug\netcoreapp3.0\Native.Kli.Input.Console.manifest" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <DeployManifest Remove="obj\Debug\netcoreapp3.0\Kli.Input.Console.application" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ClsidMap Remove="obj\Debug\netcoreapp3.0\Kli.Input.Console.clsidmap" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <RegFreeComManifest Remove="obj\Debug\netcoreapp3.0\Kli.Input.Console.X.manifest" />
+    </ItemGroup>
+
+    <PropertyGroup>
+        <Copyright>sergiocabral.com</Copyright>
+    </PropertyGroup>
+
+</Project>

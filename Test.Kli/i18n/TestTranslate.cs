@@ -637,7 +637,7 @@ namespace Kli.i18n
 
             var idioma = Substitute.For<ILanguage>();
             var idiomaAtualConsultado = 0;
-            idioma.Current.ReturnsForAnyArgs(info => idiomaAtualConsultado++.ToString());
+            idioma.Current.ReturnsForAnyArgs(idiomaAtualConsultado++.ToString());
             
             // Act, When
 

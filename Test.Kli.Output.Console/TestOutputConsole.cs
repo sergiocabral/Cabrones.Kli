@@ -17,7 +17,7 @@ namespace Kli.Output.Console
         }
         
         [Theory]
-        [InlineData(typeof(OutputConsole), 3)]
+        [InlineData(typeof(OutputConsole), 4)]
         public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
             verifica_se_o_total_de_métodos_públicos_declarados_está_correto_no_tipo(tipo, totalDeMétodosEsperado);
 
@@ -63,7 +63,7 @@ namespace Kli.Output.Console
             var marcadorDeExemplo = Fixture.Create<char>();
             
             outputMarkersToConsoleColor.Convert(marcadorDeExemplo).Returns(
-                info => Fixture.Create<Tuple<ConsoleColor, ConsoleColor>>());
+                Fixture.Create<Tuple<ConsoleColor, ConsoleColor>>());
             
             // Act, When
 
@@ -116,7 +116,7 @@ namespace Kli.Output.Console
                 console) as IOutputConsole;
             
             outputMarkersToConsoleColor.Convert((char)0).Returns(
-                info => Fixture.Create<Tuple<ConsoleColor, ConsoleColor>>());
+                Fixture.Create<Tuple<ConsoleColor, ConsoleColor>>());
             
             var textoDeExemplo = Fixture.Create<string>();
             
@@ -148,6 +148,45 @@ namespace Kli.Output.Console
 
             retornoDeWrite.Should().BeSameAs(outputConsole);
             retornoDeWriteLine.Should().BeSameAs(outputConsole);
+        }
+        
+        [Fact]
+        public void verifica_se_o_marcador_atual_foi_determinado_corretamente_usando_IConsole()
+        {
+            // Arrange, Given
+
+            var outputMarkersToConsoleColor = DependencyResolverFromProgram.GetInstance<IOutputMarkersToConsoleColor>();
+            var console = Substitute.For<IConsole>();
+            var outputConsole = new OutputConsole(
+                Substitute.For<IOutputWriter>(),
+                outputMarkersToConsoleColor,
+                console) as IOutputConsole;
+
+            var marcadorAtualEsperado = outputMarkersToConsoleColor.Convert(console.ForegroundColor, console.BackgroundColor);
+
+            var consultaDeBackgroundColor = 0;
+            console.BackgroundColor.Returns(info =>
+            {
+                consultaDeBackgroundColor++;
+                return default;
+            });
+            
+            var consultaDeForegroundColor = 0;
+            console.ForegroundColor.Returns(info =>
+            {
+                consultaDeForegroundColor++;
+                return default;
+            });
+            
+            // Act, When
+
+            var marcadorAtual = outputConsole.CurrentMarker();
+            
+            // Assert, Then
+
+            consultaDeBackgroundColor.Should().Be(1);
+            consultaDeForegroundColor.Should().Be(1);
+            marcadorAtual.Should().Be(marcadorAtualEsperado);
         }
     }
 }

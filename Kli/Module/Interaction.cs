@@ -47,7 +47,7 @@ namespace Kli.Module
             
             _multipleOutput.WriteLine("Started.");
             _multipleOutput.WriteLine("Yes".Translate("pt"));
-            _multipleInput.HasRead();
+            _multipleInput.Read(true);
         }
     }
 }
