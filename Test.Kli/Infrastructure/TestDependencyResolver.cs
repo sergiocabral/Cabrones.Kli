@@ -71,7 +71,7 @@ namespace Kli.Infrastructure
 
             // Act, When
             
-            Action adicionar = () => dependencyResolver.Register(typeof(ITeste), typeof(Teste));
+            Action adicionar = () => dependencyResolver.Register(typeof(SimulationToTestDependencyResolver), typeof(SimulationToTestDependencyResolver));
                 
             // Assert, Then
 
@@ -87,7 +87,7 @@ namespace Kli.Infrastructure
 
             // Act, When
             
-            Action adicionar = () => dependencyResolver.Register<ITeste, Teste>();
+            Action adicionar = () => dependencyResolver.Register<SimulationToTestDependencyResolver, SimulationToTestDependencyResolver>();
                 
             // Assert, Then
 
@@ -100,15 +100,15 @@ namespace Kli.Infrastructure
             // Arrange, Given
             
             var dependencyResolver = new DependencyResolver() as IDependencyResolver;
-            dependencyResolver.Register(typeof(ITeste), typeof(Teste));
+            dependencyResolver.Register(typeof(SimulationToTestDependencyResolver), typeof(SimulationToTestDependencyResolver));
             
             // Act, When
 
-            var instância = (ITeste) dependencyResolver.GetInstance(typeof(ITeste));
+            var instância = dependencyResolver.GetInstance(typeof(SimulationToTestDependencyResolver));
                 
             // Assert, Then
 
-            instância.GetType().Should().Be(typeof(Teste));
+            instância.GetType().Should().Be(typeof(SimulationToTestDependencyResolver));
         }
         
         [Fact]
@@ -117,15 +117,15 @@ namespace Kli.Infrastructure
             // Arrange, Given
             
             var dependencyResolver = new DependencyResolver() as IDependencyResolver;
-            dependencyResolver.Register<ITeste, Teste>();
+            dependencyResolver.Register<SimulationToTestDependencyResolver, SimulationToTestDependencyResolver>();
             
             // Act, When
 
-            var instância = dependencyResolver.GetInstance<ITeste>();
+            var instância = dependencyResolver.GetInstance<SimulationToTestDependencyResolver>();
                 
             // Assert, Then
 
-            instância.GetType().Should().Be(typeof(Teste));
+            instância.GetType().Should().Be(typeof(SimulationToTestDependencyResolver));
         }
         
         [Fact]
@@ -135,12 +135,12 @@ namespace Kli.Infrastructure
             
             var dependencyResolver = new DependencyResolver() as IDependencyResolver;
             // ReSharper disable once RedundantArgumentDefaultValue
-            dependencyResolver.Register(typeof(ITeste),typeof(Teste), DependencyResolverLifeTime.PerContainer);
+            dependencyResolver.Register(typeof(SimulationToTestDependencyResolver),typeof(SimulationToTestDependencyResolver), DependencyResolverLifeTime.PerContainer);
             
             // Act, When
 
-            var instância1 = (ITeste) dependencyResolver.GetInstance(typeof(ITeste));
-            var instância2 = (ITeste) dependencyResolver.GetInstance(typeof(ITeste));
+            var instância1 = (SimulationToTestDependencyResolver) dependencyResolver.GetInstance(typeof(SimulationToTestDependencyResolver));
+            var instância2 = (SimulationToTestDependencyResolver) dependencyResolver.GetInstance(typeof(SimulationToTestDependencyResolver));
                 
             // Assert, Then
 
@@ -155,12 +155,12 @@ namespace Kli.Infrastructure
             
             var dependencyResolver = new DependencyResolver() as IDependencyResolver;
             // ReSharper disable once RedundantArgumentDefaultValue
-            dependencyResolver.Register<ITeste, Teste>(DependencyResolverLifeTime.PerContainer);
+            dependencyResolver.Register<SimulationToTestDependencyResolver, SimulationToTestDependencyResolver>(DependencyResolverLifeTime.PerContainer);
             
             // Act, When
 
-            var instância1 = dependencyResolver.GetInstance<ITeste>();
-            var instância2 = dependencyResolver.GetInstance<ITeste>();
+            var instância1 = dependencyResolver.GetInstance<SimulationToTestDependencyResolver>();
+            var instância2 = dependencyResolver.GetInstance<SimulationToTestDependencyResolver>();
                 
             // Assert, Then
 
@@ -224,16 +224,16 @@ namespace Kli.Infrastructure
             // Arrange, Given
             
             var dependencyResolver = new DependencyResolver() as IDependencyResolver;
-            dependencyResolver.Register(typeof(ITeste), typeof(Teste),DependencyResolverLifeTime.PerScope);
+            dependencyResolver.Register(typeof(SimulationToTestDependencyResolver), typeof(SimulationToTestDependencyResolver),DependencyResolverLifeTime.PerScope);
             
             // Act, When
 
             var escopo1 = dependencyResolver.CreateScope();
-            var instância1A = (ITeste) dependencyResolver.GetInstance(typeof(ITeste), escopo1);
-            var instância1B = (ITeste) dependencyResolver.GetInstance(typeof(ITeste), escopo1);
+            var instância1A = (SimulationToTestDependencyResolver) dependencyResolver.GetInstance(typeof(SimulationToTestDependencyResolver), escopo1);
+            var instância1B = (SimulationToTestDependencyResolver) dependencyResolver.GetInstance(typeof(SimulationToTestDependencyResolver), escopo1);
             var escopo2 = dependencyResolver.CreateScope();
-            var instância2A = (ITeste) dependencyResolver.GetInstance(typeof(ITeste), escopo2);
-            var instância2B = (ITeste) dependencyResolver.GetInstance(typeof(ITeste), escopo2);
+            var instância2A = (SimulationToTestDependencyResolver) dependencyResolver.GetInstance(typeof(SimulationToTestDependencyResolver), escopo2);
+            var instância2B = (SimulationToTestDependencyResolver) dependencyResolver.GetInstance(typeof(SimulationToTestDependencyResolver), escopo2);
                 
             // Assert, Then
 
@@ -253,16 +253,16 @@ namespace Kli.Infrastructure
             // Arrange, Given
             
             var dependencyResolver = new DependencyResolver() as IDependencyResolver;
-            dependencyResolver.Register<ITeste, Teste>(DependencyResolverLifeTime.PerScope);
+            dependencyResolver.Register<SimulationToTestDependencyResolver, SimulationToTestDependencyResolver>(DependencyResolverLifeTime.PerScope);
             
             // Act, When
 
             var escopo1 = dependencyResolver.CreateScope();
-            var instância1A = dependencyResolver.GetInstance<ITeste>(escopo1);
-            var instância1B = dependencyResolver.GetInstance<ITeste>(escopo1);
+            var instância1A = dependencyResolver.GetInstance<SimulationToTestDependencyResolver>(escopo1);
+            var instância1B = dependencyResolver.GetInstance<SimulationToTestDependencyResolver>(escopo1);
             var escopo2 = dependencyResolver.CreateScope();
-            var instância2A = dependencyResolver.GetInstance<ITeste>(escopo2);
-            var instância2B = dependencyResolver.GetInstance<ITeste>(escopo2);
+            var instância2A = dependencyResolver.GetInstance<SimulationToTestDependencyResolver>(escopo2);
+            var instância2B = dependencyResolver.GetInstance<SimulationToTestDependencyResolver>(escopo2);
                 
             // Assert, Then
 
@@ -283,12 +283,12 @@ namespace Kli.Infrastructure
             
             var dependencyResolver = new DependencyResolver() as IDependencyResolver;
             var escopoQueNãoExiste = Fixture.Create<Guid>();
-            dependencyResolver.Register(typeof(ITeste), typeof(Teste), DependencyResolverLifeTime.PerScope);
+            dependencyResolver.Register(typeof(SimulationToTestDependencyResolver), typeof(SimulationToTestDependencyResolver), DependencyResolverLifeTime.PerScope);
             
             // Act, When
 
             Action obterServiçoDeEscopoQueNãoExiste =
-                () => dependencyResolver.GetInstance(typeof(ITeste), escopoQueNãoExiste);
+                () => dependencyResolver.GetInstance(typeof(SimulationToTestDependencyResolver), escopoQueNãoExiste);
                 
             // Assert, Then
 
@@ -302,12 +302,12 @@ namespace Kli.Infrastructure
             
             var dependencyResolver = new DependencyResolver() as IDependencyResolver;
             var escopoQueNãoExiste = Fixture.Create<Guid>();
-            dependencyResolver.Register<ITeste, Teste>(DependencyResolverLifeTime.PerScope);
+            dependencyResolver.Register<SimulationToTestDependencyResolver, SimulationToTestDependencyResolver>(DependencyResolverLifeTime.PerScope);
             
             // Act, When
 
             Action obterServiçoDeEscopoQueNãoExiste =
-                () => dependencyResolver.GetInstance<ITeste>(escopoQueNãoExiste);
+                () => dependencyResolver.GetInstance<SimulationToTestDependencyResolver>(escopoQueNãoExiste);
                 
             // Assert, Then
 
@@ -387,11 +387,11 @@ namespace Kli.Infrastructure
             // Arrange, Given
             
             var dependencyResolver = new DependencyResolver() as IDependencyResolver;
-            dependencyResolver.Register(typeof(ITeste), typeof(Teste),DependencyResolverLifeTime.PerScope);
+            dependencyResolver.Register(typeof(SimulationToTestDependencyResolver), typeof(SimulationToTestDependencyResolver),DependencyResolverLifeTime.PerScope);
             var escopo = dependencyResolver.CreateScope();
             
             var liberadoQuantasVezes = 0;
-            var instância = (ITeste) dependencyResolver.GetInstance(typeof(ITeste), escopo);
+            var instância = (SimulationToTestDependencyResolver) dependencyResolver.GetInstance(typeof(SimulationToTestDependencyResolver), escopo);
             instância.Disposed += () => liberadoQuantasVezes++;
 
             // Act, When
@@ -409,11 +409,11 @@ namespace Kli.Infrastructure
             // Arrange, Given
             
             var dependencyResolver = new DependencyResolver() as IDependencyResolver;
-            dependencyResolver.Register<ITeste, Teste>(DependencyResolverLifeTime.PerScope);
+            dependencyResolver.Register<SimulationToTestDependencyResolver, SimulationToTestDependencyResolver>(DependencyResolverLifeTime.PerScope);
             var escopo = dependencyResolver.CreateScope();
             
             var liberadoQuantasVezes = 0;
-            var instância = dependencyResolver.GetInstance<ITeste>(escopo);
+            var instância = dependencyResolver.GetInstance<SimulationToTestDependencyResolver>(escopo);
             instância.Disposed += () => liberadoQuantasVezes++;
 
             // Act, When
@@ -431,16 +431,16 @@ namespace Kli.Infrastructure
             // Arrange, Given
             
             var dependencyResolver = new DependencyResolver() as IDependencyResolver;
-            dependencyResolver.Register(typeof(ITeste), typeof(Teste),DependencyResolverLifeTime.PerScope);
+            dependencyResolver.Register(typeof(SimulationToTestDependencyResolver), typeof(SimulationToTestDependencyResolver),DependencyResolverLifeTime.PerScope);
             var escopoPai = dependencyResolver.CreateScope();
             var escopoFilho = dependencyResolver.CreateScope(escopoPai);
             var escopoNeto = dependencyResolver.CreateScope(escopoFilho);
             
             var liberadoQuantasVezes = 0;
             
-            var instânciaNoPai = (ITeste) dependencyResolver.GetInstance(typeof(ITeste), escopoPai);
-            var instânciaNoFilho = (ITeste) dependencyResolver.GetInstance(typeof(ITeste), escopoFilho);
-            var instânciaNoNeto = (ITeste) dependencyResolver.GetInstance(typeof(ITeste), escopoNeto);
+            var instânciaNoPai = (SimulationToTestDependencyResolver) dependencyResolver.GetInstance(typeof(SimulationToTestDependencyResolver), escopoPai);
+            var instânciaNoFilho = (SimulationToTestDependencyResolver) dependencyResolver.GetInstance(typeof(SimulationToTestDependencyResolver), escopoFilho);
+            var instânciaNoNeto = (SimulationToTestDependencyResolver) dependencyResolver.GetInstance(typeof(SimulationToTestDependencyResolver), escopoNeto);
             
             instânciaNoPai.Disposed += () => liberadoQuantasVezes++;
             instânciaNoFilho.Disposed += () => liberadoQuantasVezes++;
@@ -461,16 +461,16 @@ namespace Kli.Infrastructure
             // Arrange, Given
             
             var dependencyResolver = new DependencyResolver() as IDependencyResolver;
-            dependencyResolver.Register<ITeste, Teste>(DependencyResolverLifeTime.PerScope);
+            dependencyResolver.Register<SimulationToTestDependencyResolver, SimulationToTestDependencyResolver>(DependencyResolverLifeTime.PerScope);
             var escopoPai = dependencyResolver.CreateScope();
             var escopoFilho = dependencyResolver.CreateScope(escopoPai);
             var escopoNeto = dependencyResolver.CreateScope(escopoFilho);
             
             var liberadoQuantasVezes = 0;
             
-            var instânciaNoPai = dependencyResolver.GetInstance<ITeste>(escopoPai);
-            var instânciaNoFilho = dependencyResolver.GetInstance<ITeste>(escopoFilho);
-            var instânciaNoNeto = dependencyResolver.GetInstance<ITeste>(escopoNeto);
+            var instânciaNoPai = dependencyResolver.GetInstance<SimulationToTestDependencyResolver>(escopoPai);
+            var instânciaNoFilho = dependencyResolver.GetInstance<SimulationToTestDependencyResolver>(escopoFilho);
+            var instânciaNoNeto = dependencyResolver.GetInstance<SimulationToTestDependencyResolver>(escopoNeto);
             
             instânciaNoPai.Disposed += () => liberadoQuantasVezes++;
             instânciaNoFilho.Disposed += () => liberadoQuantasVezes++;
@@ -522,47 +522,5 @@ namespace Kli.Infrastructure
 
             interfacesComMúltiplasImplementações.Should().BeEquivalentTo(typeof(IOutput), typeof(IInput), typeof(IModule));
         }
-    }
-
-    /// <summary>
-    /// Interface usada como insumo para testar o DependencyResolver.
-    /// </summary>
-    internal interface ITeste: IDisposable
-    {
-        /// <summary>
-        /// Identificador da instância.
-        /// </summary>
-        long Identificador { get; }
-
-        /// <summary>
-        /// Evento disparado quando Dispose é chamado.
-        /// </summary>
-        event Action Disposed;
-    }
-
-    /// <summary>
-    /// Classe usada como insumo para testar o DependencyResolver.
-    /// </summary>
-    internal class Teste: ITeste
-    {
-        /// <summary>
-        /// Construtor. Define o identificador.
-        /// </summary>
-        public Teste() => Identificador = DateTime.Now.Ticks;
-        
-        /// <summary>
-        /// Identificador da instância.
-        /// </summary>
-        public long Identificador { get; }
-
-        /// <summary>
-        /// Evento disparado quando Dispose é chamado.
-        /// </summary>
-        public event Action Disposed;
-
-        /// <summary>
-        /// Dispose.
-        /// </summary>
-        public void Dispose() => Disposed?.Invoke();
     }
 }

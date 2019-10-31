@@ -8,12 +8,12 @@ namespace Kli.Wrappers
     public interface IConsole
     {
         /// <summary>
-        /// For do texto.
+        /// Cor do texto.
         /// </summary>
         ConsoleColor ForegroundColor { get; set; }
 
         /// <summary>
-        /// For do fundo do texto.
+        /// Cor do fundo do texto.
         /// </summary>
         ConsoleColor BackgroundColor { get; set; }
 

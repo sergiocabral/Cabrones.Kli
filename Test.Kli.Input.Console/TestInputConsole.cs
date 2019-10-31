@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
 using Kli.Wrappers;
 using NSubstitute;
 using Test;
 using Xunit;
-using Environment = System.Environment;
 
 namespace Kli.Input.Console
 {
@@ -216,7 +214,7 @@ namespace Kli.Input.Console
         {
             // Arrange, Given
 
-            var console = new ConsoleSimulation(texto) as IConsole;
+            var console = new SimulationForIConsole(texto) as IConsole;
             var inputConsole = new InputConsole(console);
             console.CursorTop = posiçãoInicialCursorTop;
             console.CursorLeft = posiçãoInicialCursorLeft;
@@ -255,7 +253,7 @@ namespace Kli.Input.Console
         {
             // Arrange, Given
 
-            var console = new ConsoleSimulation(texto);
+            var console = new SimulationForIConsole(texto);
             var inputConsole = new InputConsole(console);
             var cursorTop  = console.CursorTop = posiçãoInicialCursorTop;
             var cursorLeft = console.CursorLeft = posiçãoInicialCursorLeft;
@@ -268,86 +266,6 @@ namespace Kli.Input.Console
 
             console.CursorTop.Should().Be(cursorTop);
             console.CursorLeft.Should().Be(cursorLeft);
-        }
-    }
-
-    /// <summary>
-    /// Classe implementada apenas para simular um console.
-    /// Deve ser ignorada para teste de cobertura.
-    /// </summary>
-    internal class ConsoleSimulation : IConsole
-    {
-        private string _resposta;
-
-        public ConsoleSimulation(string resposta)
-        {
-            _resposta = $"{resposta}";
-        }
-
-        [ExcludeFromCodeCoverage] public ConsoleColor ForegroundColor { get; set; }
-
-        [ExcludeFromCodeCoverage] public ConsoleColor BackgroundColor { get; set; }
-
-        [ExcludeFromCodeCoverage] public void ResetColor() { }
-        
-        public void Write(string value)
-        {
-            foreach (var ch in value)
-            {
-                if (ch >= 32)
-                {
-                    CursorLeft = CursorLeft < BufferWidth - 1 ? CursorLeft + 1 : 0;
-                    if (CursorLeft == 0) CursorTop++;
-                }
-                else if (ch == '\n')
-                {
-                    CursorLeft = 0;
-                    CursorTop++;
-                }
-            }
-
-            if (CursorTop > BufferHeight) CursorTop = BufferHeight;  
-        }
-
-        public void WriteLine(string value) => Write(value + Environment.NewLine);
-
-        public string ReadLine()
-        {
-            var resposta = _resposta;
-            _resposta = string.Empty;
-            CursorLeft = 0;
-            CursorTop += 1 + resposta.Length / BufferWidth;
-            CursorTop = CursorTop <= BufferHeight ? CursorTop : BufferHeight;
-            return resposta;
-        }
-
-        public ConsoleKeyInfo ReadKey()
-        {
-            if (_resposta.Length == 0) return new ConsoleKeyInfo('\n', ConsoleKey.Enter, false, false, false);
-            
-            var resposta = _resposta[0];
-            _resposta = _resposta.Substring(1);
-            
-            if (resposta == '\b') return new ConsoleKeyInfo('\b', ConsoleKey.Backspace, false, false, false);
-
-            Enum.TryParse(resposta.ToString().ToUpper(), out ConsoleKey consoleKey);
-            return new ConsoleKeyInfo(resposta, consoleKey, false, false, false);
-        }
-
-        [ExcludeFromCodeCoverage] public bool KeyAvailable { get; } = false;
-        
-        public int CursorTop { get; set; }
-        
-        public int CursorLeft { get; set; }
-        
-        public int BufferHeight { get; } = 25;
-        
-        public int BufferWidth { get; } = 80;
-        
-        public void SetCursorPosition(int left, int top)
-        {
-            CursorLeft = left;
-            CursorTop = top;
         }
     }
 }
