@@ -4,3 +4,4 @@
 /**/obj
 /_build
 /_test
+*_build/

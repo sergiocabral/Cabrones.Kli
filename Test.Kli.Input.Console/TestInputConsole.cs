@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Text;
+using AutoFixture;
 using FluentAssertions;
 using Kli.Wrappers;
 using NSubstitute;
 using Test;
 using Xunit;
+using Environment = System.Environment;
 
 namespace Kli.Input.Console
 {
@@ -23,7 +26,7 @@ namespace Kli.Input.Console
         [InlineData(typeof(InputConsole), typeof(IInput), typeof(IInputConsole))]
         public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
             verifica_se_classe_implementa_o_tipo(tipoDaClasse, tiposQueDeveSerImplementado);
-
+        
         [Fact]
         public void os_métodos_Read_e_ReadLine_devem_chamar_o_método_correspondente_de_Console()
         {
@@ -155,7 +158,7 @@ namespace Kli.Input.Console
             // Assert, Then
             
             console.Received(1).WriteLine(new string(' ', resposta.Length));
-            console.Received(2).SetCursorPosition(cursorLeft, cursorTop - 1); // Por causa do avanço de linha deve ser CursorTop-1
+            console.Received(2).SetCursorPosition(cursorLeft, cursorTop > 0 ? cursorTop - 1 : 0); // Por causa do avanço de linha deve ser CursorTop-1
         }
         
         [Fact]
@@ -209,7 +212,7 @@ namespace Kli.Input.Console
         [InlineData(10, 0, "texto bem maior, texto bem maior, texto bem maior, texto bem maior, texto bem maior, texto bem maior, texto bem maior, texto bem maior, texto bem maior, texto bem maior.")]
         [InlineData(0, 10, "texto bem maior, texto bem maior, texto bem maior, texto bem maior, texto bem maior, texto bem maior, texto bem maior, texto bem maior, texto bem maior, texto bem maior.")]
         [InlineData(10, 10, "texto bem maior, texto bem maior, texto bem maior, texto bem maior, texto bem maior, texto bem maior, texto bem maior, texto bem maior, texto bem maior, texto bem maior.")]
-        [InlineData(25, 10, "texto bem maior, texto bem maior, texto bem maior, texto bem maior, texto bem maior, texto bem maior, texto bem maior, texto bem maior, texto bem maior, texto bem maior.")]
+        [InlineData(24, 10, "texto bem maior, texto bem maior, texto bem maior, texto bem maior, texto bem maior, texto bem maior, texto bem maior, texto bem maior, texto bem maior, texto bem maior.")]
         public void verifica_se_ReadLine_com_isSensitive_está_movimentando_o_cursor_corretamente(int posiçãoInicialCursorTop, int posiçãoInicialCursorLeft, string texto)
         {
             // Arrange, Given
@@ -226,7 +229,7 @@ namespace Kli.Input.Console
             // Assert, Then
 
             var esperadoParaCursorTop = posiçãoInicialCursorTop + 1 + texto.Length / console.BufferWidth;
-            if (esperadoParaCursorTop > console.BufferHeight) esperadoParaCursorTop = console.BufferHeight;
+            if (esperadoParaCursorTop > console.BufferHeight) esperadoParaCursorTop = console.BufferHeight - 1;
 
             console.CursorTop.Should().Be(esperadoParaCursorTop);
             console.CursorLeft.Should().Be(0);
@@ -266,6 +269,165 @@ namespace Kli.Input.Console
 
             console.CursorTop.Should().Be(cursorTop);
             console.CursorLeft.Should().Be(cursorLeft);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ao_final_de_ReadLine_deve_escrever_o_texto_e_avançar_uma_linha(bool isSensitive)
+        {
+            // Arrange, Given
+
+            var texto = Fixture.Create<string>();
+            var console = new SimulationForIConsole(texto);
+            var inputConsole = new InputConsole(console);
+            var textoEsperado = !isSensitive ? texto : new string('*', texto.Length); 
+            
+            // Act, When
+
+            inputConsole.ReadLine(isSensitive);
+
+            // Assert, Then
+
+            console.OQueFoiEscrito.Should().Be(textoEsperado + Environment.NewLine);
+        }
+
+        [Theory]
+        [InlineData("", 0, 0)]
+        [InlineData("abc\b", 0, 2)]
+        [InlineData("abc\b\b\b", 0, 0)]
+        [InlineData("abc\b\b\b\b\b\b", 0, 0)]
+        public void confere_posicionamento_do_cursor_ao_usar_backspace_com_ReadLine_isSensitive(string texto, int posiçãoEsperadaAntesDoEnterDeCursorTop, int posiçãoEsperadaAntesDoEnterDeCursorLeft)
+        {
+            // Arrange, Given
+            
+            var console = new SimulationForIConsole(texto);
+            var inputConsole = new InputConsole(console);
+
+            const int posiçãoInicialDeCursorTop = 10;
+            console.CursorTop = posiçãoInicialDeCursorTop;
+
+            string TextoComBackspaceProcessado()
+            {
+                var resultado = new StringBuilder();
+                
+                foreach (var ch in texto)
+                {
+                    if (ch != '\b') resultado.Append(ch);
+                    else if (resultado.Length > 0) resultado.Remove(resultado.Length - 1, 1);
+                }
+
+                return resultado.ToString();
+            }
+
+            var textoComBackspaceProcessado = TextoComBackspaceProcessado();
+            
+            // Act, When
+
+            inputConsole.ReadLine(true);
+
+            // Assert, Then
+
+            var historicoCursorTop = console.Historico["CursorTop"];
+            var historicoCursorLeft = console.Historico["CursorLeft"];
+            
+            historicoCursorTop[^2].Should().Be(posiçãoInicialDeCursorTop + posiçãoEsperadaAntesDoEnterDeCursorTop);
+            historicoCursorLeft[^2].Should().Be(posiçãoEsperadaAntesDoEnterDeCursorLeft);
+            
+            if (textoComBackspaceProcessado.Length <= 0) return;
+            
+            historicoCursorLeft[^2].Should().Be(textoComBackspaceProcessado.Length);
+        }
+
+        [Theory]
+        [InlineData("ab", 0, 2)]
+        [InlineData("ab\b", 0, 1)]
+        [InlineData("ab\b\b\b", 0, 0)]
+        [InlineData("abc", 1, 0)]
+        [InlineData("abcABC", 2, 0)]
+        [InlineData("abcABCasa", 2, 0)]
+        [InlineData("abcABCasa\b", 1, 2)]
+        [InlineData("abcABCasa\b\b\b\b\b\b\b\b\b", 0, 0)]
+        [InlineData("abcABCasa\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b", 0, 0)]
+        public void num_console_de_3x3_confere_posicionamento_do_cursor_entre_linhas_ao_usar_backspace_com_ReadLine_isSensitive(string texto, int posiçãoEsperadaAntesDoEnterDeCursorTop, int posiçãoEsperadaAntesDoEnterDeCursorLeft)
+        {
+            // Arrange, Given
+            
+            var console = new SimulationForIConsole(texto) { BufferWidth = 3, BufferHeight = 3 };
+            var inputConsole = new InputConsole(console);
+            
+            // Act, When
+
+            inputConsole.ReadLine(true);
+
+            // Assert, Then
+
+            var historicoCursorTop = console.Historico["CursorTop"];
+            var historicoCursorLeft = console.Historico["CursorLeft"];
+            
+            historicoCursorTop[^2].Should().Be(posiçãoEsperadaAntesDoEnterDeCursorTop);
+            historicoCursorLeft[^2].Should().Be(posiçãoEsperadaAntesDoEnterDeCursorLeft);
+        }
+
+        [Theory]
+        [InlineData("ab")]
+        [InlineData("ab\b")]
+        [InlineData("ab\b\b\b")]
+        [InlineData("abc")]
+        [InlineData("abcABC")]
+        [InlineData("abcABCasa")]
+        [InlineData("abcABCasa\b")]
+        [InlineData("abcABCasa\b\b\b\b\b\b\b\b\b")]
+        [InlineData("abcABCasa\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b")]
+        public void num_console_de_3x3_confere_posicionamento_do_cursor_entre_linhas_ao_usar_backspace_com_Read_isSensitive(string texto)
+        {
+            // Arrange, Given
+            
+            var console = new SimulationForIConsole(texto) { BufferWidth = 3, BufferHeight = 3 };
+            var inputConsole = new InputConsole(console);
+            
+            // Act, When
+
+            inputConsole.Read(true);
+
+            // Assert, Then
+
+            var historicoCursorTop = console.Historico["CursorTop"];
+            var historicoCursorLeft = console.Historico["CursorLeft"];
+            
+            historicoCursorTop[^1].Should().Be(0);
+            historicoCursorLeft[^1].Should().Be(0);
+        }
+
+        [Theory]
+        [InlineData("", 1, 1)]
+        [InlineData("b", 1, 1)]
+        [InlineData("bc", 0, 1)]
+        [InlineData("bc123456789", 0, 1)]
+        [InlineData("bc123456789\b\b\b\b\b\b\b\b\b\b\b", 0, 1)]
+        [InlineData("bc123456789\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b", 0, 1)]
+        public void num_console_de_3x3_confere_posicionamento_do_cursor_entre_linhas_quando_posicionado_em_1x1_ao_usar_backspace_com_Read_isSensitive(string texto, int posiçãoEsperadaAntesDoEnterDeCursorTop, int posiçãoEsperadaAntesDoEnterDeCursorLeft)
+        {
+            // Arrange, Given
+            
+            var console = new SimulationForIConsole(texto)
+            {
+                BufferWidth = 3, BufferHeight = 3, 
+                CursorLeft = 1, CursorTop = 1
+            };
+            var inputConsole = new InputConsole(console);
+            
+            // Act, When
+
+            inputConsole.Read(true);
+
+            // Assert, Then
+
+            var historicoCursorTop = console.Historico["CursorTop"];
+            var historicoCursorLeft = console.Historico["CursorLeft"];
+            
+            historicoCursorTop[^1].Should().Be(posiçãoEsperadaAntesDoEnterDeCursorTop);
+            historicoCursorLeft[^1].Should().Be(posiçãoEsperadaAntesDoEnterDeCursorLeft);
         }
     }
 }

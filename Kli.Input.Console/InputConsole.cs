@@ -43,14 +43,31 @@ namespace Kli.Input.Console
                 {
                     //Processa o backspace.
                     answer = answer.Substring(0, answer.Length - 1);
-                    
-                    _console.CursorTop = _console.CursorLeft > 0 ? _console.CursorTop : _console.CursorTop > 0 ? _console.CursorTop - 1 : _console.CursorTop;
-                    _console.CursorLeft = _console.CursorLeft > 0 ? _console.CursorLeft - 1 : _console.BufferWidth - 1;
+
+                    if (_console.CursorLeft > 0)
+                    {
+                        _console.CursorTop = _console.CursorTop;
+                        _console.CursorLeft--;
+                    }
+                    else
+                    {
+                        _console.CursorTop = _console.CursorTop > 0 ? _console.CursorTop - 1 : _console.CursorTop;
+                        _console.CursorLeft = _console.BufferWidth - 1;
+                    }
                     
                     _console.Write(" ");
                     
-                    _console.CursorTop = _console.CursorLeft > 0 ? _console.CursorTop : _console.CursorTop > 0 ? _console.CursorTop - 1 : _console.CursorTop;
-                    _console.CursorLeft = _console.CursorLeft > 0 ? _console.CursorLeft - 1 : _console.BufferWidth - 1;
+                    if (_console.CursorLeft > 0)
+                    {
+                        _console.CursorTop = _console.CursorTop;
+                        _console.CursorLeft--;
+                    }
+                    else
+                    {
+                        _console.CursorTop--;
+                        _console.CursorLeft = _console.BufferWidth - 1;
+                    }
+                    
                 } else if (key.KeyChar >= 32)
                 {
                     //Adiciona apenas caracteres válidos.
@@ -73,12 +90,13 @@ namespace Kli.Input.Console
         public string Read(bool isSensitive = false)
         {
             var cursorLeft = _console.CursorLeft;
-            var answer = ReadLine(isSensitive) ?? string.Empty;
+            var answer = ReadLine(isSensitive);
             var cursorTop = _console.CursorTop - 1;
 
             var lengthExtra = answer.Length - (_console.BufferWidth - cursorLeft);
 
-            if (lengthExtra > 0) cursorTop -= (int) Math.Floor((double) lengthExtra / _console.BufferWidth) + 1;
+            if (lengthExtra >= 0) cursorTop -= (int) Math.Floor((double) lengthExtra / _console.BufferWidth) + 1;
+            cursorTop = cursorTop > -1 ? cursorTop : 0;
 
             _console.SetCursorPosition(cursorLeft, cursorTop);
             _console.WriteLine(new string(' ', answer.Length));

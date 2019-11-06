@@ -29,7 +29,7 @@ namespace Kli.Input
 
             var input1 = Substitute.For<IInput>();
 
-            var depoisDeQuantasTentativasHasReadRetornaTrue = new Random(Fixture.Create<int>()).Next(5, 10);
+            var depoisDeQuantasTentativasHasReadRetornaTrue = new Random(Fixture.Create<int>()).Next(3, 6);
             var input2Resposta = Fixture.Create<string>();
             var input2 = Substitute.For<IInput>();
             input2.ReadLine().Returns(input2Resposta);
@@ -63,7 +63,7 @@ namespace Kli.Input
 
             var input1 = Substitute.For<IInput>();
 
-            var depoisDeQuantasTentativasHasReadRetornaTrue = new Random(Fixture.Create<int>()).Next(5, 10);
+            var depoisDeQuantasTentativasHasReadRetornaTrue = new Random(Fixture.Create<int>()).Next(3, 6);
             var input2Resposta = Fixture.Create<string>();
             var input2 = Substitute.For<IInput>();
             input2.Read().Returns(input2Resposta);
@@ -97,7 +97,7 @@ namespace Kli.Input
 
             var input1 = Substitute.For<IInput>();
 
-            var depoisDeQuantasTentativasHasReadRetornaTrue = new Random(Fixture.Create<int>()).Next(5, 10);
+            var depoisDeQuantasTentativasHasReadRetornaTrue = new Random(Fixture.Create<int>()).Next(3, 6);
             var input2Resposta = Fixture.Create<string>();
             var input2 = Substitute.For<IInput>();
             input2.ReadKey().Returns(input2Resposta);

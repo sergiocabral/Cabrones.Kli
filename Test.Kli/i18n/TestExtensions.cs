@@ -10,16 +10,42 @@ namespace Kli.i18n
     public class TestExtensions: BaseForTest
     {
         [Theory]
-        [InlineData(typeof(Extensions), 1)]
+        [InlineData(typeof(Extensions), 3)]
         public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
             verifica_se_o_total_de_métodos_públicos_declarados_está_correto_no_tipo(tipo, totalDeMétodosEsperado);
+        
+        [Fact]
+        public void verifica_se_o_resolvedor_de_dependência_da_classe_está_sendo_usado_quando_é_definido()
+        {   
+            // Arrange, Given
+            // Act, When
+
+            Extensions.DependencyResolver = DependencyResolverForTest;
+            
+            // Assert, Then
+
+            Extensions.DependencyResolver.Should().BeSameAs(DependencyResolverForTest);
+        }
+        
+        [Fact]
+        public void verifica_se_o_resolvedor_de_dependência_da_classe_usa_o_valor_padrão_quando_é_definido_nulo()
+        {   
+            // Arrange, Given
+            // Act, When
+
+            Extensions.DependencyResolver = null;
+            
+            // Assert, Then
+
+            Extensions.DependencyResolver.Should().BeSameAs(Program.DependencyResolver);
+        }
         
         [Fact]
         public void verifica_se_método_Translate_faz_uso_classe_Translate()
         {
             // Arrange, Given
 
-            var dependencyResolver = Program.DependencyResolver = DependencyResolverForTest;
+            Extensions.DependencyResolver = DependencyResolverForTest;
 
             // Act, When
 
@@ -29,7 +55,7 @@ namespace Kli.i18n
             
             // Assert, Then
 
-            dependencyResolver.GetInstance<ITranslate>().Received(1).Get(texto, idioma);
+            Extensions.DependencyResolver.GetInstance<ITranslate>().Received(1).Get(texto, idioma);
         }
 
         [Fact]
@@ -37,8 +63,8 @@ namespace Kli.i18n
         {
             // Arrange, Given
 
-            var dependencyResolver = Program.DependencyResolver = DependencyResolverFromProgram;
-            var tradução = dependencyResolver.GetInstance<ITranslate>();
+            Extensions.DependencyResolver = DependencyResolverFromProgram;
+            var tradução = Extensions.DependencyResolver.GetInstance<ITranslate>();
 
             const string texto = "Yes";
             const string idioma = "pt";
@@ -54,6 +80,6 @@ namespace Kli.i18n
 
             textoTraduzidoPelaExtensionSemInformarOIdioma.Should().Be(textoTraduzidoPelaClasseSemInformarOIdioma);
             textoTraduzidoPelaExtensionInformandoOIdioma.Should().Be(textoTraduzidoPelaClasseInformandoOIdioma);
-        }        
+        }
     }
 }

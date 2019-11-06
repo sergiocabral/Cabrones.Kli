@@ -9,17 +9,43 @@ namespace Kli.Output
     public class TestExtensions: BaseForTest
     {
         [Theory]
-        [InlineData(typeof(Extensions), 1)]
+        [InlineData(typeof(Extensions), 3)]
         public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
             verifica_se_o_total_de_métodos_públicos_declarados_está_correto_no_tipo(tipo, totalDeMétodosEsperado);
+        
+        [Fact]
+        public void verifica_se_o_resolvedor_de_dependência_da_classe_está_sendo_usado_quando_é_definido()
+        {   
+            // Arrange, Given
+            // Act, When
+
+            Extensions.DependencyResolver = DependencyResolverForTest;
+            
+            // Assert, Then
+
+            Extensions.DependencyResolver.Should().BeSameAs(DependencyResolverForTest);
+        }
+        
+        [Fact]
+        public void verifica_se_o_resolvedor_de_dependência_da_classe_usa_o_valor_padrão_quando_é_definido_nulo()
+        {   
+            // Arrange, Given
+            // Act, When
+
+            Extensions.DependencyResolver = null;
+            
+            // Assert, Then
+
+            Extensions.DependencyResolver.Should().BeSameAs(Program.DependencyResolver);
+        }
 
         [Fact]
         public void verifica_se_método_EscapeForOutput_faz_uso_classe_OutputMarkers()
         {
             // Arrange, Given
 
-            var dependencyResolver = Program.DependencyResolver = DependencyResolverForTest;
-
+            Extensions.DependencyResolver = DependencyResolverForTest;
+            
             // Act, When
 
             var texto = string.Empty; 
@@ -27,7 +53,7 @@ namespace Kli.Output
             
             // Assert, Then
 
-            dependencyResolver.GetInstance<IOutputMarkers>().Received(1).Escape(texto);
+            Extensions.DependencyResolver.GetInstance<IOutputMarkers>().Received(1).Escape(texto);
         }
 
         [Fact]
@@ -35,8 +61,8 @@ namespace Kli.Output
         {
             // Arrange, Given
 
-            var dependencyResolver = Program.DependencyResolver = DependencyResolverFromProgram;
-            var outputFormatter = dependencyResolver.GetInstance<IOutputMarkers>();
+            Extensions.DependencyResolver = DependencyResolverFromProgram;
+            var outputFormatter = Extensions.DependencyResolver.GetInstance<IOutputMarkers>();
 
             foreach (var marcador in outputFormatter.Markers)
             {
