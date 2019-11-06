@@ -29,18 +29,19 @@ namespace Kli.Core
         {
             // Arrange, Given
             
-            var loaderAssembly = new LoaderAssembly(DependencyResolverFromProgram.GetInstance<IDefinition>(), Substitute.For<IDependencyResolver>());
+            var loaderAssembly = new LoaderAssembly(
+                DependencyResolverFromProgram.GetInstance<IDefinition>(), 
+                Substitute.For<IDependencyResolver>());
 
             // Act, When
 
-            var carregados = loaderAssembly.Load("Kli.Output.*.dll").Where(a => a.Value != null).Select(a => new FileInfo(a.Key).Name).OrderBy(a => a).ToList();
+            var carregados = loaderAssembly.Load("K*.dll").Where(a => a.Value != null).Select(a => new FileInfo(a.Key).Name).OrderBy(a => a).ToList();
             
             
             // Assert, Then
 
-            carregados.Should().HaveCount(2);
-            carregados[0].Should().Be("Kli.Output.Console.dll");
-            carregados[1].Should().Be("Kli.Output.File.dll");
+            carregados.Should().HaveCount(1);
+            carregados[0].Should().Be("Kli.dll");
         }
         
         [Fact]
@@ -52,12 +53,12 @@ namespace Kli.Core
 
             // Act, When
 
-            var carregados = loaderAssembly.Load("Kli.Output.*.dll").Count(a => a.Value != null);
+            var carregados = loaderAssembly.Load("*.dll").Count(a => a.Value != null);
             
             
             // Assert, Then
 
-            carregados.Should().Be(2);
+            carregados.Should().BeGreaterThan(1);
         }
 
         [Fact]
@@ -82,16 +83,18 @@ namespace Kli.Core
         {
             // Arrange, Given
             
-            var loaderAssembly = new LoaderAssembly(DependencyResolverFromProgram.GetInstance<IDefinition>(), Substitute.For<IDependencyResolver>());
+            var loaderAssembly = new LoaderAssembly(
+                DependencyResolverFromProgram.GetInstance<IDefinition>(), 
+                Substitute.For<IDependencyResolver>());
 
             // Act, When
 
-            var carregados = loaderAssembly.Load("Kli.Output.*").Count(a => a.Value == null);
+            var carregados = loaderAssembly.Load("*.pdb").Count(a => a.Value == null);
             
             
             // Assert, Then
 
-            carregados.Should().Be(2);
+            carregados.Should().BeGreaterThan(0);
         }
 
         [Fact]
@@ -107,10 +110,11 @@ namespace Kli.Core
                 leituraDePropriedade++;
                 return Environment.GetEnvironmentVariable("TEMP");
             });
+            const string fileMaskParaNenhumArquivo = "no.found";
 
             // Act, When
 
-            loaderAssembly.Load(string.Empty);
+            loaderAssembly.Load(fileMaskParaNenhumArquivo);
             
             // Assert, Then
 
@@ -127,7 +131,7 @@ namespace Kli.Core
 
             // Act, When
 
-            loaderAssembly.RegisterServices("Kli.Output.Console.dll");
+            loaderAssembly.RegisterServices("Kli.dll");
             
             // Assert, Then
 
@@ -145,7 +149,7 @@ namespace Kli.Core
 
             // Act, When
 
-            loaderAssembly.RegisterServices("Kli.Output.Console.dll");
+            loaderAssembly.RegisterServices("Kli.dll");
             var escopos = dependencyResolver.ReceivedCalls().Where(a => a.GetMethodInfo().Name == "Register")
                 .Select(a => (DependencyResolverLifeTime) a.GetArguments()[2]).Distinct().ToList();
             
@@ -156,7 +160,7 @@ namespace Kli.Core
         }
 
         [Fact]
-        public void verifica_se_o_total_de_serviços_registrados_está_de_acordo_com_o_esperado()
+        public void verifica_se_está_registrando_os_serviços()
         {
             // Arrange, Given
 
@@ -167,11 +171,14 @@ namespace Kli.Core
 
             // Act, When
 
-            loaderAssembly.RegisterServices("Kli.Output.Console.dll");
+            loaderAssembly.RegisterServices("Kli.dll");
             
             // Assert, Then
 
-            dependencyResolver.ReceivedWithAnyArgs(2).Register(null, null, DependencyResolverLifeTime.PerScope);
+            dependencyResolver
+                .ReceivedCalls()
+                .Count(a => a.GetMethodInfo().Name == "Register")
+                .Should().BeGreaterThan(1);
         }
 
         [Fact]
@@ -198,7 +205,7 @@ namespace Kli.Core
 
             var definition = DependencyResolverFromProgram.GetInstance<IDefinition>();
             var loaderAssembly = new LoaderAssembly(definition, DependencyResolverFromProgram.GetInstance<IDependencyResolver>());
-            var arquivo = new FileInfo(Path.Combine(definition.DirectoryOfProgram, "Kli.Output.Console.pdb"));
+            var arquivo = new FileInfo(Path.Combine(definition.DirectoryOfProgram, "Kli.pdb"));
 
             // Act, When
 
@@ -256,7 +263,7 @@ namespace Kli.Core
 
             // Act, When
 
-            var instâncias = loaderAssembly.GetInstances<IOutput>("Kli.Output.Console.dll");
+            var instâncias = loaderAssembly.GetInstances<IEngine>("Kli.dll");
             
             // Assert, Then
 
@@ -274,7 +281,6 @@ namespace Kli.Core
 
             var instâncias = loaderAssembly.GetInstances<IOutput>("máscara\\inválida");
             
-            
             // Assert, Then
 
             instâncias.Should().HaveCount(0);
@@ -287,7 +293,7 @@ namespace Kli.Core
 
             var definition = DependencyResolverFromProgram.GetInstance<IDefinition>();
             var loaderAssembly = new LoaderAssembly(definition, DependencyResolverFromProgram.GetInstance<IDependencyResolver>());
-            var arquivo = new FileInfo(Path.Combine(definition.DirectoryOfProgram, "Kli.Output.Console.pdb"));
+            var arquivo = new FileInfo(Path.Combine(definition.DirectoryOfProgram, "Kli.pdb"));
 
             // Act, When
 

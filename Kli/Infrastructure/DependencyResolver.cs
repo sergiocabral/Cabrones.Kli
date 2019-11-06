@@ -35,13 +35,13 @@ namespace Kli.Infrastructure
         {
             ValidateScope(parentScope);
             var id = Guid.NewGuid();
-            var scope = parentScope.HasValue ? Scopes[parentScope.Value].BeginScope() : Container.BeginScope();
-            Scopes.Add(id, scope);
+            var scope = parentScope.HasValue ? _scopes[parentScope.Value].BeginScope() : _container.BeginScope();
+            _scopes.Add(id, scope);
             scope.Completed += (sender, args) =>
             {
-                foreach (var (childId, _) in Scopes.Where(a => a.Value.ParentScope == Scopes[id]))
+                foreach (var (childId, _) in _scopes.Where(a => a.Value.ParentScope == _scopes[id]))
                     DisposeScope(childId);
-                Scopes.Remove(id);
+                _scopes.Remove(id);
             }; 
             return id;
         }
@@ -53,7 +53,7 @@ namespace Kli.Infrastructure
         public void DisposeScope(Guid scope)
         {
             ValidateScope(scope);
-            Scopes[scope].Dispose();
+            _scopes[scope].Dispose();
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace Kli.Infrastructure
         /// <returns>Indica se está liberado ou não.</returns>
         public bool IsActive(Guid scope)
         {
-            return Scopes.ContainsKey(scope);
+            return _scopes.ContainsKey(scope);
         }
 
         /// <summary>
@@ -83,11 +83,11 @@ namespace Kli.Infrastructure
         /// <returns>Instância encontrada.</returns>
         public object GetInstance(Type service, Guid? scope)
         {
-            if (!scope.HasValue) return Container.GetInstance(service);
+            if (!scope.HasValue) return _container.GetInstance(service);
             
             ValidateScope(scope.Value);
             
-            return Scopes[scope.Value].GetInstance(service);
+            return _scopes[scope.Value].GetInstance(service);
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace Kli.Infrastructure
         /// <param name="lifetime">Tempo de vida.</param>
         public void Register<TService, TImplementation>(DependencyResolverLifeTime lifetime) 
             where TImplementation : TService where TService : class =>
-            Container.Register<TService, TImplementation>(GetILifeTime(lifetime));
+            _container.Register<TService, TImplementation>(GetILifeTime(lifetime));
 
         /// <summary>
         /// Registrar um serviço com sua respectiva implementação.
@@ -109,7 +109,7 @@ namespace Kli.Infrastructure
         public void Register(Type service, Type implementation, DependencyResolverLifeTime lifetime)
         {
             if (InterfacesForMultipleImplementation.Contains(service)) throw new ArgumentException();
-            Container.Register(service, implementation, GetILifeTime(lifetime));
+            _container.Register(service, implementation, GetILifeTime(lifetime));
         }
 
         /// <summary>
@@ -121,12 +121,12 @@ namespace Kli.Infrastructure
         /// <summary>
         /// Container de trabalho do LightInject para este projeto.
         /// </summary>
-        private static readonly ServiceContainer Container = new ServiceContainer();
+        private readonly ServiceContainer _container = new ServiceContainer();
         
         /// <summary>
         /// Lista de escopos abertos.
         /// </summary>
-        private static readonly IDictionary<Guid, Scope> Scopes = new Dictionary<Guid, Scope>();
+        private readonly IDictionary<Guid, Scope> _scopes = new Dictionary<Guid, Scope>();
 
         /// <summary>
         /// Registra as interfaces e tipos associados.

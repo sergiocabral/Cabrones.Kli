@@ -3,9 +3,8 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.0</TargetFramework>
         <IsPackable>false</IsPackable>
-        <Version>0.0.0.372</Version>
+        <Version>0.0.0.429</Version>
         <RootNamespace>Kli</RootNamespace>
-        <OutputPath>$(SolutionDir)_test</OutputPath>
     </PropertyGroup>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">

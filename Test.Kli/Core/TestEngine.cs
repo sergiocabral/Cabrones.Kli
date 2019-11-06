@@ -120,28 +120,40 @@ namespace Kli.Core
         }
         
         [Fact]
-        public void método_principal_Initialize_deve_carregar_items_pelo_menos_no_IMultipleInput_e_IMultipleOutput()
+        public void método_principal_Initialize_deve_carregar_items_dos_IMultiple()
         {
             // Arrange, Given
 
+            var loaderAssembly = Substitute.For<ILoaderAssembly>();
             var multipleInput = Substitute.For<IMultipleInput>();
             var multipleOutput = Substitute.For<IMultipleOutput>();
+            var multipleModule = Substitute.For<IMultipleModule>();
             var engine = new Engine(
                 Substitute.For<IConsole>(), 
                 Substitute.For<ITranslate>(), 
-                DependencyResolverFromProgram.GetInstance<ILoaderAssembly>(),
+                loaderAssembly,
                 multipleInput,
                 multipleOutput,
-                Substitute.For<IMultipleModule>()) as IEngine;
+                multipleModule) as IEngine;
 
+            var listaDeIInput = new[] { Substitute.For<IInput>() };
+            loaderAssembly.GetInstances<IInput>(null).ReturnsForAnyArgs(listaDeIInput);
+            
+            var listaDeIOutput = new[] { Substitute.For<IOutput>() };
+            loaderAssembly.GetInstances<IOutput>(null).ReturnsForAnyArgs(listaDeIOutput);
+            
+            var listaDeIModule = new[] { Substitute.For<IModule>() };
+            loaderAssembly.GetInstances<IModule>(null).ReturnsForAnyArgs(listaDeIModule);
+                
             // Act, When
             
             engine.Initialize();
                 
             // Assert, Then
 
-            multipleInput.ReceivedWithAnyArgs().Add(null);
-            multipleOutput.ReceivedWithAnyArgs().Add(null);
+            foreach (var input in listaDeIInput) multipleInput.Received(1).Add(input);
+            foreach (var output in listaDeIOutput) multipleOutput.Received(1).Add(output);
+            foreach (var module in listaDeIModule) multipleModule.Received(1).Add(module);
         }
         
         [Fact]
