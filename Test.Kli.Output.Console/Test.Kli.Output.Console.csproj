@@ -1,9 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.0</TargetFramework>
         <IsPackable>false</IsPackable>
-        <Version>0.0.0.207</Version>
+        <Version>0.0.0.210</Version>
         <RootNamespace>Kli.Output.Console</RootNamespace>
     </PropertyGroup>
 

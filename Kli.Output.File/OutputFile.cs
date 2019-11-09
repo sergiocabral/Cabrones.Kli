@@ -30,11 +30,15 @@ namespace Kli.Output.File
             _outputWriter = outputWriter;
             _definition = definition;
 
-            Path = new FileInfo(System.IO.Path.Combine(definition.DirectoryOfUser,
-                $"{Regex.Replace(GetType().FullName ?? string.Empty, @"\.\w*$", string.Empty)}.{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.log")).FullName;
+            var file = new FileInfo(System.IO.Path.Combine(definition.DirectoryOfUser,
+                $"{Regex.Replace(GetType().FullName ?? throw new NullReferenceException(), @"\.\w*$", string.Empty)}.{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.log"));
 
-            if (definition.CanWriteIntoDirectoryOfUser && !System.IO.File.Exists(Path))
-                System.IO.File.WriteAllText(Path, string.Empty);
+            Path = file.FullName;
+ 
+            if (definition.CanWriteIntoDirectoryOfUser && !file.Exists)
+            {
+                file.Open(FileMode.CreateNew).Close();
+            }
         }
         
         /// <summary>

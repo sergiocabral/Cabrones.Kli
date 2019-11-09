@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Text.RegularExpressions;
 using AutoFixture;
 using FluentAssertions;
 using Kli.Core;
@@ -25,6 +27,46 @@ namespace Kli.Output.File
         public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
             verifica_se_classe_implementa_o_tipo(tipoDaClasse, tiposQueDeveSerImplementado);
 
+        [Fact]
+        public void verifica_se_o_nome_do_arquivo_está_correto()
+        {
+            // Arrange, Given
+
+            var definition = DependencyResolverFromProgram.GetInstance<IDefinition>();
+            var caminhoEsperado = Path.Combine(definition.DirectoryOfUser,
+                $"{Regex.Replace(typeof(OutputFile).FullName ?? throw new NullReferenceException(), @"\.\w*$", string.Empty)}.{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.log");
+
+            // Act, When
+
+            var outputFile = new OutputFile(Substitute.For<IOutputWriter>(), definition) as IOutputFile;
+            
+            // Assert, Then
+
+            outputFile.Path.Should().Be(caminhoEsperado);
+        }
+        
+        [Fact]
+        public void não_pode_criar_o_arquivo_caso_já_exista()
+        {
+            // Arrange, Given
+
+            var definition = DependencyResolverFromProgram.GetInstance<IDefinition>();
+            var caminhoDoArquivo = Path.Combine(definition.DirectoryOfUser,
+                $"{Regex.Replace(typeof(OutputFile).FullName ?? throw new NullReferenceException(), @"\.\w*$", string.Empty)}.{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.log");
+
+            var conteudoDoArquivoAoEscrever = Fixture.Create<string>();
+            System.IO.File.WriteAllText(caminhoDoArquivo, conteudoDoArquivoAoEscrever);
+
+            // Act, When
+
+            var _ = new OutputFile(Substitute.For<IOutputWriter>(), definition);
+            var conteudoDoArquivoLido = System.IO.File.ReadAllText(caminhoDoArquivo);
+                
+            // Assert, Then
+
+            conteudoDoArquivoLido.Should().Be(conteudoDoArquivoAoEscrever);
+        }
+        
         [Fact]
         public void ao_escrever_um_texto_o_método_WriteToFile_deve_ser_chamado()
         {
@@ -53,6 +95,8 @@ namespace Kli.Output.File
             var outputFile = new OutputFile(Substitute.For<IOutputWriter>(), 
                 DependencyResolverFromProgram.GetInstance<IDefinition>()) as IOutputFile;
             var textoEscrito = Fixture.Create<string>();
+            
+            System.IO.File.WriteAllText(outputFile.Path, string.Empty);
             
             // Act, When
             
