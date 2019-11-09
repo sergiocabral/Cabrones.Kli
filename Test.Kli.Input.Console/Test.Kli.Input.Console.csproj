@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.0</TargetFramework>
         <IsPackable>false</IsPackable>
-        <Version>0.0.0.286</Version>
+        <Version>0.0.0.288</Version>
         <RootNamespace>Kli.Input.Console</RootNamespace>
     </PropertyGroup>
 

@@ -10,7 +10,7 @@ namespace Kli.i18n
         /// <summary>
         /// Resolvedor de dependência para os métodos desta classe.
         /// </summary>
-        private static IDependencyResolver _dependencyResolver;
+        private static IDependencyResolver? _dependencyResolver;
         
         /// <summary>
         /// Resolvedor de dependência para os métodos desta classe.
