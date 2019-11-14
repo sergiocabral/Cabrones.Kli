@@ -19,12 +19,12 @@ namespace Kli.Output.Console
         [Theory]
         [InlineData(typeof(OutputConsole), 4)]
         public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            verifica_se_o_total_de_métodos_públicos_declarados_está_correto_no_tipo(tipo, totalDeMétodosEsperado);
+            TestTypeMethodsCount(tipo, totalDeMétodosEsperado);
 
         [Theory]
         [InlineData(typeof(OutputConsole), typeof(IOutput), typeof(IOutputConsole))]
         public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            verifica_se_classe_implementa_o_tipo(tipoDaClasse, tiposQueDeveSerImplementado);
+            TestTypeImplementations(tipoDaClasse, tiposQueDeveSerImplementado);
 
         [Fact]
         public void ao_escrever_um_texto_o_método_WriteToConsole_deve_ser_chamado()

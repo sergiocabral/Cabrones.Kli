@@ -14,12 +14,12 @@ namespace Kli.Core
         [Theory]
         [InlineData(typeof(Multiple<IModule>), 2)]
         public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            verifica_se_o_total_de_métodos_públicos_declarados_está_correto_no_tipo(tipo, totalDeMétodosEsperado);
+            TestTypeMethodsCount(tipo, totalDeMétodosEsperado);
 
         [Theory]
         [InlineData(typeof(Multiple<IModule>), typeof(IMultiple<IModule>))]
         public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            verifica_se_classe_implementa_o_tipo(tipoDaClasse, tiposQueDeveSerImplementado);
+            TestTypeImplementations(tipoDaClasse, tiposQueDeveSerImplementado);
         
         [Fact]
         public void deve_ser_capaz_de_adicionar_novos_serviços()

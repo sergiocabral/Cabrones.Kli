@@ -14,7 +14,7 @@ namespace Test
     {
         public DependencyResolverForTest()
         {
-            Instances.Clear();
+            _instances.Clear();
             ForFullUnitTestCoverage();
         }
 
@@ -56,7 +56,7 @@ namespace Test
         public object GetInstance(Type service, Guid? scope = null)
         {
             Register(service, service, DependencyResolverLifeTime.PerContainer);
-            return Instances[service];
+            return _instances[service];
         }
 
         /// <summary>
@@ -68,8 +68,8 @@ namespace Test
         public void Register<TService, TImplementation>(DependencyResolverLifeTime lifetime)
             where TImplementation : TService where TService : class
         {
-            if (Instances.ContainsKey(typeof(TService))) return;
-            Instances.Add(typeof(TService), Substitute.For<TService>());
+            if (_instances.ContainsKey(typeof(TService))) return;
+            _instances.Add(typeof(TService), Substitute.For<TService>());
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace Test
         /// <summary>
         /// Histórico de instâncias utilizadas.
         /// </summary>
-        private static readonly Dictionary<Type, object> Instances = new Dictionary<Type, object>();
+        private readonly Dictionary<Type, object> _instances = new Dictionary<Type, object>();
 
         /// <summary>
         /// O conteúdo deste método existe apenas para garantir que o Unit Test Coverage seja de 100%.

@@ -41,176 +41,174 @@ namespace Test
         protected static DependencyResolverForTest DependencyResolverForTest { get; } = new DependencyResolverForTest();
         
         /// <summary>
-        /// Método para testar se um tipo implementa determinada classe ou interface.
+        /// Testar se um tipo implementa um ou mais tipos.
         /// </summary>
-        /// <param name="tipoDaClasse">Tipo da classe.</param>
-        /// <param name="tiposQueDeveSerImplementado">TipoS que deve ser implementado.</param>
-        protected static void verifica_se_classe_implementa_o_tipo(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado)
+        /// <param name="type">Tipo da classe.</param>
+        /// <param name="implementations">TipoS que deve ser implementado.</param>
+        protected static void TestTypeImplementations(Type type, params Type[] implementations)
         {
             // Arrange, Given
             
-            var métodosDoTipoDaClasse = tipoDaClasse.GetMethods().Where(a => a.IsPublic && a.DeclaringType == tipoDaClasse && a.DeclaringType?.Assembly == tipoDaClasse.Assembly).Select(a => a.ToString()).ToList();
-            var métodosDosTiposQueDeveSerImplementado = new List<MethodInfo>();
+            var methodsOfType = type.GetMethods().Where(a => a.IsPublic && a.DeclaringType == type && a.DeclaringType?.Assembly == type.Assembly).Select(a => a.ToString()).ToList();
+            var methods = new List<MethodInfo>();
 
-            foreach (var tipoQueDeveSerImplementado in tiposQueDeveSerImplementado)
+            foreach (var implementation in implementations)
             {
-                métodosDosTiposQueDeveSerImplementado.AddRange(tipoQueDeveSerImplementado.GetMethods()
-                    .Where(a => a.IsPublic && a.DeclaringType == tipoQueDeveSerImplementado &&
-                                a.DeclaringType?.Assembly == tipoQueDeveSerImplementado.Assembly)
+                methods.AddRange(implementation.GetMethods()
+                    .Where(a => a.IsPublic && a.DeclaringType == implementation &&
+                                a.DeclaringType?.Assembly == implementation.Assembly)
                     .ToList());
             }
 
-            var métodosDisponíveisNoTipoDaClasse = tipoDaClasse.GetMethods().Where(a => a.IsPublic).Select(a => a.ToString()).ToList();
-            métodosDosTiposQueDeveSerImplementado.RemoveAll(a => !métodosDoTipoDaClasse.Contains(a.ToString()) && métodosDisponíveisNoTipoDaClasse.Contains(a.ToString()));
+            var methodsInType = type.GetMethods().Where(a => a.IsPublic).Select(a => a.ToString()).ToList();
+            methods.RemoveAll(a => !methodsOfType.Contains(a.ToString()) && methodsInType.Contains(a.ToString()));
             
             // Act, When
 
-            var tiposQueForamImplementados = tiposQueDeveSerImplementado.Count(a => a.IsAssignableFrom(tipoDaClasse));
-            var totalDeMétodosNoTipoDaClasse = métodosDoTipoDaClasse.Count;
-            var totalDeMétodosNosTiposQueDeveSerImplementado = métodosDosTiposQueDeveSerImplementado.Count;
+            var countImplementations = implementations.Count(a => a.IsAssignableFrom(type));
+            var countImplemented = methods.Count;
 
             // Assert, Then
 
-            tiposQueForamImplementados.Should().Be(tiposQueDeveSerImplementado.Length);
-            totalDeMétodosNoTipoDaClasse.Should().Be(totalDeMétodosNosTiposQueDeveSerImplementado);
+            countImplementations.Should().Be(implementations.Length);
+            countImplemented.Should().Be(methodsOfType.Count);
         }
 
         /// <summary>
-        /// Método para testar se um método existe com base na sua assinatura.
+        /// Testa se a quantidade de métodos está correta.
         /// </summary>
-        /// <param name="tipo">Tipo a ser consultado.</param>
-        /// <param name="totalDeMétodosEsperado">Total de métodos esperados.</param>
-        protected static void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_no_tipo(Type tipo, int totalDeMétodosEsperado)
+        /// <param name="type">Tipo a ser consultado.</param>
+        /// <param name="count">Total de métodos esperados.</param>
+        protected static void TestTypeMethodsCount(Type type, int count)
         {
             // Arrange, Given
 
-            var métodos = tipo.GetMethods();
+            var methods = type.GetMethods();
 
             // Act, When
 
-            var métodosPrópriosDoTipo = métodos.Where(a => a.IsPublic && a.DeclaringType == tipo && a.DeclaringType?.Assembly == tipo.Assembly).ToList();
+            var methodsOfType = methods.Where(a => a.IsPublic && a.DeclaringType == type && a.DeclaringType?.Assembly == type.Assembly).ToList();
 
             // Assert, Then
 
-            métodosPrópriosDoTipo.Count.Should().Be(totalDeMétodosEsperado);
+            methodsOfType.Count.Should().Be(count);
         }
         
         /// <summary>
-        /// Método para testar se um método existe com base na sua assinatura.
+        /// Testa se um método existe com base na sua assinatura.
         /// </summary>
-        /// <param name="tipo">Tipo a ser consultado.</param>
-        /// <param name="assinaturaEsperada">Assinatura esperada.</param>
-        protected static void verifica_se_o_método_existe_com_base_na_assinatura(Type tipo, string assinaturaEsperada)
+        /// <param name="type">Tipo a ser consultado.</param>
+        /// <param name="signature">Assinatura esperada.</param>
+        protected static void TestTypeMethodSignature(Type type, string signature)
         {
             // Arrange, Given
 
-            string NomeDoTipo(Type type)
+            string Format(Type typeToFormat)
             {
-                var nome = type.ToString();
-                if (Regex.IsMatch(nome, @"`\d+\["))
+                var result = typeToFormat.ToString();
+                if (Regex.IsMatch(result, @"`\d+\["))
                 {
-                    nome = nome
+                    result = result
                         .Replace("[", "<")
                         .Replace("]", ">");
                 }
-                nome = nome
+                result = result
                     .Replace(",", ", ");
-                nome = Regex.Replace(nome, @"(\w+\.|`\d+)", string.Empty);
-                return nome;
+                result = Regex.Replace(result, @"(\w+\.|`\d+)", string.Empty);
+                return result;
             }
             
-            string AssinaturaDoMétodo(MethodInfo método)
+            string Signature(MethodInfo method)
             {
-                var parâmetrosParaGeneric = método.GetGenericArguments().ToList();
-                var parâmetrosDoMétodo = método.GetParameters().ToList();
+                var parametersForGeneric = method.GetGenericArguments().ToList();
+                var parameters = method.GetParameters().ToList();
              
-                var assinatura = new StringBuilder();
+                var result = new StringBuilder();
                 
-                assinatura.Append($"{NomeDoTipo(método.ReturnType)} {método.Name}");
+                result.Append($"{Format(method.ReturnType)} {method.Name}");
                 
-                if (parâmetrosParaGeneric.Count > 0)
+                if (parametersForGeneric.Count > 0)
                 {
-                    assinatura.Append($"<{parâmetrosParaGeneric.Select(NomeDoTipo).Aggregate((acumulador, nomeDoTipo) => $"{(string.IsNullOrWhiteSpace(acumulador) ? "" : $"{acumulador}, ")}{nomeDoTipo}")}>");
+                    result.Append($"<{parametersForGeneric.Select(Format).Aggregate((acumulador, nomeDoTipo) => $"{(string.IsNullOrWhiteSpace(acumulador) ? "" : $"{acumulador}, ")}{nomeDoTipo}")}>");
                 }
 
-                assinatura.Append(parâmetrosDoMétodo.Count > 0
-                    ? $"({parâmetrosDoMétodo.Select(a => $"{NomeDoTipo(a.ParameterType)}{(a.HasDefaultValue ? $" = {(a.DefaultValue == null ? "null" : a.ParameterType == typeof(char) && ((char)0).Equals(a.DefaultValue) ? "''" : $"'{a.DefaultValue}'")}": "")}").Aggregate((acumulador, nomeDoTipo) => $"{(string.IsNullOrWhiteSpace(acumulador) ? "" : $"{acumulador}, ")}{nomeDoTipo}")})"
+                result.Append(parameters.Count > 0
+                    ? $"({parameters.Select(a => $"{Format(a.ParameterType)}{(a.HasDefaultValue ? $" = {(a.DefaultValue == null ? "null" : a.ParameterType == typeof(char) && ((char)0).Equals(a.DefaultValue) ? "''" : $"'{a.DefaultValue}'")}": "")}").Aggregate((acumulador, nomeDoTipo) => $"{(string.IsNullOrWhiteSpace(acumulador) ? "" : $"{acumulador}, ")}{nomeDoTipo}")})"
                     : "()");
 
-                return assinatura.ToString();
+                return result.ToString();
             }
 
-            IEnumerable<MethodInfo> MétodosEncontrados()
+            IEnumerable<MethodInfo> MethodsFound()
             {
-                var nomeDoMétodo = Regex.Match(assinaturaEsperada, @"\w+(?=(|<[^>]+>)\()").Value;
-                return tipo.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static).Where(a => a.Name == nomeDoMétodo);
+                var methodName = Regex.Match(signature, @"\w+(?=(|<[^>]+>)\()").Value;
+                return type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static).Where(a => a.Name == methodName);
             }
 
-            IEnumerable<string> AssinaturasEncontradas() => MétodosEncontrados().Select(AssinaturaDoMétodo).ToList();
+            IEnumerable<string> SignaturesFound() => MethodsFound().Select(Signature).ToList();
 
             // Act, When
 
-            var assinaturasEncontrada = AssinaturasEncontradas();
+            var signaturesFound = SignaturesFound();
 
             // Assert, Then
 
-            assinaturasEncontrada.Should().Contain(assinaturaEsperada);
+            signaturesFound.Should().Contain(signature);
         }
         
         /// <summary>
         /// Verifica se o cache está sendo usado ao consulta uma propriedade.
         /// A evidência é o tempo menor na segunda consulta.
         /// </summary>
-        /// <param name="tipo">Tipo.</param>
-        /// <param name="nomeDePropriedade">Nome da propriedade.</param>
-        protected static void verifica_se_o_cache_está_sendo_usado_na_consulta(Type tipo, string nomeDePropriedade)
+        /// <param name="instance">Instância.</param>
+        /// <param name="propertyName">Nome da propriedade.</param>
+        private static void TestPropertyWithCache(object instance, string propertyName)
         {
             // Arrange, Given
-            
-            var instânciaDoTipo = DependencyResolverFromProgram.GetInstance(tipo);
-            var propriedade = tipo.GetProperty(nomeDePropriedade,
+
+            var type = instance.GetType();
+            var propriedade = type.GetProperty(propertyName,
                 BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
            
+            object Query() => propriedade?.GetValue(instance);
+
             // Act, When
 
-            var (tempo1, valor1, tempo2, valor2) = cronometrar_consulta_dupla(() => propriedade?.GetValue(instânciaDoTipo));
+            var (tempo1, valor1) = StopwatchQuery(Query);
+            var (tempo2, valor2) = StopwatchQuery(Query);
 
             // Assert, Then
             
             valor2.Should().BeEquivalentTo(valor1);
             tempo2.Should().BeLessThan(tempo1);
         }
+        
+        /// <summary>
+        /// Verifica se o cache está sendo usado ao consulta uma propriedade.
+        /// A evidência é o tempo menor na segunda consulta.
+        /// </summary>
+        /// <param name="type">Tipo.</param>
+        /// <param name="propertyName">Nome da propriedade.</param>
+        protected static void TestPropertyWithCache(Type type, string propertyName) => 
+            TestPropertyWithCache(
+                DependencyResolverFromProgram.GetInstance(type), propertyName);
 
         /// <summary>
         /// Faz uma consulta qualquer e cronometra o tempo.
         /// </summary>
-        /// <param name="consulta">Função de consulta.</param>
+        /// <param name="query">Função de consulta.</param>
         /// <typeparam name="T">Tipo de retorno.</typeparam>
         /// <returns>Tempo e valores.</returns>
-        protected static Tuple<long, T> cronometrar_consulta<T>(Func<T> consulta)
+        protected static Tuple<long, T> StopwatchQuery<T>(Func<T> query)
         {
-            var cronômetro = new Stopwatch();
+            var stopwatch = new Stopwatch();
                 
-            cronômetro.Start();
-            var valores = consulta();
-            cronômetro.Stop();
-            var tempo = cronômetro.ElapsedTicks;
+            stopwatch.Start();
+            var valores = query();
+            stopwatch.Stop();
+            var tempo = stopwatch.ElapsedTicks;
             
             return new Tuple<long, T>(tempo, valores);
-        }
-        
-        /// <summary>
-        /// Faz uma consulta qualquer e cronometra o tempo. Executa duas vezes.
-        /// </summary>
-        /// <param name="consulta">Função de consulta.</param>
-        /// <typeparam name="T">Tipo de retorno.</typeparam>
-        /// <returns>Tempo e valores duas vezes.</returns>
-        private static Tuple<long, T, long, T> cronometrar_consulta_dupla<T>(Func<T> consulta)
-        {
-            var (tempo1, valores1) = cronometrar_consulta(consulta);
-            var (tempo2, valores2) = cronometrar_consulta(consulta);
-            
-            return new Tuple<long, T, long, T>(tempo1, valores1, tempo2, valores2);
         }
     }
 }

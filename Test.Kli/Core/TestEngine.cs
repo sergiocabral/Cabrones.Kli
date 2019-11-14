@@ -16,12 +16,12 @@ namespace Kli.Core
         [Theory]
         [InlineData(typeof(Engine), 1)]
         public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            verifica_se_o_total_de_métodos_públicos_declarados_está_correto_no_tipo(tipo, totalDeMétodosEsperado);
+            TestTypeMethodsCount(tipo, totalDeMétodosEsperado);
 
         [Theory]
         [InlineData(typeof(Engine), typeof(IEngine))]
         public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            verifica_se_classe_implementa_o_tipo(tipoDaClasse, tiposQueDeveSerImplementado);
+            TestTypeImplementations(tipoDaClasse, tiposQueDeveSerImplementado);
         
         [Fact]
         public void método_principal_Initialize_deve_fazer_reset_nas_cores_do_console_no_início_e_no_final()

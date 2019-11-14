@@ -9,7 +9,7 @@ namespace Kli.Infrastructure
         [Theory]
         [InlineData(typeof(IDependencyResolver), 8)]
         public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            verifica_se_o_total_de_métodos_públicos_declarados_está_correto_no_tipo(tipo, totalDeMétodosEsperado);
+            TestTypeMethodsCount(tipo, totalDeMétodosEsperado);
         
         [Theory]
         [InlineData(typeof(IDependencyResolver), "Guid CreateScope(Nullable<Guid> = null)")]
@@ -21,6 +21,6 @@ namespace Kli.Infrastructure
         [InlineData(typeof(IDependencyResolver), "Void Register(Type, Type, DependencyResolverLifeTime = 'PerContainer')")]
         [InlineData(typeof(IDependencyResolver), "IEnumerable<Type> get_InterfacesForMultipleImplementation()")]
         public void verifica_se_os_métodos_existem_com_base_na_assinatura(Type tipo, string assinaturaEsperada) =>
-            verifica_se_o_método_existe_com_base_na_assinatura(tipo, assinaturaEsperada);
+            TestTypeMethodSignature(tipo, assinaturaEsperada);
     }
 }

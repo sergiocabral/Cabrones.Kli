@@ -11,7 +11,7 @@ namespace Kli.Output
         [Theory]
         [InlineData(typeof(Extensions), 3)]
         public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            verifica_se_o_total_de_métodos_públicos_declarados_está_correto_no_tipo(tipo, totalDeMétodosEsperado);
+            TestTypeMethodsCount(tipo, totalDeMétodosEsperado);
         
         [Fact]
         public void verifica_se_o_resolvedor_de_dependência_da_classe_está_sendo_usado_quando_é_definido()

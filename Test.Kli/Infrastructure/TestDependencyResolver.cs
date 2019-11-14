@@ -18,12 +18,12 @@ namespace Kli.Infrastructure
         [Theory]
         [InlineData(typeof(DependencyResolver), 8)]
         public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            verifica_se_o_total_de_métodos_públicos_declarados_está_correto_no_tipo(tipo, totalDeMétodosEsperado);
+            TestTypeMethodsCount(tipo, totalDeMétodosEsperado);
 
         [Theory]
         [InlineData(typeof(DependencyResolver), typeof(IDependencyResolver))]
         public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            verifica_se_classe_implementa_o_tipo(tipoDaClasse, tiposQueDeveSerImplementado);
+            TestTypeImplementations(tipoDaClasse, tiposQueDeveSerImplementado);
 
         [Theory]
         [InlineData(typeof(IOutputWriter))]

@@ -14,18 +14,18 @@ namespace Kli.i18n
         [Theory]
         [InlineData(typeof(Language), 4)]
         public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            verifica_se_o_total_de_métodos_públicos_declarados_está_correto_no_tipo(tipo, totalDeMétodosEsperado);
+            TestTypeMethodsCount(tipo, totalDeMétodosEsperado);
 
         [Theory]
         [InlineData(typeof(Language), typeof(ILanguage))]
         public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            verifica_se_classe_implementa_o_tipo(tipoDaClasse, tiposQueDeveSerImplementado);
+            TestTypeImplementations(tipoDaClasse, tiposQueDeveSerImplementado);
 
         [Theory]
         [InlineData(typeof(ILanguage), "EnvironmentVariables")]
         [InlineData(typeof(ILanguage), "Current")]
         public void verifica_se_o_cache_está_sendo_usado_nas_consultas(Type tipo, string nomeDePropriedade) =>
-            verifica_se_o_cache_está_sendo_usado_na_consulta(tipo, nomeDePropriedade);
+            TestPropertyWithCache(tipo, nomeDePropriedade);
 
         [Fact]
         public void confere_os_valores_válidos_para_variáveis_de_ambiente_definirem_o_idioma()
