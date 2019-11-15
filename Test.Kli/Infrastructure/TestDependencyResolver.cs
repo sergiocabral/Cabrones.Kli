@@ -51,7 +51,7 @@ namespace Kli.Infrastructure
         {
             // Arrange, Given
 
-            var dependencyResolver = DependencyResolverFromProgram;
+            var dependencyResolver = Program.DependencyResolver;
             
             // Act, When
             
@@ -512,7 +512,7 @@ namespace Kli.Infrastructure
         {
             // Arrange, Given
             
-            var dependencyResolver = DependencyResolverFromProgram.GetInstance<IDependencyResolver>();
+            var dependencyResolver = Program.DependencyResolver.GetInstance<IDependencyResolver>();
             
             // Act, When
 

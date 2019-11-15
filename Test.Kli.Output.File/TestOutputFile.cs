@@ -14,7 +14,7 @@ namespace Kli.Output.File
     {
         public TestOutputFile()
         {
-            DependencyResolverFromProgram.Register<IOutputFile, OutputFile>();
+            Program.DependencyResolver.Register<IOutputFile, OutputFile>();
         }
         
         [Theory]
@@ -32,7 +32,7 @@ namespace Kli.Output.File
         {
             // Arrange, Given
 
-            var definition = DependencyResolverFromProgram.GetInstance<IDefinition>();
+            var definition = Program.DependencyResolver.GetInstance<IDefinition>();
             var caminhoEsperado = Path.Combine(definition.DirectoryOfUser,
                 $"{Regex.Replace(typeof(OutputFile).FullName ?? throw new NullReferenceException(), @"\.\w*$", string.Empty)}.{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.log");
 
@@ -50,7 +50,7 @@ namespace Kli.Output.File
         {
             // Arrange, Given
 
-            var definition = DependencyResolverFromProgram.GetInstance<IDefinition>();
+            var definition = Program.DependencyResolver.GetInstance<IDefinition>();
             var caminhoDoArquivo = Path.Combine(definition.DirectoryOfUser,
                 $"{Regex.Replace(typeof(OutputFile).FullName ?? throw new NullReferenceException(), @"\.\w*$", string.Empty)}.{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.log");
 
@@ -73,7 +73,7 @@ namespace Kli.Output.File
             // Arrange, Given
 
             var outputWriter = Substitute.For<IOutputWriter>();
-            var outputFile = new OutputFile(outputWriter, DependencyResolverFromProgram.GetInstance<IDefinition>()) as IOutputFile;
+            var outputFile = new OutputFile(outputWriter, Program.DependencyResolver.GetInstance<IDefinition>()) as IOutputFile;
             var textoDeExemplo = Fixture.Create<string>();
             
             // Act, When
@@ -93,7 +93,7 @@ namespace Kli.Output.File
             // Arrange, Given
 
             var outputFile = new OutputFile(Substitute.For<IOutputWriter>(), 
-                DependencyResolverFromProgram.GetInstance<IDefinition>()) as IOutputFile;
+                Program.DependencyResolver.GetInstance<IDefinition>()) as IOutputFile;
             var textoEscrito = Fixture.Create<string>();
             
             System.IO.File.WriteAllText(outputFile.Path, string.Empty);
@@ -132,7 +132,7 @@ namespace Kli.Output.File
 
             var outputFile = new OutputFile(
                 Substitute.For<IOutputWriter>(),
-                DependencyResolverFromProgram.GetInstance<IDefinition>()) as IOutputFile;
+                Program.DependencyResolver.GetInstance<IDefinition>()) as IOutputFile;
             
             // Act, When
 

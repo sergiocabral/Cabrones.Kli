@@ -9,7 +9,7 @@ namespace Kli.Output.Console
     {
         public TestOutputMarkersToConsoleColor()
         {
-            DependencyResolverFromProgram.Register<IOutputMarkersToConsoleColor, OutputMarkersToConsoleColor>();    
+            Program.DependencyResolver.Register<IOutputMarkersToConsoleColor, OutputMarkersToConsoleColor>();    
         }
         
         [Theory]
@@ -34,7 +34,7 @@ namespace Kli.Output.Console
         {
             // Arrange, Given
 
-            var outputMarkersToConsoleColor = DependencyResolverFromProgram.GetInstance<IOutputMarkersToConsoleColor>();
+            var outputMarkersToConsoleColor = Program.DependencyResolver.GetInstance<IOutputMarkersToConsoleColor>();
 
             // Act, When
 
@@ -53,7 +53,7 @@ namespace Kli.Output.Console
         {
             // Arrange, Given
 
-            var outputMarkersToConsoleColor = DependencyResolverFromProgram.GetInstance<IOutputMarkersToConsoleColor>();
+            var outputMarkersToConsoleColor = Program.DependencyResolver.GetInstance<IOutputMarkersToConsoleColor>();
 
             // Act, When
 

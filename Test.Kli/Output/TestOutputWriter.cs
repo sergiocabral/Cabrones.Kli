@@ -26,7 +26,7 @@ namespace Kli.Output
         {
             // Arrange, Given
 
-            var outputWriter = DependencyResolverFromProgram.GetInstance<IOutputWriter>();
+            var outputWriter = Program.DependencyResolver.GetInstance<IOutputWriter>();
             var textoEnviado = Fixture.Create<string>();
             
             // Act, When
@@ -48,7 +48,7 @@ namespace Kli.Output
         {
             // Arrange, Given
 
-            var outputWriter = DependencyResolverFromProgram.GetInstance<IOutputWriter>();
+            var outputWriter = Program.DependencyResolver.GetInstance<IOutputWriter>();
             var escritorIgnorandoMarcadores = Substitute.For<Action<string>>();
             var escritorConsiderandoMarcadores = Substitute.For<Action<string, char>>();
             
@@ -92,7 +92,7 @@ namespace Kli.Output
         {
             // Arrange, Given
 
-            var outputWriter = DependencyResolverFromProgram.GetInstance<IOutputWriter>();
+            var outputWriter = Program.DependencyResolver.GetInstance<IOutputWriter>();
             
             // Act, When
 
@@ -131,7 +131,7 @@ namespace Kli.Output
         {
             // Arrange, Given
 
-            var outputWriter = DependencyResolverFromProgram.GetInstance<IOutputWriter>();
+            var outputWriter = Program.DependencyResolver.GetInstance<IOutputWriter>();
             
             // Act, When
 
@@ -156,7 +156,7 @@ namespace Kli.Output
         {
             // Arrange, Given
 
-            var outputWriter = DependencyResolverFromProgram.GetInstance<IOutputWriter>();
+            var outputWriter = Program.DependencyResolver.GetInstance<IOutputWriter>();
             
             // Act, When
 
@@ -184,7 +184,7 @@ namespace Kli.Output
         {
             // Arrange, Given
 
-            var outputWriter = DependencyResolverFromProgram.GetInstance<IOutputWriter>();
+            var outputWriter = Program.DependencyResolver.GetInstance<IOutputWriter>();
             
             // Act, When
 
@@ -213,7 +213,7 @@ namespace Kli.Output
         {
             // Arrange, Given
 
-            var outputWriter = DependencyResolverFromProgram.GetInstance<IOutputWriter>();
+            var outputWriter = Program.DependencyResolver.GetInstance<IOutputWriter>();
             var escritasEsperadas = escritasEsperadasComMarcadorETexto.Select(a => new Tuple<string, char>(a.Substring(2), a[0] != ' ' ? a[0] : (char) 0)).ToList();
             
             // Act, When

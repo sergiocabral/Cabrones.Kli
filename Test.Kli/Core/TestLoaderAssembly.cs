@@ -30,7 +30,7 @@ namespace Kli.Core
             // Arrange, Given
             
             var loaderAssembly = new LoaderAssembly(
-                DependencyResolverFromProgram.GetInstance<IDefinition>(), 
+                Program.DependencyResolver.GetInstance<IDefinition>(), 
                 Substitute.For<IDependencyResolver>());
 
             // Act, When
@@ -49,7 +49,7 @@ namespace Kli.Core
         {
             // Arrange, Given
             
-            var loaderAssembly = new LoaderAssembly(DependencyResolverFromProgram.GetInstance<IDefinition>(), Substitute.For<IDependencyResolver>());
+            var loaderAssembly = new LoaderAssembly(Program.DependencyResolver.GetInstance<IDefinition>(), Substitute.For<IDependencyResolver>());
 
             // Act, When
 
@@ -66,7 +66,7 @@ namespace Kli.Core
         {
             // Arrange, Given
             
-            var loaderAssembly = DependencyResolverFromProgram.GetInstance<ILoaderAssembly>();
+            var loaderAssembly = Program.DependencyResolver.GetInstance<ILoaderAssembly>();
 
             // Act, When
 
@@ -84,7 +84,7 @@ namespace Kli.Core
             // Arrange, Given
             
             var loaderAssembly = new LoaderAssembly(
-                DependencyResolverFromProgram.GetInstance<IDefinition>(), 
+                Program.DependencyResolver.GetInstance<IDefinition>(), 
                 Substitute.For<IDependencyResolver>());
 
             // Act, When
@@ -127,7 +127,7 @@ namespace Kli.Core
             // Arrange, Given
 
             var dependencyResolver = Substitute.For<IDependencyResolver>();
-            var loaderAssembly = new LoaderAssembly(DependencyResolverFromProgram.GetInstance<IDefinition>(), dependencyResolver);
+            var loaderAssembly = new LoaderAssembly(Program.DependencyResolver.GetInstance<IDefinition>(), dependencyResolver);
 
             // Act, When
 
@@ -145,7 +145,7 @@ namespace Kli.Core
             // Arrange, Given
 
             var dependencyResolver = Substitute.For<IDependencyResolver>();
-            var loaderAssembly = new LoaderAssembly(DependencyResolverFromProgram.GetInstance<IDefinition>(), dependencyResolver);
+            var loaderAssembly = new LoaderAssembly(Program.DependencyResolver.GetInstance<IDefinition>(), dependencyResolver);
 
             // Act, When
 
@@ -165,9 +165,9 @@ namespace Kli.Core
             // Arrange, Given
 
             var dependencyResolver = Substitute.For<IDependencyResolver>();
-            var loaderAssembly = new LoaderAssembly(DependencyResolverFromProgram.GetInstance<IDefinition>(), dependencyResolver);
+            var loaderAssembly = new LoaderAssembly(Program.DependencyResolver.GetInstance<IDefinition>(), dependencyResolver);
             dependencyResolver.InterfacesForMultipleImplementation.Returns(info =>
-                DependencyResolverFromProgram.GetInstance<IDependencyResolver>().InterfacesForMultipleImplementation);
+                Program.DependencyResolver.GetInstance<IDependencyResolver>().InterfacesForMultipleImplementation);
 
             // Act, When
 
@@ -186,7 +186,7 @@ namespace Kli.Core
         {
             // Arrange, Given
             
-            var loaderAssembly = DependencyResolverFromProgram.GetInstance<ILoaderAssembly>();
+            var loaderAssembly = Program.DependencyResolver.GetInstance<ILoaderAssembly>();
 
             // Act, When
 
@@ -203,8 +203,8 @@ namespace Kli.Core
         {
             // Arrange, Given
 
-            var definition = DependencyResolverFromProgram.GetInstance<IDefinition>();
-            var loaderAssembly = new LoaderAssembly(definition, DependencyResolverFromProgram.GetInstance<IDependencyResolver>());
+            var definition = Program.DependencyResolver.GetInstance<IDefinition>();
+            var loaderAssembly = new LoaderAssembly(definition, Program.DependencyResolver.GetInstance<IDependencyResolver>());
             var arquivo = new FileInfo(Path.Combine(definition.DirectoryOfProgram, "Kli.pdb"));
 
             // Act, When
@@ -224,8 +224,8 @@ namespace Kli.Core
         {
             // Arrange, Given
 
-            var dependencyResolver = DependencyResolverFromProgram.GetInstance<IDependencyResolver>();
-            var loaderAssembly = DependencyResolverFromProgram.GetInstance<ILoaderAssembly>();
+            var dependencyResolver = Program.DependencyResolver.GetInstance<IDependencyResolver>();
+            var loaderAssembly = Program.DependencyResolver.GetInstance<ILoaderAssembly>();
             
             // Act, When
 
@@ -243,7 +243,7 @@ namespace Kli.Core
         {
             // Arrange, Given
 
-            var loaderAssembly = DependencyResolverFromProgram.GetInstance<ILoaderAssembly>();
+            var loaderAssembly = Program.DependencyResolver.GetInstance<ILoaderAssembly>();
 
             // Act, When
 
@@ -259,7 +259,7 @@ namespace Kli.Core
         {
             // Arrange, Given
 
-            var loaderAssembly = DependencyResolverFromProgram.GetInstance<ILoaderAssembly>();
+            var loaderAssembly = Program.DependencyResolver.GetInstance<ILoaderAssembly>();
 
             // Act, When
 
@@ -275,7 +275,7 @@ namespace Kli.Core
         {
             // Arrange, Given
             
-            var loaderAssembly = DependencyResolverFromProgram.GetInstance<ILoaderAssembly>();
+            var loaderAssembly = Program.DependencyResolver.GetInstance<ILoaderAssembly>();
 
             // Act, When
 
@@ -291,8 +291,8 @@ namespace Kli.Core
         {
             // Arrange, Given
 
-            var definition = DependencyResolverFromProgram.GetInstance<IDefinition>();
-            var loaderAssembly = new LoaderAssembly(definition, DependencyResolverFromProgram.GetInstance<IDependencyResolver>());
+            var definition = Program.DependencyResolver.GetInstance<IDefinition>();
+            var loaderAssembly = new LoaderAssembly(definition, Program.DependencyResolver.GetInstance<IDependencyResolver>());
             var arquivo = new FileInfo(Path.Combine(definition.DirectoryOfProgram, "Kli.pdb"));
 
             // Act, When

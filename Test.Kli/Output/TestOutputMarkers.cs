@@ -23,14 +23,14 @@ namespace Kli.Output
         [InlineData(typeof(IOutputMarkers), "MarkersEscapedForRegexJoined")]
         [InlineData(typeof(IOutputMarkers), "MarkersEscapedForRegexSeparated")]
         public void verifica_se_o_cache_está_sendo_usado_nas_consultas(Type tipo, string nomeDePropriedade) =>
-            TestPropertyWithCache(tipo, nomeDePropriedade);
+            TestPropertyWithCache(Program.DependencyResolver.GetInstance(tipo), nomeDePropriedade);
         
         [Fact]
         public void verifica_se_os_valores_dos_marcadores_estao_corretos()
         {
             // Arrange, Given
 
-            var outputFormatter = DependencyResolverFromProgram.GetInstance<IOutputMarkers>();
+            var outputFormatter = Program.DependencyResolver.GetInstance<IOutputMarkers>();
 
             // Act, When
 
@@ -56,7 +56,7 @@ namespace Kli.Output
         {
             // Arrange, Given
 
-            var outputFormatter = DependencyResolverFromProgram.GetInstance<IOutputMarkers>();
+            var outputFormatter = Program.DependencyResolver.GetInstance<IOutputMarkers>();
 
             // Act, When
 
@@ -78,7 +78,7 @@ namespace Kli.Output
         {
             // Arrange, Given
 
-            var outputFormatter = DependencyResolverFromProgram.GetInstance<IOutputMarkers>();
+            var outputFormatter = Program.DependencyResolver.GetInstance<IOutputMarkers>();
 
             foreach (var marcador in outputFormatter.Markers)
             {
@@ -100,7 +100,7 @@ namespace Kli.Output
         {
             // Arrange, Given
 
-            var outputFormatter = DependencyResolverFromProgram.GetInstance<IOutputMarkers>();
+            var outputFormatter = Program.DependencyResolver.GetInstance<IOutputMarkers>();
                 
             // Act, When
 

@@ -24,7 +24,7 @@ namespace Kli.Core
         {
             // Arrange, Given
 
-            var definition = DependencyResolverFromProgram.GetInstance<IDefinition>();
+            var definition = Program.DependencyResolver.GetInstance<IDefinition>();
 
             // Act, When
 
@@ -41,7 +41,7 @@ namespace Kli.Core
         {
             // Arrange, Given
 
-            var definition = DependencyResolverFromProgram.GetInstance<IDefinition>();
+            var definition = Program.DependencyResolver.GetInstance<IDefinition>();
 
             // Act, When
 

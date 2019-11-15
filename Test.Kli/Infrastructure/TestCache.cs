@@ -25,7 +25,7 @@ namespace Kli.Infrastructure
         {
             // Arrange, Given
 
-            var cache = DependencyResolverFromProgram.GetInstance<ICache>();
+            var cache = Program.DependencyResolver.GetInstance<ICache>();
             var identificador = Fixture.Create<string>();
             var valorGravado = Fixture.Create<string>();
 
@@ -45,7 +45,7 @@ namespace Kli.Infrastructure
         {
             // Arrange, Given
 
-            var cache = DependencyResolverFromProgram.GetInstance<ICache>();
+            var cache = Program.DependencyResolver.GetInstance<ICache>();
             var identificador = Fixture.Create<string>();
             var valorGravado = Fixture.Create<string>();
 
@@ -71,7 +71,7 @@ namespace Kli.Infrastructure
         {
             // Arrange, Given
 
-            var cache = DependencyResolverFromProgram.GetInstance<ICache>();
+            var cache = Program.DependencyResolver.GetInstance<ICache>();
             var identificador = Fixture.Create<string>();
 
             // Act, When
@@ -91,7 +91,7 @@ namespace Kli.Infrastructure
         {
             // Arrange, Given
 
-            var cache = DependencyResolverFromProgram.GetInstance<ICache>();
+            var cache = Program.DependencyResolver.GetInstance<ICache>();
             var identificador = Fixture.Create<string>();
             var valor = Fixture.Create<string>();
 

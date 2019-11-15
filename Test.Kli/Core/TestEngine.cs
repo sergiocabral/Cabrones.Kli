@@ -74,14 +74,14 @@ namespace Kli.Core
         {
             // Arrange, Given
 
-            var translate = DependencyResolverFromProgram.GetInstance<ITranslate>();
+            var translate = Program.DependencyResolver.GetInstance<ITranslate>();
             var engine = new Engine(
-                DependencyResolverForTest.GetInstance<IConsole>(),
+                Substitute.For<IConsole>(),
                 translate,
-                DependencyResolverForTest.GetInstance<ILoaderAssembly>(),
-                DependencyResolverForTest.GetInstance<IMultipleInput>(),
-                DependencyResolverForTest.GetInstance<IMultipleOutput>(),
-                DependencyResolverForTest.GetInstance<IMultipleModule>()
+                Substitute.For<ILoaderAssembly>(),
+                Substitute.For<IMultipleInput>(),
+                Substitute.For<IMultipleOutput>(),
+                Substitute.For<IMultipleModule>()
                 ) as IEngine;
             engine.Initialize();
             

@@ -1,5 +1,7 @@
 ﻿using System;
 using FluentAssertions;
+using Kli.Core;
+using Kli.Infrastructure;
 using NSubstitute;
 using Test;
 using Xunit;
@@ -17,13 +19,16 @@ namespace Kli.Output
         public void verifica_se_o_resolvedor_de_dependência_da_classe_está_sendo_usado_quando_é_definido()
         {   
             // Arrange, Given
+            
+            var dependencyResolver = Substitute.For<IDependencyResolver>();
+            
             // Act, When
 
-            Extensions.DependencyResolver = DependencyResolverForTest;
+            Extensions.DependencyResolver = dependencyResolver;
             
             // Assert, Then
 
-            Extensions.DependencyResolver.Should().BeSameAs(DependencyResolverForTest);
+            Extensions.DependencyResolver.Should().BeSameAs(dependencyResolver);
         }
         
         [Fact]
@@ -44,7 +49,8 @@ namespace Kli.Output
         {
             // Arrange, Given
 
-            Extensions.DependencyResolver = DependencyResolverForTest;
+            var dependencyResolver = Substitute.For<IDependencyResolver>();
+            Extensions.DependencyResolver = dependencyResolver;
             
             // Act, When
 
@@ -61,7 +67,7 @@ namespace Kli.Output
         {
             // Arrange, Given
 
-            Extensions.DependencyResolver = DependencyResolverFromProgram;
+            Extensions.DependencyResolver = Program.DependencyResolver;
             var outputFormatter = Extensions.DependencyResolver.GetInstance<IOutputMarkers>();
 
             foreach (var marcador in outputFormatter.Markers)

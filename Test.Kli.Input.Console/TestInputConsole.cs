@@ -14,7 +14,7 @@ namespace Kli.Input.Console
     {
         public TestInputConsole()
         {
-            DependencyResolverFromProgram.Register<IInputConsole, InputConsole>();
+            Program.DependencyResolver.Register<IInputConsole, InputConsole>();
         }
         
         [Theory]

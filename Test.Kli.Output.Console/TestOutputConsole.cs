@@ -12,8 +12,8 @@ namespace Kli.Output.Console
     {
         public TestOutputConsole()
         {
-            DependencyResolverFromProgram.Register<IOutputConsole, OutputConsole>();
-            DependencyResolverFromProgram.Register<IOutputMarkersToConsoleColor, OutputMarkersToConsoleColor>();
+            Program.DependencyResolver.Register<IOutputConsole, OutputConsole>();
+            Program.DependencyResolver.Register<IOutputMarkersToConsoleColor, OutputMarkersToConsoleColor>();
         }
         
         [Theory]
@@ -56,7 +56,7 @@ namespace Kli.Output.Console
 
             var outputMarkersToConsoleColor = Substitute.For<IOutputMarkersToConsoleColor>();
             var outputConsole = new OutputConsole(
-                DependencyResolverFromProgram.GetInstance<IOutputWriter>(),
+                Program.DependencyResolver.GetInstance<IOutputWriter>(),
                 outputMarkersToConsoleColor,
                 Substitute.For<IConsole>()) as IOutputConsole;
             
@@ -79,11 +79,11 @@ namespace Kli.Output.Console
         {
             // Arrange, Given
 
-            var outputMarkers = DependencyResolverFromProgram.GetInstance<IOutputMarkers>();
-            var outputMarkersToConsoleColor = DependencyResolverFromProgram.GetInstance<IOutputMarkersToConsoleColor>();
+            var outputMarkers = Program.DependencyResolver.GetInstance<IOutputMarkers>();
+            var outputMarkersToConsoleColor = Program.DependencyResolver.GetInstance<IOutputMarkersToConsoleColor>();
             var console = Substitute.For<IConsole>();
             var outputConsole = new OutputConsole(
-                DependencyResolverFromProgram.GetInstance<IOutputWriter>(),
+                Program.DependencyResolver.GetInstance<IOutputWriter>(),
                 outputMarkersToConsoleColor,
                 console) as IOutputConsole;
 
@@ -111,7 +111,7 @@ namespace Kli.Output.Console
             var console = Substitute.For<IConsole>();
             var outputMarkersToConsoleColor = Substitute.For<IOutputMarkersToConsoleColor>();
             var outputConsole = new OutputConsole(
-                DependencyResolverFromProgram.GetInstance<IOutputWriter>(),
+                Program.DependencyResolver.GetInstance<IOutputWriter>(),
                 outputMarkersToConsoleColor,
                 console) as IOutputConsole;
             
@@ -155,7 +155,7 @@ namespace Kli.Output.Console
         {
             // Arrange, Given
 
-            var outputMarkersToConsoleColor = DependencyResolverFromProgram.GetInstance<IOutputMarkersToConsoleColor>();
+            var outputMarkersToConsoleColor = Program.DependencyResolver.GetInstance<IOutputMarkersToConsoleColor>();
             var console = Substitute.For<IConsole>();
             var outputConsole = new OutputConsole(
                 Substitute.For<IOutputWriter>(),

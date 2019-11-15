@@ -27,7 +27,7 @@ namespace Kli.i18n
         {
             // Arrange, Given
 
-            var tradução = DependencyResolverFromProgram.GetInstance<ITranslate>();
+            var tradução = Program.DependencyResolver.GetInstance<ITranslate>();
             tradução.Clear();
             
             var conteudo = new Dictionary<string, IDictionary<string, string>>
@@ -68,7 +68,7 @@ namespace Kli.i18n
         {
             // Arrange, Given
 
-            var tradução = DependencyResolverFromProgram.GetInstance<ITranslate>();
+            var tradução = Program.DependencyResolver.GetInstance<ITranslate>();
             tradução.Clear();
             
             var conteudoInseridoPrimeiro = new Dictionary<string, IDictionary<string, string>>
@@ -99,7 +99,7 @@ namespace Kli.i18n
         {
             // Arrange, Given
 
-            var tradução = DependencyResolverFromProgram.GetInstance<ITranslate>();
+            var tradução = Program.DependencyResolver.GetInstance<ITranslate>();
             tradução.Clear();
 
             var contagemDeTraduçõesNoInício = tradução.Translates.Count;
@@ -120,7 +120,7 @@ namespace Kli.i18n
         {
             // Arrange, Given
 
-            var tradução = DependencyResolverFromProgram.GetInstance<ITranslate>();
+            var tradução = Program.DependencyResolver.GetInstance<ITranslate>();
             tradução.Clear();
 
             var contagemDeTraduçõesNoInício = tradução.Translates.Count;
@@ -146,7 +146,7 @@ namespace Kli.i18n
         {
             // Arrange, Given
 
-            var tradução = DependencyResolverFromProgram.GetInstance<ITranslate>();
+            var tradução = Program.DependencyResolver.GetInstance<ITranslate>();
             tradução.Clear();
 
             var valorTexto = Fixture.Create<string>();
@@ -182,7 +182,7 @@ namespace Kli.i18n
         {
             // Arrange, Given
 
-            var tradução = DependencyResolverFromProgram.GetInstance<ITranslate>();
+            var tradução = Program.DependencyResolver.GetInstance<ITranslate>();
             tradução.Clear();
             
             var valorTexto = Fixture.Create<string>();
@@ -224,7 +224,7 @@ namespace Kli.i18n
         {
             // Arrange, Given
 
-            var tradução = DependencyResolverFromProgram.GetInstance<ITranslate>();
+            var tradução = Program.DependencyResolver.GetInstance<ITranslate>();
             tradução.Clear();
 
             var contagemDeTraduçõesNoInício = tradução.Translates.Count;
@@ -245,7 +245,7 @@ namespace Kli.i18n
         {
             // Arrange, Given
 
-            var tradução = DependencyResolverFromProgram.GetInstance<ITranslate>();
+            var tradução = Program.DependencyResolver.GetInstance<ITranslate>();
             tradução.Clear();
 
             var contagemDeTraduçõesNoInício = tradução.Translates.Count;
@@ -277,7 +277,7 @@ namespace Kli.i18n
         {
             // Arrange, Given
 
-            var tradução = DependencyResolverFromProgram.GetInstance<ITranslate>();
+            var tradução = Program.DependencyResolver.GetInstance<ITranslate>();
             tradução.Clear();
 
             var contagemDeTraduçõesNoInício = tradução.Translates.Count;
@@ -299,7 +299,7 @@ namespace Kli.i18n
         {
             // Arrange, Given
 
-            var tradução = DependencyResolverFromProgram.GetInstance<ITranslate>();
+            var tradução = Program.DependencyResolver.GetInstance<ITranslate>();
             tradução.Clear();
 
             var assembly = Assembly.GetExecutingAssembly();
@@ -325,7 +325,7 @@ namespace Kli.i18n
         {
             // Arrange, Given
 
-            var tradução = DependencyResolverFromProgram.GetInstance<ITranslate>();
+            var tradução = Program.DependencyResolver.GetInstance<ITranslate>();
             tradução.Clear();
 
             var assembly = Assembly.GetExecutingAssembly();
@@ -354,7 +354,7 @@ namespace Kli.i18n
         {
             // Arrange, Given
 
-            var tradução = DependencyResolverFromProgram.GetInstance<ITranslate>();
+            var tradução = Program.DependencyResolver.GetInstance<ITranslate>();
             tradução.Clear();
 
             var assembly = Assembly.GetExecutingAssembly();
@@ -382,7 +382,7 @@ namespace Kli.i18n
         {
             // Arrange, Given
 
-            var tradução = DependencyResolverFromProgram.GetInstance<ITranslate>();
+            var tradução = Program.DependencyResolver.GetInstance<ITranslate>();
             tradução.Clear();
 
             var assembly = Assembly.GetExecutingAssembly();
@@ -405,7 +405,7 @@ namespace Kli.i18n
         {
             // Arrange, Given
 
-            var tradução = DependencyResolverFromProgram.GetInstance<ITranslate>();
+            var tradução = Program.DependencyResolver.GetInstance<ITranslate>();
             tradução.Clear();
 
             var assembly = Assembly.GetExecutingAssembly();
@@ -428,7 +428,7 @@ namespace Kli.i18n
         {
             // Arrange, Given
 
-            var tradução = DependencyResolverFromProgram.GetInstance<ITranslate>();
+            var tradução = Program.DependencyResolver.GetInstance<ITranslate>();
 
             var valorTexto = Fixture.Create<string>();
             var valorIdioma = Fixture.Create<string>();
@@ -460,7 +460,7 @@ namespace Kli.i18n
         {
             // Arrange, Given
 
-            var tradução = DependencyResolverFromProgram.GetInstance<ITranslate>();
+            var tradução = Program.DependencyResolver.GetInstance<ITranslate>();
             tradução.Clear();
 
             var valorTexto = Fixture.Create<string>();
@@ -482,7 +482,7 @@ namespace Kli.i18n
         {
             // Arrange, Given
 
-            var tradução = DependencyResolverFromProgram.GetInstance<ITranslate>();
+            var tradução = Program.DependencyResolver.GetInstance<ITranslate>();
             tradução.Clear();
 
             var valorTexto = Fixture.Create<string>();
@@ -516,7 +516,7 @@ namespace Kli.i18n
         {
             // Arrange, Given
 
-            var tradução = DependencyResolverFromProgram.GetInstance<ITranslate>();
+            var tradução = Program.DependencyResolver.GetInstance<ITranslate>();
             
             var valorTexto = Fixture.Create<string>();
             var valorIdiomaPadrao = Fixture.Create<string>();
@@ -550,7 +550,7 @@ namespace Kli.i18n
         {
             // Arrange, Given
 
-            var tradução = DependencyResolverFromProgram.GetInstance<ITranslate>();
+            var tradução = Program.DependencyResolver.GetInstance<ITranslate>();
             
             var valorTexto = Fixture.Create<string>();
             var valorIdioma = Fixture.Create<string>();
@@ -583,7 +583,7 @@ namespace Kli.i18n
         {
             // Arrange, Given
 
-            var tradução = DependencyResolverFromProgram.GetInstance<ITranslate>();
+            var tradução = Program.DependencyResolver.GetInstance<ITranslate>();
             
             var valorTexto = Fixture.Create<string>();
             var valorIdioma = Fixture.Create<string>();
@@ -616,7 +616,7 @@ namespace Kli.i18n
         {
             // Arrange, Given
 
-            var tradução = DependencyResolverFromProgram.GetInstance<ITranslate>();
+            var tradução = Program.DependencyResolver.GetInstance<ITranslate>();
             var valorIdioma = Fixture.Create<string>();
             
             // Act, When
@@ -653,7 +653,7 @@ namespace Kli.i18n
         {
             // Arrange, Given
 
-            var idioma = DependencyResolverFromProgram.GetInstance<ILanguage>();
+            var idioma = Program.DependencyResolver.GetInstance<ILanguage>();
             var tradução = new Translate(idioma) as ITranslate;
             
             // Act, When

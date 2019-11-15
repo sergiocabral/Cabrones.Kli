@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading;
 using Kli.Core;
+using Kli.Infrastructure;
 using NSubstitute;
 using Test;
 using Xunit;
@@ -24,13 +26,26 @@ namespace Kli
         {
             // Arrange, Given
             
-            var dependencyResolver = Program.DependencyResolver = DependencyResolverForTest;
+            var dependencyResolver = Substitute.For<IDependencyResolver>();
+
+            // Espera um tempo para reduzir a possibilidade deste teste
+            // rodar simultaneamente com outros testes.
+            // O motivo disso está explicado no próximo comentário.
+            Thread.Sleep(1000);
+            
+            // Esta troca pode ocasionar erros em outros testes.
+            // O motivo é que está trocando o resolvedor de dependências
+            // principal do programa.
+            Program.DependencyResolver = dependencyResolver;
 
             // Act, When
             
             Program.Main();
 
             // Assert, Then
+            
+            // Aqui o resolvedor de dependências é restaurado para o original.
+            Program.DependencyResolver = null;
 
             dependencyResolver.GetInstance<IEngine>().Received(1).Initialize();
         }

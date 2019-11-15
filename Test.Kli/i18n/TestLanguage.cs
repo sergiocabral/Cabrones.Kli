@@ -25,14 +25,14 @@ namespace Kli.i18n
         [InlineData(typeof(ILanguage), "EnvironmentVariables")]
         [InlineData(typeof(ILanguage), "Current")]
         public void verifica_se_o_cache_está_sendo_usado_nas_consultas(Type tipo, string nomeDePropriedade) =>
-            TestPropertyWithCache(tipo, nomeDePropriedade);
+            TestPropertyWithCache(Program.DependencyResolver.GetInstance(tipo), nomeDePropriedade);
 
         [Fact]
         public void confere_os_valores_válidos_para_variáveis_de_ambiente_definirem_o_idioma()
         {
             // Arrange, Given
 
-            var idioma = DependencyResolverFromProgram.GetInstance<ILanguage>();
+            var idioma = Program.DependencyResolver.GetInstance<ILanguage>();
             
             // Act, When
 
@@ -111,7 +111,7 @@ namespace Kli.i18n
         {
             // Arrange, Given
 
-            var idioma = DependencyResolverFromProgram.GetInstance<ILanguage>();
+            var idioma = Program.DependencyResolver.GetInstance<ILanguage>();
             
             // Act, When
 
@@ -128,7 +128,7 @@ namespace Kli.i18n
             // Arrange, Given
 
             var environment = Substitute.For<IEnvironment>();
-            var cache = DependencyResolverFromProgram.GetInstance<ICache>();
+            var cache = Program.DependencyResolver.GetInstance<ICache>();
             var idioma = new Language(cache, environment) as ILanguage;
 
             cache.Clear();
@@ -153,7 +153,7 @@ namespace Kli.i18n
             // Arrange, Given
 
             var environment = Substitute.For<IEnvironment>();
-            var cache = DependencyResolverFromProgram.GetInstance<ICache>();
+            var cache = Program.DependencyResolver.GetInstance<ICache>();
             var idioma = new Language(cache, environment) as ILanguage;
 
             cache.Clear();
@@ -182,7 +182,7 @@ namespace Kli.i18n
             // Arrange, Given
 
             var environment = Substitute.For<IEnvironment>();
-            var cache = DependencyResolverFromProgram.GetInstance<ICache>();
+            var cache = Program.DependencyResolver.GetInstance<ICache>();
             var idioma = new Language(cache, environment) as ILanguage;
 
             cache.Clear();

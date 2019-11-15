@@ -7,8 +7,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using AutoFixture;
 using FluentAssertions;
-using Kli;
-using Kli.Infrastructure;
 
 namespace Test
 {
@@ -18,28 +16,10 @@ namespace Test
     public abstract class BaseForTest
     {
         /// <summary>
-        /// Construtor. SetUp dos testes.
-        /// </summary>
-        protected BaseForTest()
-        {
-            Program.DependencyResolver = DependencyResolverFromProgram;
-        }
-        
-        /// <summary>
         /// Fixture.
         /// </summary>
         protected Fixture Fixture { get; } = new Fixture();
 
-        /// <summary>
-        /// Resolvedor de dependências usado originalmente pelo programa.
-        /// </summary>
-        protected static IDependencyResolver DependencyResolverFromProgram { get; } = Program.DependencyResolver;
-
-        /// <summary>
-        /// Resolvedor de dependências ajustado para atender os testes com Substitute.
-        /// </summary>
-        protected static DependencyResolverForTest DependencyResolverForTest { get; } = new DependencyResolverForTest();
-        
         /// <summary>
         /// Testar se um tipo implementa um ou mais tipos.
         /// </summary>
@@ -162,7 +142,7 @@ namespace Test
         /// </summary>
         /// <param name="instance">Instância.</param>
         /// <param name="propertyName">Nome da propriedade.</param>
-        private static void TestPropertyWithCache(object instance, string propertyName)
+        protected static void TestPropertyWithCache(object instance, string propertyName)
         {
             // Arrange, Given
 
@@ -183,16 +163,6 @@ namespace Test
             tempo2.Should().BeLessThan(tempo1);
         }
         
-        /// <summary>
-        /// Verifica se o cache está sendo usado ao consulta uma propriedade.
-        /// A evidência é o tempo menor na segunda consulta.
-        /// </summary>
-        /// <param name="type">Tipo.</param>
-        /// <param name="propertyName">Nome da propriedade.</param>
-        protected static void TestPropertyWithCache(Type type, string propertyName) => 
-            TestPropertyWithCache(
-                DependencyResolverFromProgram.GetInstance(type), propertyName);
-
         /// <summary>
         /// Faz uma consulta qualquer e cronometra o tempo.
         /// </summary>

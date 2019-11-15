@@ -23,7 +23,7 @@ namespace Kli.Wrappers
         {
             // Arrange, Given
 
-            var environment = DependencyResolverFromProgram.GetInstance<IEnvironment>();
+            var environment = Program.DependencyResolver.GetInstance<IEnvironment>();
 
             // Act, When
 
@@ -42,7 +42,7 @@ namespace Kli.Wrappers
         {
             // Arrange, Given
 
-            var environment = DependencyResolverFromProgram.GetInstance<IEnvironment>();
+            var environment = Program.DependencyResolver.GetInstance<IEnvironment>();
 
             // Act, When
 
