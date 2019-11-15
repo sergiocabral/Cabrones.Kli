@@ -15,12 +15,12 @@ namespace Kli.i18n
         [Theory]
         [InlineData(typeof(Translate), 8)]
         public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            tipo.TestTypeMethodsCount(totalDeMétodosEsperado);
+            tipo.TestMethodsCount(totalDeMétodosEsperado);
 
         [Theory]
         [InlineData(typeof(Translate), typeof(ITranslate))]
         public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            tipoDaClasse.TestTypeImplementations(tiposQueDeveSerImplementado);
+            tipoDaClasse.TestImplementations(tiposQueDeveSerImplementado);
         
         [Fact]
         public void ao_carregar_traduções_de_dicionário_deve_retornar_os_valores_inseridos_sem_ser_uma_referência_direta()

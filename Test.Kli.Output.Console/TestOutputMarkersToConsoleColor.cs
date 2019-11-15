@@ -15,12 +15,12 @@ namespace Kli.Output.Console
         [Theory]
         [InlineData(typeof(OutputMarkersToConsoleColor), 2)]
         public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            tipo.TestTypeMethodsCount(totalDeMétodosEsperado);
+            tipo.TestMethodsCount(totalDeMétodosEsperado);
 
         [Theory]
         [InlineData(typeof(OutputMarkersToConsoleColor), typeof(IOutputMarkersToConsoleColor))]
         public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            tipoDaClasse.TestTypeImplementations(tiposQueDeveSerImplementado);
+            tipoDaClasse.TestImplementations(tiposQueDeveSerImplementado);
 
         [Theory]
         [InlineData((char) 0, ConsoleColor.Gray, ConsoleColor.Black)]

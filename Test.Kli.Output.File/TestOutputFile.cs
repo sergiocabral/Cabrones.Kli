@@ -20,12 +20,12 @@ namespace Kli.Output.File
         [Theory]
         [InlineData(typeof(OutputFile), 4)]
         public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            tipo.TestTypeMethodsCount(totalDeMétodosEsperado);
+            tipo.TestMethodsCount(totalDeMétodosEsperado);
 
         [Theory]
         [InlineData(typeof(OutputFile), typeof(IOutput), typeof(IOutputFile))]
         public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            tipoDaClasse.TestTypeImplementations(tiposQueDeveSerImplementado);
+            tipoDaClasse.TestImplementations(tiposQueDeveSerImplementado);
 
         [Fact]
         public void verifica_se_o_nome_do_arquivo_está_correto()

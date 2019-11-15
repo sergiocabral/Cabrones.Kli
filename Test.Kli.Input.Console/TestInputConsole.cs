@@ -20,12 +20,12 @@ namespace Kli.Input.Console
         [Theory]
         [InlineData(typeof(InputConsole), 4)]
         public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            tipo.TestTypeMethodsCount(totalDeMétodosEsperado);
+            tipo.TestMethodsCount(totalDeMétodosEsperado);
 
         [Theory]
         [InlineData(typeof(InputConsole), typeof(IInput), typeof(IInputConsole))]
         public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            tipoDaClasse.TestTypeImplementations(tiposQueDeveSerImplementado);
+            tipoDaClasse.TestImplementations(tiposQueDeveSerImplementado);
         
         [Fact]
         public void os_métodos_Read_e_ReadLine_devem_chamar_o_método_correspondente_de_Console()

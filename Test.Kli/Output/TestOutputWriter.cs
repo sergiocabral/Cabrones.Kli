@@ -14,12 +14,12 @@ namespace Kli.Output
         [Theory]
         [InlineData(typeof(OutputWriter), 2)]
         public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            tipo.TestTypeMethodsCount(totalDeMétodosEsperado);
+            tipo.TestMethodsCount(totalDeMétodosEsperado);
 
         [Theory]
         [InlineData(typeof(OutputWriter), typeof(IOutputWriter))]
         public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            tipoDaClasse.TestTypeImplementations(tiposQueDeveSerImplementado);
+            tipoDaClasse.TestImplementations(tiposQueDeveSerImplementado);
         
         [Fact]
         public void o_parse_deve_enviar_o_texto_para_ser_escrito()

@@ -11,19 +11,19 @@ namespace Kli.Output
         [Theory]
         [InlineData(typeof(OutputMarkers), 10)]
         public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            tipo.TestTypeMethodsCount(totalDeMétodosEsperado);
+            tipo.TestMethodsCount(totalDeMétodosEsperado);
 
         [Theory]
         [InlineData(typeof(OutputMarkers), typeof(IOutputMarkers))]
         public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            tipoDaClasse.TestTypeImplementations(tiposQueDeveSerImplementado);
+            tipoDaClasse.TestImplementations(tiposQueDeveSerImplementado);
         
         [Theory]
         [InlineData(typeof(IOutputMarkers), "Markers")]
         [InlineData(typeof(IOutputMarkers), "MarkersEscapedForRegexJoined")]
         [InlineData(typeof(IOutputMarkers), "MarkersEscapedForRegexSeparated")]
         public void verifica_se_o_cache_está_sendo_usado_nas_consultas(Type tipo, string nomeDePropriedade) =>
-            Program.DependencyResolver.GetInstance(tipo).TestPropertyWithCache(nomeDePropriedade);
+            Program.DependencyResolver.GetInstance(tipo).TestPropertyCache(nomeDePropriedade);
         
         [Fact]
         public void verifica_se_os_valores_dos_marcadores_estao_corretos()
@@ -104,10 +104,10 @@ namespace Kli.Output
                 
             // Act, When
 
-            var tempoParaTextoComMarcador = new Func<string>(() => outputFormatter.Escape(outputFormatter.MarkersEscapedForRegexJoined)).StopwatchQuery().Item1;
-            var tempoParaTextoSemMarcador = new Func<string>(() => outputFormatter.Escape("12345")).StopwatchQuery().Item1;
-            var tempoParaTextoVazio = new Func<string>(() => outputFormatter.Escape(string.Empty)).StopwatchQuery().Item1;
-            var tempoParaTextoEmBranco = new Func<string>(() => outputFormatter.Escape("     ")).StopwatchQuery().Item1;
+            var tempoParaTextoComMarcador = new Func<string>(() => outputFormatter.Escape(outputFormatter.MarkersEscapedForRegexJoined)).StopwatchFor().Item1;
+            var tempoParaTextoSemMarcador = new Func<string>(() => outputFormatter.Escape("12345")).StopwatchFor().Item1;
+            var tempoParaTextoVazio = new Func<string>(() => outputFormatter.Escape(string.Empty)).StopwatchFor().Item1;
+            var tempoParaTextoEmBranco = new Func<string>(() => outputFormatter.Escape("     ")).StopwatchFor().Item1;
             
             // Assert, Then
 
