@@ -53,10 +53,15 @@ namespace Kli.Wrappers
         public string ReadLine() => System.Console.ReadLine();
 
         /// <summary>
+        /// Valor padrão para System.Console.ReadKey();
+        /// </summary>
+        private const bool ConsoleReadKeyInterceptMode = true;
+
+        /// <summary>
         /// Lê uma entrada de tecla de dados do usuário.
         /// </summary>
         /// <returns>Caracter digitado.</returns>
-        public ConsoleKeyInfo ReadKey() => System.Console.ReadKey(true);
+        public ConsoleKeyInfo ReadKey() => System.Console.ReadKey(ConsoleReadKeyInterceptMode);
 
         /// <summary>
         /// Verifica se existe tecla disponível para leitura imediata.

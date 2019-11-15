@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Text.RegularExpressions;
+using AutoFixture;
 using FluentAssertions;
 using Cabrones.Test;
 using Xunit;
@@ -19,6 +21,26 @@ namespace Kli.Core
         public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
             tipoDaClasse.TestImplementations(tiposQueDeveSerImplementado);
 
+        [Fact]
+        public void o_arquivo_temporário_de_teste_deve_ser_válido()
+        {
+            // Arrange, Given
+
+            var nomeDoArquivo = Definition.TemporaryFilenameForTestIfCanWriteIntoDirectoryOfUser;
+
+            const string máscaraRegex = @"_can_delete_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.tmp";
+            var testeDaMáscara = this.Fixture().Create<string>();
+
+            // Act, When
+
+            var fileInfo = new FileInfo(Path.Combine(Environment.CurrentDirectory, nomeDoArquivo));
+
+            // Assert, Then
+
+            fileInfo.Name.Should().Be(nomeDoArquivo);
+            Regex.Replace(fileInfo.Name, máscaraRegex, testeDaMáscara).Should().Be(testeDaMáscara);
+        }
+        
         [Fact]
         public void verificar_se_valor_está_correto_para_propriedade_DirectoryOfProgram()
         {

@@ -45,9 +45,7 @@ namespace Kli.Module
             if (_startedInteraction) throw new InvalidOperationException();
             _startedInteraction = true;
             
-            _multipleOutput.WriteLine("Started.");
-            _multipleOutput.WriteLine("Yes".Translate("pt"));
-            _multipleInput.Read(true);
+            //Execução dos módulos aqui...
         }
     }
 }

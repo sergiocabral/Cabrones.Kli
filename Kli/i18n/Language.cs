@@ -14,7 +14,7 @@ namespace Kli.i18n
         /// <summary>
         /// Lista de nomes de variáveis de ambiente que serão consultadas para obter o idioma
         /// </summary>
-        public IEnumerable<string> EnvironmentVariables { get; } = new[]
+        public IEnumerable<string> EnvironmentVariables { get; } = new []
         {
             "KLI-LANG",
             "KLI_LANG"

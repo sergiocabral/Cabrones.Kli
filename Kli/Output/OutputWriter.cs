@@ -37,7 +37,7 @@ namespace Kli.Output
             text = NormalizeNewLine(text);
             foreach (var (part, mark) in ExtractParts(text))
             {
-                writer(part, mark);
+                if (!string.IsNullOrEmpty(text)) writer(part, mark);
             }
         }
 
@@ -52,7 +52,8 @@ namespace Kli.Output
             
             text = NormalizeNewLine(text);
             text = RemoveAllMarkers(text);
-            writer(text);
+            
+            if (!string.IsNullOrEmpty(text)) writer(text);
         }
 
         /// <summary>
@@ -151,7 +152,7 @@ namespace Kli.Output
                 text += (char)0;
                 
                 var position = text.IndexOf(marker);
-                do
+                while (position >= 0)
                 {
                     if (text[position + 1] == marker)
                     {
@@ -159,7 +160,7 @@ namespace Kli.Output
                     }
                     text = text.Remove(position, 1);
                     position = text.IndexOf(marker, position);
-                } while (position >= 0);
+                };
 
                 // Remove o caracter adicional.
                 text = text.Substring(0, text.Length - 1);

@@ -135,8 +135,10 @@ namespace Kli.Core
             
             // Assert, Then
 
-            dependencyResolver.ReceivedCalls().Count(a => a.GetMethodInfo().Name == "Register").Should()
-                .BeGreaterThan(0);
+            dependencyResolver.ReceivedCalls().Count(a => a.GetMethodInfo().Name == "Register")
+                // Este valor muda com frequência. A cada nova classe neste projeto.
+                // O número é mantido exato ao invés de BeGreaterThan por conta do MutationTest. 
+                .Should().Be(21); 
         }
 
         [Fact]

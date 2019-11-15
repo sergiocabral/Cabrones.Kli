@@ -115,5 +115,22 @@ namespace Kli.Output
             tempoParaTextoVazio.Should().BeLessThan(tempoParaTextoComMarcador);
             tempoParaTextoEmBranco.Should().BeLessThan(tempoParaTextoComMarcador);
         }
+
+        [Fact]
+        public void lista_de_marcadores_como_array_e_como_texto_devem_ser_iguais()
+        {
+            // Arrange, Given
+
+            var outputFormatter = Program.DependencyResolver.GetInstance<IOutputMarkers>();
+                
+            // Act, When
+
+            var comoArray = outputFormatter.MarkersEscapedForRegexSeparated;
+            var comoTexto = outputFormatter.MarkersEscapedForRegexJoined;
+
+            // Assert, Then
+
+            comoTexto.Should().Be(string.Join("", comoArray));
+        }
     }
 }

@@ -44,6 +44,28 @@ namespace Kli.Output
         }
         
         [Fact]
+        public void o_parse_não_precisa_enviar_texto_vazio_para_ser_escrito()
+        {
+            // Arrange, Given
+
+            var outputWriter = Program.DependencyResolver.GetInstance<IOutputWriter>();
+            const string marcadorQualquer = "!";
+            
+            // Act, When
+
+            var textoEscritoIgnorandoMarcadores = 0;
+            outputWriter.Parse(marcadorQualquer, textoRecebido => textoEscritoIgnorandoMarcadores++);
+
+            var textoEscritoConsiderandoMarcadores = 0;
+            outputWriter.Parse(marcadorQualquer, (textoRecebido, marcador) => textoEscritoConsiderandoMarcadores++);
+               
+            // Assert, Then
+
+            textoEscritoIgnorandoMarcadores.Should().Be(0);
+            textoEscritoConsiderandoMarcadores.Should().Be(0);
+        }
+        
+        [Fact]
         public void o_parse_não_precisa_fazer_análise_de_texto_vazio_ou_nulo()
         {
             // Arrange, Given
@@ -86,6 +108,7 @@ namespace Kli.Output
         [InlineData("Marcador no final___", "Marcador no final_")]
         [InlineData("Marcador no final__", "Marcador no final_")]
         [InlineData("Marcador no final_", "Marcador no final")]
+        [InlineData("!!!a!!b!!c!", "!a!b!c")]
         [InlineData(" ", " ")]
         [InlineData("", "")]
         public void o_parse_que_desconsidera_marcadores_deve_enviar_o_texto_para_ser_escrito_corretamente_para_o_usuario(string textoEnviado, string textoEscritoEsperado)

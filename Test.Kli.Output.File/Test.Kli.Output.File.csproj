@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.0</TargetFramework>
         <IsPackable>false</IsPackable>
-        <Version>0.0.0.219</Version>
+        <Version>0.0.0.233</Version>
         <RootNamespace>Kli.Output.File</RootNamespace>
     </PropertyGroup>
 

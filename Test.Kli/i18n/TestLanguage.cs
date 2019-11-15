@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using FluentAssertions;
 using Kli.Infrastructure;
 using Kli.Wrappers;
@@ -39,7 +40,7 @@ namespace Kli.i18n
             var variáveisDeAmbientePossíveis = idioma.EnvironmentVariables;
 
             // Assert, Then
-            
+
             variáveisDeAmbientePossíveis.Should().BeEquivalentTo("KLI-LANG", "KLI_LANG");
         }
         

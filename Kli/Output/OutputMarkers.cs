@@ -65,7 +65,7 @@ namespace Kli.Output
         public string Markers =>
             _cache.Get<string>(CacheKeyMarkers) ??
             _cache.Set(CacheKeyMarkers,
-                string.Join("", (
+                new string((
                     from property in GetType().GetProperties()
                     where property.PropertyType == typeof(char)
                     select (char) (property.GetValue(this) ?? 0)
@@ -85,7 +85,7 @@ namespace Kli.Output
         public string MarkersEscapedForRegexJoined =>
             _cache.Get<string>(CacheKeyMarkersEscapedForRegexJoined) ??
             _cache.Set(CacheKeyMarkersEscapedForRegexJoined,
-                string.Join("", MarkersEscapedForRegexSeparated));
+                string.Join(string.Empty, MarkersEscapedForRegexSeparated));
 
         /// <summary>
         /// Chave identificador do valor de cache para a propriedade: Markers

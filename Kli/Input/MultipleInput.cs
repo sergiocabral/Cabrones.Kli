@@ -45,16 +45,23 @@ namespace Kli.Input
         /// <returns>Retorno.</returns>
         private string CallReadMethod(string method, params object[] parameters)
         {
+            string? result = null;
+            
             var methodInfo = typeof(IInput).GetMethod(method, BindingFlags.Instance | BindingFlags.Public);
             do
             {
                 foreach (var instance in Instances)
                 {
-                    // ReSharper disable once ArrangeRedundantParentheses
-                    if (instance.HasRead()) return (methodInfo?.Invoke(instance, parameters) as string)!;
+                    if (!instance.HasRead()) continue;
+                    
+                    result = methodInfo?.Invoke(instance, parameters) as string;
+                    break;
                 }
+
                 Thread.Sleep(SleepWhenInLoop);
-            } while (true);   
+            } while (result == null);
+
+            return result;
         }
 
         /// <summary>
