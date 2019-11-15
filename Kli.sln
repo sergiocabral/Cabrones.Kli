@@ -8,8 +8,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kli.Output.Console", "Kli.O
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Kli.Output.Console", "Test.Kli.Output.Console\Test.Kli.Output.Console.csproj", "{59FCAF50-B7E7-49CA-BE2B-8E5F8DA7CC7C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cabrones.Test", "Cabrones.Test\Cabrones.Test.csproj", "{EDCEDD30-D8C7-4D55-B00E-1DD2F3E1174B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kli.Output.File", "Kli.Output.File\Kli.Output.File.csproj", "{205EC265-8FD5-431C-9D6C-5941229CACCE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Kli.Output.File", "Test.Kli.Output.File\Test.Kli.Output.File.csproj", "{AF5CF3C8-0685-4614-898D-DA1DED8B48BC}"
@@ -40,10 +38,6 @@ Global
 		{59FCAF50-B7E7-49CA-BE2B-8E5F8DA7CC7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59FCAF50-B7E7-49CA-BE2B-8E5F8DA7CC7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59FCAF50-B7E7-49CA-BE2B-8E5F8DA7CC7C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EDCEDD30-D8C7-4D55-B00E-1DD2F3E1174B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EDCEDD30-D8C7-4D55-B00E-1DD2F3E1174B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EDCEDD30-D8C7-4D55-B00E-1DD2F3E1174B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EDCEDD30-D8C7-4D55-B00E-1DD2F3E1174B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{205EC265-8FD5-431C-9D6C-5941229CACCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{205EC265-8FD5-431C-9D6C-5941229CACCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{205EC265-8FD5-431C-9D6C-5941229CACCE}.Release|Any CPU.ActiveCfg = Release|Any CPU

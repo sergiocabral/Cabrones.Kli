@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.0</TargetFramework>
         <IsPackable>false</IsPackable>
-        <Version>0.0.0.234</Version>
+        <Version>0.0.0.242</Version>
         <RootNamespace>Kli.Output.Console</RootNamespace>
     </PropertyGroup>
 
@@ -12,17 +12,14 @@
     </Target>
 
     <ItemGroup>
+        <PackageReference Include="Cabrones.Test" Version="1.0.0.567" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
         <PackageReference Include="xunit" Version="2.4.1" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
         <PackageReference Include="coverlet.collector" Version="1.1.0" />
-        <PackageReference Include="FluentAssertions" Version="5.9.0" />
-        <PackageReference Include="AutoFixture" Version="4.11.0" />
-        <PackageReference Include="NSubstitute" Version="4.2.1" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Cabrones.Test\Cabrones.Test.csproj" />
         <ProjectReference Include="..\Kli.Output.Console\Kli.Output.Console.csproj" />
     </ItemGroup>
 
