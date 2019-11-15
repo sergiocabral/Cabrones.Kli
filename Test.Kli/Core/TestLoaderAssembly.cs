@@ -6,23 +6,23 @@ using Kli.Infrastructure;
 using Kli.Input;
 using Kli.Output;
 using NSubstitute;
-using Test;
+using Cabrones.Test;
 using Xunit;
 using Environment = System.Environment;
 
 namespace Kli.Core
 {
-    public class TestLoaderAssembly: BaseForTest
+    public class TestLoaderAssembly
     {
         [Theory]
         [InlineData(typeof(LoaderAssembly), 3)]
         public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            TestTypeMethodsCount(tipo, totalDeMétodosEsperado);
+            tipo.TestTypeMethodsCount(totalDeMétodosEsperado);
 
         [Theory]
         [InlineData(typeof(LoaderAssembly), typeof(ILoaderAssembly))]
         public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            TestTypeImplementations(tipoDaClasse, tiposQueDeveSerImplementado);
+            tipoDaClasse.TestTypeImplementations(tiposQueDeveSerImplementado);
        
         [Fact]
         public void verifica_se_a_máscara_do_arquivo_está_capturando_os_arquivos_corretamente()

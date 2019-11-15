@@ -5,12 +5,12 @@ using AutoFixture;
 using FluentAssertions;
 using Kli.Core;
 using NSubstitute;
-using Test;
+using Cabrones.Test;
 using Xunit;
 
 namespace Kli.Output.File
 {
-    public class TestOutputFile: BaseForTest
+    public class TestOutputFile
     {
         public TestOutputFile()
         {
@@ -20,12 +20,12 @@ namespace Kli.Output.File
         [Theory]
         [InlineData(typeof(OutputFile), 4)]
         public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            TestTypeMethodsCount(tipo, totalDeMétodosEsperado);
+            tipo.TestTypeMethodsCount(totalDeMétodosEsperado);
 
         [Theory]
         [InlineData(typeof(OutputFile), typeof(IOutput), typeof(IOutputFile))]
         public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            TestTypeImplementations(tipoDaClasse, tiposQueDeveSerImplementado);
+            tipoDaClasse.TestTypeImplementations(tiposQueDeveSerImplementado);
 
         [Fact]
         public void verifica_se_o_nome_do_arquivo_está_correto()
@@ -54,7 +54,7 @@ namespace Kli.Output.File
             var caminhoDoArquivo = Path.Combine(definition.DirectoryOfUser,
                 $"{Regex.Replace(typeof(OutputFile).FullName ?? throw new NullReferenceException(), @"\.\w*$", string.Empty)}.{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.log");
 
-            var conteudoDoArquivoAoEscrever = Fixture.Create<string>();
+            var conteudoDoArquivoAoEscrever = this.Fixture().Create<string>();
             System.IO.File.WriteAllText(caminhoDoArquivo, conteudoDoArquivoAoEscrever);
 
             // Act, When
@@ -74,7 +74,7 @@ namespace Kli.Output.File
 
             var outputWriter = Substitute.For<IOutputWriter>();
             var outputFile = new OutputFile(outputWriter, Program.DependencyResolver.GetInstance<IDefinition>()) as IOutputFile;
-            var textoDeExemplo = Fixture.Create<string>();
+            var textoDeExemplo = this.Fixture().Create<string>();
             
             // Act, When
 
@@ -94,7 +94,7 @@ namespace Kli.Output.File
 
             var outputFile = new OutputFile(Substitute.For<IOutputWriter>(), 
                 Program.DependencyResolver.GetInstance<IDefinition>()) as IOutputFile;
-            var textoEscrito = Fixture.Create<string>();
+            var textoEscrito = this.Fixture().Create<string>();
             
             System.IO.File.WriteAllText(outputFile.Path, string.Empty);
             
@@ -118,7 +118,7 @@ namespace Kli.Output.File
             
             // Act, When
             
-            outputFile.WriteToFile(Fixture.Create<string>());
+            outputFile.WriteToFile(this.Fixture().Create<string>());
             
             // Assert, Then
 

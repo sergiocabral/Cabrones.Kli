@@ -3,22 +3,22 @@ using System.Reflection;
 using AutoFixture;
 using FluentAssertions;
 using NSubstitute;
-using Test;
+using Cabrones.Test;
 using Xunit;
 
 namespace Kli.Infrastructure
 {
-    public class TestCache: BaseForTest
+    public class TestCache
     {
         [Theory]
         [InlineData(typeof(Cache), 3)]
         public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            TestTypeMethodsCount(tipo, totalDeMétodosEsperado);
+            tipo.TestTypeMethodsCount(totalDeMétodosEsperado);
 
         [Theory]
         [InlineData(typeof(Cache), typeof(ICache))]
         public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            TestTypeImplementations(tipoDaClasse, tiposQueDeveSerImplementado);
+            tipoDaClasse.TestTypeImplementations(tiposQueDeveSerImplementado);
 
         [Fact]
         public void um_valor_de_cache_deve_ser_gravado_e_lido_corretamente()
@@ -26,8 +26,8 @@ namespace Kli.Infrastructure
             // Arrange, Given
 
             var cache = Program.DependencyResolver.GetInstance<ICache>();
-            var identificador = Fixture.Create<string>();
-            var valorGravado = Fixture.Create<string>();
+            var identificador = this.Fixture().Create<string>();
+            var valorGravado = this.Fixture().Create<string>();
 
             // Act, When
 
@@ -46,8 +46,8 @@ namespace Kli.Infrastructure
             // Arrange, Given
 
             var cache = Program.DependencyResolver.GetInstance<ICache>();
-            var identificador = Fixture.Create<string>();
-            var valorGravado = Fixture.Create<string>();
+            var identificador = this.Fixture().Create<string>();
+            var valorGravado = this.Fixture().Create<string>();
 
             // Act, When
 
@@ -72,7 +72,7 @@ namespace Kli.Infrastructure
             // Arrange, Given
 
             var cache = Program.DependencyResolver.GetInstance<ICache>();
-            var identificador = Fixture.Create<string>();
+            var identificador = this.Fixture().Create<string>();
 
             // Act, When
 
@@ -92,8 +92,8 @@ namespace Kli.Infrastructure
             // Arrange, Given
 
             var cache = Program.DependencyResolver.GetInstance<ICache>();
-            var identificador = Fixture.Create<string>();
-            var valor = Fixture.Create<string>();
+            var identificador = this.Fixture().Create<string>();
+            var valor = this.Fixture().Create<string>();
 
             // Act, When
 

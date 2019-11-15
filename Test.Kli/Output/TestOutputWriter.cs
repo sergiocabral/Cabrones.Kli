@@ -4,22 +4,22 @@ using System.Linq;
 using AutoFixture;
 using FluentAssertions;
 using NSubstitute;
-using Test;
+using Cabrones.Test;
 using Xunit;
 
 namespace Kli.Output
 {
-    public class TestOutputWriter: BaseForTest
+    public class TestOutputWriter
     {
         [Theory]
         [InlineData(typeof(OutputWriter), 2)]
         public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            TestTypeMethodsCount(tipo, totalDeMétodosEsperado);
+            tipo.TestTypeMethodsCount(totalDeMétodosEsperado);
 
         [Theory]
         [InlineData(typeof(OutputWriter), typeof(IOutputWriter))]
         public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            TestTypeImplementations(tipoDaClasse, tiposQueDeveSerImplementado);
+            tipoDaClasse.TestTypeImplementations(tiposQueDeveSerImplementado);
         
         [Fact]
         public void o_parse_deve_enviar_o_texto_para_ser_escrito()
@@ -27,7 +27,7 @@ namespace Kli.Output
             // Arrange, Given
 
             var outputWriter = Program.DependencyResolver.GetInstance<IOutputWriter>();
-            var textoEnviado = Fixture.Create<string>();
+            var textoEnviado = this.Fixture().Create<string>();
             
             // Act, When
 

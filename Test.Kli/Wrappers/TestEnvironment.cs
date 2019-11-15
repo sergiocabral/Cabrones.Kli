@@ -1,22 +1,22 @@
 ﻿using System;
 using AutoFixture;
 using FluentAssertions;
-using Test;
+using Cabrones.Test;
 using Xunit;
 
 namespace Kli.Wrappers
 {
-    public class TestEnvironment: BaseForTest
+    public class TestEnvironment
     {
         [Theory]
         [InlineData(typeof(Environment), 1)]
         public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            TestTypeMethodsCount(tipo, totalDeMétodosEsperado);
+            tipo.TestTypeMethodsCount(totalDeMétodosEsperado);
         
         [Theory]
         [InlineData(typeof(Environment), typeof(IEnvironment))]
         public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            TestTypeImplementations(tipoDaClasse, tiposQueDeveSerImplementado);
+            tipoDaClasse.TestTypeImplementations(tiposQueDeveSerImplementado);
 
         [Fact]
         public void métodos_devem_rodar_sem_erros()
@@ -29,7 +29,7 @@ namespace Kli.Wrappers
 
             Action executarTodosOsMétodos = () =>
             {
-                environment.GetEnvironmentVariable(Fixture.Create<string>());
+                environment.GetEnvironmentVariable(this.Fixture().Create<string>());
             };
 
             // Assert, Then   
@@ -46,7 +46,7 @@ namespace Kli.Wrappers
 
             // Act, When
 
-            var valorNãoExistente = environment.GetEnvironmentVariable(Fixture.Create<string>());
+            var valorNãoExistente = environment.GetEnvironmentVariable(this.Fixture().Create<string>());
 
             // Assert, Then   
 

@@ -3,23 +3,23 @@ using System.Threading;
 using Kli.Core;
 using Kli.Infrastructure;
 using NSubstitute;
-using Test;
+using Cabrones.Test;
 using Xunit;
 
 namespace Kli
 {
-    public class TestProgram: BaseForTest
+    public class TestProgram
     {
         [Theory]
         [InlineData(typeof(Program), 3)]
         public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            TestTypeMethodsCount(tipo, totalDeMétodosEsperado);
+            tipo.TestTypeMethodsCount(totalDeMétodosEsperado);
 
         [Theory]
         [InlineData(typeof(Program), "IDependencyResolver get_DependencyResolver()")]
         [InlineData(typeof(Program), "Void Main()")]
         public void verifica_se_os_métodos_existem_com_base_na_assinatura(Type tipo, string assinaturaEsperada) =>
-            TestTypeMethodSignature(tipo, assinaturaEsperada);
+            tipo.TestTypeMethodSignature(assinaturaEsperada);
         
         [Fact]
         public void verifica_se_o_programa_chama_a_classe_com_a_lógica_principal()

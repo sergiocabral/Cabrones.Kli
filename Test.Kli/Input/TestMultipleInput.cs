@@ -3,22 +3,22 @@ using AutoFixture;
 using FluentAssertions;
 using Kli.Core;
 using NSubstitute;
-using Test;
+using Cabrones.Test;
 using Xunit;
 
 namespace Kli.Input
 {
-    public class TestMultipleInput: BaseForTest
+    public class TestMultipleInput
     {
         [Theory]
         [InlineData(typeof(MultipleInput), 4)]
         public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            TestTypeMethodsCount(tipo, totalDeMétodosEsperado);
+            tipo.TestTypeMethodsCount(totalDeMétodosEsperado);
 
         [Theory]
         [InlineData(typeof(MultipleInput), typeof(IMultiple<IInput>), typeof(Multiple<IInput>), typeof(IMultipleInput), typeof(IInput))]
         public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            TestTypeImplementations(tipoDaClasse, tiposQueDeveSerImplementado);
+            tipoDaClasse.TestTypeImplementations(tiposQueDeveSerImplementado);
         
         [Fact]
         public void o_método_ReadLine_deve_chamar_o_mesmo_método_da_primeira_instância_que_puder_responder()
@@ -29,8 +29,8 @@ namespace Kli.Input
 
             var input1 = Substitute.For<IInput>();
 
-            var depoisDeQuantasTentativasHasReadRetornaTrue = new Random(Fixture.Create<int>()).Next(3, 6);
-            var input2Resposta = Fixture.Create<string>();
+            var depoisDeQuantasTentativasHasReadRetornaTrue = new Random(this.Fixture().Create<int>()).Next(3, 6);
+            var input2Resposta = this.Fixture().Create<string>();
             var input2 = Substitute.For<IInput>();
             input2.ReadLine().Returns(input2Resposta);
             input2.HasRead().Returns(info =>
@@ -63,8 +63,8 @@ namespace Kli.Input
 
             var input1 = Substitute.For<IInput>();
 
-            var depoisDeQuantasTentativasHasReadRetornaTrue = new Random(Fixture.Create<int>()).Next(3, 6);
-            var input2Resposta = Fixture.Create<string>();
+            var depoisDeQuantasTentativasHasReadRetornaTrue = new Random(this.Fixture().Create<int>()).Next(3, 6);
+            var input2Resposta = this.Fixture().Create<string>();
             var input2 = Substitute.For<IInput>();
             input2.Read().Returns(input2Resposta);
             input2.HasRead().Returns(info =>
@@ -97,8 +97,8 @@ namespace Kli.Input
 
             var input1 = Substitute.For<IInput>();
 
-            var depoisDeQuantasTentativasHasReadRetornaTrue = new Random(Fixture.Create<int>()).Next(3, 6);
-            var input2Resposta = Fixture.Create<string>();
+            var depoisDeQuantasTentativasHasReadRetornaTrue = new Random(this.Fixture().Create<int>()).Next(3, 6);
+            var input2Resposta = this.Fixture().Create<string>();
             var input2 = Substitute.For<IInput>();
             input2.ReadKey().Returns(input2Resposta);
             input2.HasRead().Returns(info =>

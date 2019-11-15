@@ -3,22 +3,22 @@ using AutoFixture;
 using FluentAssertions;
 using Kli.Core;
 using NSubstitute;
-using Test;
+using Cabrones.Test;
 using Xunit;
 
 namespace Kli.Output
 {
-    public class TestMultipleOutput: BaseForTest
+    public class TestMultipleOutput
     {
         [Theory]
         [InlineData(typeof(MultipleOutput), 2)]
         public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            TestTypeMethodsCount(tipo, totalDeMétodosEsperado);
+            tipo.TestTypeMethodsCount(totalDeMétodosEsperado);
 
         [Theory]
         [InlineData(typeof(MultipleOutput), typeof(Multiple<IOutput>), typeof(IMultiple<IOutput>), typeof(IMultipleOutput), typeof(IOutput))]
         public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            TestTypeImplementations(tipoDaClasse, tiposQueDeveSerImplementado);
+            tipoDaClasse.TestTypeImplementations(tiposQueDeveSerImplementado);
         
         [Fact]
         public void o_método_Write_deve_chamar_o_mesmo_método_de_todos_as_instâncias_adicionados()
@@ -27,13 +27,13 @@ namespace Kli.Output
 
             var multipleOutput = new MultipleOutput() as IMultipleOutput;
 
-            var totalDeInstâncias = Fixture.Create<int>();
+            var totalDeInstâncias = this.Fixture().Create<int>();
             for (var i = 0; i < totalDeInstâncias; i++) 
                 multipleOutput.Add(Substitute.For<IOutput>());
 
             // Act, When
 
-            var qualquerTexto = Fixture.Create<string>();
+            var qualquerTexto = this.Fixture().Create<string>();
             multipleOutput.Write(qualquerTexto);
             
             // Assert, Then
@@ -49,13 +49,13 @@ namespace Kli.Output
 
             var multipleOutput = new MultipleOutput() as IMultipleOutput;
 
-            var totalDeInstâncias = Fixture.Create<int>();
+            var totalDeInstâncias = this.Fixture().Create<int>();
             for (var i = 0; i < totalDeInstâncias; i++) 
                 multipleOutput.Add(Substitute.For<IOutput>());
 
             // Act, When
 
-            var qualquerTexto = Fixture.Create<string>();
+            var qualquerTexto = this.Fixture().Create<string>();
             multipleOutput.WriteLine(qualquerTexto);
             
             // Assert, Then

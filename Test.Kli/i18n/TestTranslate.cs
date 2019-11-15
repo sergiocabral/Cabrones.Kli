@@ -5,22 +5,22 @@ using System.Reflection;
 using AutoFixture;
 using FluentAssertions;
 using NSubstitute;
-using Test;
+using Cabrones.Test;
 using Xunit;
 
 namespace Kli.i18n
 {
-    public class TestTranslate: BaseForTest
+    public class TestTranslate
     {
         [Theory]
         [InlineData(typeof(Translate), 8)]
         public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            TestTypeMethodsCount(tipo, totalDeMétodosEsperado);
+            tipo.TestTypeMethodsCount(totalDeMétodosEsperado);
 
         [Theory]
         [InlineData(typeof(Translate), typeof(ITranslate))]
         public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            TestTypeImplementations(tipoDaClasse, tiposQueDeveSerImplementado);
+            tipoDaClasse.TestTypeImplementations(tiposQueDeveSerImplementado);
         
         [Fact]
         public void ao_carregar_traduções_de_dicionário_deve_retornar_os_valores_inseridos_sem_ser_uma_referência_direta()
@@ -33,21 +33,21 @@ namespace Kli.i18n
             var conteudo = new Dictionary<string, IDictionary<string, string>>
             {
                 {
-                    Fixture.Create<string>(), new Dictionary<string, string>
+                    this.Fixture().Create<string>(), new Dictionary<string, string>
                     {
-                        { Fixture.Create<string>(), Fixture.Create<string>() }
+                        { this.Fixture().Create<string>(), this.Fixture().Create<string>() }
                     }
                 },
                 {
-                    Fixture.Create<string>(), new Dictionary<string, string>
+                    this.Fixture().Create<string>(), new Dictionary<string, string>
                     {
-                        { Fixture.Create<string>(), Fixture.Create<string>() }
+                        { this.Fixture().Create<string>(), this.Fixture().Create<string>() }
                     }
                 },
                 {
-                    Fixture.Create<string>(), new Dictionary<string, string>
+                    this.Fixture().Create<string>(), new Dictionary<string, string>
                     {
-                        { Fixture.Create<string>(), Fixture.Create<string>() }
+                        { this.Fixture().Create<string>(), this.Fixture().Create<string>() }
                     }
                 }
             };
@@ -126,8 +126,8 @@ namespace Kli.i18n
             var contagemDeTraduçõesNoInício = tradução.Translates.Count;
             var conteudo = new Dictionary<string, IDictionary<string, string>>
             {
-                { Fixture.Create<string>(), new Dictionary<string, string>() },
-                { Fixture.Create<string>(), null }
+                { this.Fixture().Create<string>(), new Dictionary<string, string>() },
+                { this.Fixture().Create<string>(), null }
             };
 
             // Act, When
@@ -149,9 +149,9 @@ namespace Kli.i18n
             var tradução = Program.DependencyResolver.GetInstance<ITranslate>();
             tradução.Clear();
 
-            var valorTexto = Fixture.Create<string>();
-            var valorIdioma = Fixture.Create<string>();
-            var valorTradução = Fixture.Create<string>();
+            var valorTexto = this.Fixture().Create<string>();
+            var valorIdioma = this.Fixture().Create<string>();
+            var valorTradução = this.Fixture().Create<string>();
             var conteudo = $@"
 [
   {{
@@ -185,10 +185,10 @@ namespace Kli.i18n
             var tradução = Program.DependencyResolver.GetInstance<ITranslate>();
             tradução.Clear();
             
-            var valorTexto = Fixture.Create<string>();
-            var valorIdioma = Fixture.Create<string>();
-            var valorTradução1 = Fixture.Create<string>();
-            var valorTradução2 = Fixture.Create<string>();
+            var valorTexto = this.Fixture().Create<string>();
+            var valorIdioma = this.Fixture().Create<string>();
+            var valorTradução1 = this.Fixture().Create<string>();
+            var valorTradução2 = this.Fixture().Create<string>();
             string CriaConteudo(string valorTradução) => $@"
 [
   {{
@@ -252,11 +252,11 @@ namespace Kli.i18n
             var conteudo = $@"
 [
   {{
-    ""Key"": ""{Fixture.Create<string>()}"",
+    ""Key"": ""{this.Fixture().Create<string>()}"",
     ""Value"": [ ]
   }},
   {{
-    ""Key"": ""{Fixture.Create<string>()}"",
+    ""Key"": ""{this.Fixture().Create<string>()}"",
     ""Value"": null
   }}
 ]";
@@ -430,9 +430,9 @@ namespace Kli.i18n
 
             var tradução = Program.DependencyResolver.GetInstance<ITranslate>();
 
-            var valorTexto = Fixture.Create<string>();
-            var valorIdioma = Fixture.Create<string>();
-            var valorTradução = Fixture.Create<string>();
+            var valorTexto = this.Fixture().Create<string>();
+            var valorIdioma = this.Fixture().Create<string>();
+            var valorTradução = this.Fixture().Create<string>();
             tradução.LoadFromText($@"
 [
   {{
@@ -463,8 +463,8 @@ namespace Kli.i18n
             var tradução = Program.DependencyResolver.GetInstance<ITranslate>();
             tradução.Clear();
 
-            var valorTexto = Fixture.Create<string>();
-            var valorIdioma = Fixture.Create<string>();
+            var valorTexto = this.Fixture().Create<string>();
+            var valorIdioma = this.Fixture().Create<string>();
             
             // Act, When
 
@@ -485,9 +485,9 @@ namespace Kli.i18n
             var tradução = Program.DependencyResolver.GetInstance<ITranslate>();
             tradução.Clear();
 
-            var valorTexto = Fixture.Create<string>();
-            var valorIdioma = Fixture.Create<string>();
-            var valorTradução = Fixture.Create<string>();
+            var valorTexto = this.Fixture().Create<string>();
+            var valorIdioma = this.Fixture().Create<string>();
+            var valorTradução = this.Fixture().Create<string>();
             tradução.LoadFromText($@"
 [
   {{
@@ -518,10 +518,10 @@ namespace Kli.i18n
 
             var tradução = Program.DependencyResolver.GetInstance<ITranslate>();
             
-            var valorTexto = Fixture.Create<string>();
-            var valorIdiomaPadrao = Fixture.Create<string>();
-            var valorIdiomaDoTexto = Fixture.Create<string>();
-            var valorTradução = Fixture.Create<string>();
+            var valorTexto = this.Fixture().Create<string>();
+            var valorIdiomaPadrao = this.Fixture().Create<string>();
+            var valorIdiomaDoTexto = this.Fixture().Create<string>();
+            var valorTradução = this.Fixture().Create<string>();
             tradução.LoadFromText($@"
 [
   {{
@@ -552,9 +552,9 @@ namespace Kli.i18n
 
             var tradução = Program.DependencyResolver.GetInstance<ITranslate>();
             
-            var valorTexto = Fixture.Create<string>();
-            var valorIdioma = Fixture.Create<string>();
-            var valorTradução = Fixture.Create<string>();
+            var valorTexto = this.Fixture().Create<string>();
+            var valorIdioma = this.Fixture().Create<string>();
+            var valorTradução = this.Fixture().Create<string>();
             tradução.LoadFromText($@"
 [
   {{
@@ -585,9 +585,9 @@ namespace Kli.i18n
 
             var tradução = Program.DependencyResolver.GetInstance<ITranslate>();
             
-            var valorTexto = Fixture.Create<string>();
-            var valorIdioma = Fixture.Create<string>();
-            var valorTradução = Fixture.Create<string>();
+            var valorTexto = this.Fixture().Create<string>();
+            var valorIdioma = this.Fixture().Create<string>();
+            var valorTradução = this.Fixture().Create<string>();
             tradução.LoadFromText($@"
 [
   {{
@@ -617,7 +617,7 @@ namespace Kli.i18n
             // Arrange, Given
 
             var tradução = Program.DependencyResolver.GetInstance<ITranslate>();
-            var valorIdioma = Fixture.Create<string>();
+            var valorIdioma = this.Fixture().Create<string>();
             
             // Act, When
 

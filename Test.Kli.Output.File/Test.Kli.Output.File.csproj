@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.0</TargetFramework>
         <IsPackable>false</IsPackable>
-        <Version>0.0.0.202</Version>
+        <Version>0.0.0.209</Version>
         <RootNamespace>Kli.Output.File</RootNamespace>
     </PropertyGroup>
 
@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Test\Test.csproj" />
+        <ProjectReference Include="..\Cabrones.Test\Cabrones.Test.csproj" />
         <ProjectReference Include="..\Kli.Output.File\Kli.Output.File.csproj" />
     </ItemGroup>
 

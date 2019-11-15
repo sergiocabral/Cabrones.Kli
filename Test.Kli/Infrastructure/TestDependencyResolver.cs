@@ -8,22 +8,22 @@ using Kli.Module;
 using Kli.Output;
 using Kli.Wrappers;
 using NSubstitute;
-using Test;
+using Cabrones.Test;
 using Xunit;
 
 namespace Kli.Infrastructure
 {
-    public class TestDependencyResolver: BaseForTest
+    public class TestDependencyResolver
     {
         [Theory]
         [InlineData(typeof(DependencyResolver), 8)]
         public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            TestTypeMethodsCount(tipo, totalDeMétodosEsperado);
+            tipo.TestTypeMethodsCount(totalDeMétodosEsperado);
 
         [Theory]
         [InlineData(typeof(DependencyResolver), typeof(IDependencyResolver))]
         public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            TestTypeImplementations(tipoDaClasse, tiposQueDeveSerImplementado);
+            tipoDaClasse.TestTypeImplementations(tiposQueDeveSerImplementado);
 
         [Theory]
         [InlineData(typeof(IOutputWriter))]
@@ -207,7 +207,7 @@ namespace Kli.Infrastructure
             // Arrange, Given
             
             var dependencyResolver = new DependencyResolver() as IDependencyResolver;
-            var escopoQueNãoExiste = Fixture.Create<Guid>();
+            var escopoQueNãoExiste = this.Fixture().Create<Guid>();
             
             // Act, When
 
@@ -282,7 +282,7 @@ namespace Kli.Infrastructure
             // Arrange, Given
             
             var dependencyResolver = new DependencyResolver() as IDependencyResolver;
-            var escopoQueNãoExiste = Fixture.Create<Guid>();
+            var escopoQueNãoExiste = this.Fixture().Create<Guid>();
             dependencyResolver.Register(typeof(SimulationToTestDependencyResolver), typeof(SimulationToTestDependencyResolver), DependencyResolverLifeTime.PerScope);
             
             // Act, When
@@ -301,7 +301,7 @@ namespace Kli.Infrastructure
             // Arrange, Given
             
             var dependencyResolver = new DependencyResolver() as IDependencyResolver;
-            var escopoQueNãoExiste = Fixture.Create<Guid>();
+            var escopoQueNãoExiste = this.Fixture().Create<Guid>();
             dependencyResolver.Register<SimulationToTestDependencyResolver, SimulationToTestDependencyResolver>(DependencyResolverLifeTime.PerScope);
             
             // Act, When

@@ -1,19 +1,18 @@
 ﻿using System;
 using FluentAssertions;
-using Kli.Core;
 using Kli.Infrastructure;
 using NSubstitute;
-using Test;
+using Cabrones.Test;
 using Xunit;
 
 namespace Kli.Output
 {
-    public class TestExtensions: BaseForTest
+    public class TestExtensions
     {
         [Theory]
         [InlineData(typeof(Extensions), 3)]
         public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            TestTypeMethodsCount(tipo, totalDeMétodosEsperado);
+            tipo.TestTypeMethodsCount(totalDeMétodosEsperado);
         
         [Fact]
         public void verifica_se_o_resolvedor_de_dependência_da_classe_está_sendo_usado_quando_é_definido()

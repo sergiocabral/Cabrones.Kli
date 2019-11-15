@@ -4,22 +4,22 @@ using AutoFixture;
 using FluentAssertions;
 using Kli.Module;
 using NSubstitute;
-using Test;
+using Cabrones.Test;
 using Xunit;
 
 namespace Kli.Core
 {
-    public class TestMultiple: BaseForTest
+    public class TestMultiple
     {
         [Theory]
         [InlineData(typeof(Multiple<IModule>), 2)]
         public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            TestTypeMethodsCount(tipo, totalDeMétodosEsperado);
+            tipo.TestTypeMethodsCount(totalDeMétodosEsperado);
 
         [Theory]
         [InlineData(typeof(Multiple<IModule>), typeof(IMultiple<IModule>))]
         public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            TestTypeImplementations(tipoDaClasse, tiposQueDeveSerImplementado);
+            tipoDaClasse.TestTypeImplementations(tiposQueDeveSerImplementado);
         
         [Fact]
         public void deve_ser_capaz_de_adicionar_novos_serviços()
@@ -48,7 +48,7 @@ namespace Kli.Core
             // Arrange, Given
 
             var multiple = new MultipleModule(Substitute.For<IInteraction>()) as IMultiple<IModule>;
-            var quantasAdições = Fixture.Create<int>();
+            var quantasAdições = this.Fixture().Create<int>();
 
             // Act, When
 
@@ -65,7 +65,7 @@ namespace Kli.Core
             // Arrange, Given
 
             var multiple = new MultipleModule(Substitute.For<IInteraction>()) as IMultiple<IModule>;
-            var quantasAdições = Fixture.Create<int>();
+            var quantasAdições = this.Fixture().Create<int>();
             for (var i = 0; i < quantasAdições; i++) multiple.Add(Substitute.For<IModule>());
 
             // Act, When
