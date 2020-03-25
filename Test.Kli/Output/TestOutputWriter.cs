@@ -11,15 +11,25 @@ namespace Kli.Output
 {
     public class TestOutputWriter
     {
-        [Theory]
-        [InlineData(typeof(OutputWriter), 2)]
-        public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            tipo.TestMethodsCount(totalDeMétodosEsperado);
+        [Fact]
+        public void verificações_declarativas()
+        {
+            // Arrange, Given
+            // Act, When
 
-        [Theory]
-        [InlineData(typeof(OutputWriter), typeof(IOutputWriter))]
-        public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            tipoDaClasse.TestImplementations(tiposQueDeveSerImplementado);
+            var sut = typeof(OutputWriter);
+
+            // Assert, Then
+
+            sut.AssertMyImplementations(
+                typeof(IOutputWriter));
+            sut.AssertMyOwnImplementations(
+                typeof(IOutputWriter));
+            sut.AssertMyOwnPublicPropertiesCount(0);
+            sut.AssertMyOwnPublicMethodsCount(0);
+
+            sut.IsClass.Should().BeTrue();
+        }
         
         [Fact]
         public void o_parse_deve_enviar_o_texto_para_ser_escrito()
@@ -27,7 +37,7 @@ namespace Kli.Output
             // Arrange, Given
 
             var outputWriter = Program.DependencyResolver.GetInstance<IOutputWriter>();
-            var textoEnviado = this.Fixture().Create<string>();
+            var textoEnviado = this.Fixture<string>();
             
             // Act, When
 
@@ -54,10 +64,10 @@ namespace Kli.Output
             // Act, When
 
             var textoEscritoIgnorandoMarcadores = 0;
-            outputWriter.Parse(marcadorQualquer, textoRecebido => textoEscritoIgnorandoMarcadores++);
+            outputWriter.Parse(marcadorQualquer, (Action<string>) null);
 
             var textoEscritoConsiderandoMarcadores = 0;
-            outputWriter.Parse(marcadorQualquer, (textoRecebido, marcador) => textoEscritoConsiderandoMarcadores++);
+            outputWriter.Parse(marcadorQualquer, (Action<string>) null);
                
             // Assert, Then
 

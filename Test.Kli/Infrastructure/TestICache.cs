@@ -1,21 +1,31 @@
 ﻿using System;
 using Cabrones.Test;
+using FluentAssertions;
 using Xunit;
 
 namespace Kli.Infrastructure
 {
     public class TestICache
     {
-        [Theory]
-        [InlineData(typeof(ICache), 3)]
-        public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            tipo.TestMethodsCount(totalDeMétodosEsperado);
+        [Fact]
+        public void verificações_declarativas()
+        {
+            // Arrange, Given
+            // Act, When
 
-        [Theory]
-        [InlineData(typeof(ICache), "T Set<T>(String, T)")]
-        [InlineData(typeof(ICache), "T Get<T>(String)")]
-        [InlineData(typeof(ICache), "Void Clear()")]
-        public void verifica_se_os_métodos_existem_com_base_na_assinatura(Type tipo, string assinaturaEsperada) =>
-            tipo.TestMethodPresence(assinaturaEsperada);
+            var sut = typeof(ICache);
+
+            // Assert, Then
+
+            sut.AssertMyImplementations();
+            sut.AssertMyOwnImplementations();
+            sut.AssertMyOwnPublicPropertiesCount(0);
+            sut.AssertMyOwnPublicMethodsCount(3);
+            sut.AssertPublicMethodPresence("T Set<T>(String, T)");
+            sut.AssertPublicMethodPresence("T Get<T>(String)");
+            sut.AssertPublicMethodPresence("Void Clear()");
+
+            sut.IsInterface.Should().BeTrue();
+        }
     }
 }

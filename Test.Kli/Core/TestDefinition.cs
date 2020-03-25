@@ -11,16 +11,26 @@ namespace Kli.Core
 {
     public class TestDefinition
     {
-        [Theory]
-        [InlineData(typeof(Definition), 3)]
-        public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            tipo.TestMethodsCount(totalDeMétodosEsperado);
+        [Fact]
+        public void verificações_declarativas()
+        {
+            // Arrange, Given
+            // Act, When
 
-        [Theory]
-        [InlineData(typeof(Definition), typeof(IDefinition))]
-        public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            tipoDaClasse.TestImplementations(tiposQueDeveSerImplementado);
+            var sut = typeof(Definition);
 
+            // Assert, Then
+
+            sut.AssertMyImplementations(
+                typeof(IDefinition));
+            sut.AssertMyOwnImplementations(
+                typeof(IDefinition));
+            sut.AssertMyOwnPublicPropertiesCount(0);
+            sut.AssertMyOwnPublicMethodsCount(0);
+
+            sut.IsClass.Should().BeTrue();
+        }
+        
         [Fact]
         public void o_arquivo_temporário_de_teste_deve_ser_válido()
         {
@@ -29,7 +39,7 @@ namespace Kli.Core
             var nomeDoArquivo = Definition.TemporaryFilenameForTestIfCanWriteIntoDirectoryOfUser;
 
             const string máscaraRegex = @"_can_delete_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.tmp";
-            var testeDaMáscara = this.Fixture().Create<string>();
+            var testeDaMáscara = this.Fixture<string>();
 
             // Act, When
 

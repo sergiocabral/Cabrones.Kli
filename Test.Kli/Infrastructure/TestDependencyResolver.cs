@@ -15,15 +15,25 @@ namespace Kli.Infrastructure
 {
     public class TestDependencyResolver
     {
-        [Theory]
-        [InlineData(typeof(DependencyResolver), 8)]
-        public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            tipo.TestMethodsCount(totalDeMétodosEsperado);
+        [Fact]
+        public void verificações_declarativas()
+        {
+            // Arrange, Given
+            // Act, When
 
-        [Theory]
-        [InlineData(typeof(DependencyResolver), typeof(IDependencyResolver))]
-        public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            tipoDaClasse.TestImplementations(tiposQueDeveSerImplementado);
+            var sut = typeof(DependencyResolver);
+
+            // Assert, Then
+
+            sut.AssertMyImplementations(
+                typeof(IDependencyResolver));
+            sut.AssertMyOwnImplementations(
+                typeof(IDependencyResolver));
+            sut.AssertMyOwnPublicPropertiesCount(0);
+            sut.AssertMyOwnPublicMethodsCount(0);
+
+            sut.IsClass.Should().BeTrue();
+        }
 
         [Theory]
         [InlineData(typeof(IOutputWriter))]
@@ -207,7 +217,7 @@ namespace Kli.Infrastructure
             // Arrange, Given
             
             var dependencyResolver = new DependencyResolver() as IDependencyResolver;
-            var escopoQueNãoExiste = this.Fixture().Create<Guid>();
+            var escopoQueNãoExiste = this.Fixture<Guid>();
             
             // Act, When
 
@@ -282,7 +292,7 @@ namespace Kli.Infrastructure
             // Arrange, Given
             
             var dependencyResolver = new DependencyResolver() as IDependencyResolver;
-            var escopoQueNãoExiste = this.Fixture().Create<Guid>();
+            var escopoQueNãoExiste = this.Fixture<Guid>();
             dependencyResolver.Register(typeof(SimulationToTestDependencyResolver), typeof(SimulationToTestDependencyResolver), DependencyResolverLifeTime.PerScope);
             
             // Act, When
@@ -301,7 +311,7 @@ namespace Kli.Infrastructure
             // Arrange, Given
             
             var dependencyResolver = new DependencyResolver() as IDependencyResolver;
-            var escopoQueNãoExiste = this.Fixture().Create<Guid>();
+            var escopoQueNãoExiste = this.Fixture<Guid>();
             dependencyResolver.Register<SimulationToTestDependencyResolver, SimulationToTestDependencyResolver>(DependencyResolverLifeTime.PerScope);
             
             // Act, When

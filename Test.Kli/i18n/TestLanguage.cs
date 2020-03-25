@@ -11,22 +11,32 @@ using Xunit;
 namespace Kli.i18n
 {
     public class TestLanguage
-    {   
-        [Theory]
-        [InlineData(typeof(Language), 4)]
-        public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            tipo.TestMethodsCount(totalDeMétodosEsperado);
+    {
+        [Fact]
+        public void verificações_declarativas()
+        {
+            // Arrange, Given
+            // Act, When
 
-        [Theory]
-        [InlineData(typeof(Language), typeof(ILanguage))]
-        public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            tipoDaClasse.TestImplementations(tiposQueDeveSerImplementado);
+            var sut = typeof(Language);
+
+            // Assert, Then
+
+            sut.AssertMyImplementations(
+                typeof(ILanguage));
+            sut.AssertMyOwnImplementations(
+                typeof(ILanguage));
+            sut.AssertMyOwnPublicPropertiesCount(0);
+            sut.AssertMyOwnPublicMethodsCount(0);
+
+            sut.IsClass.Should().BeTrue();
+        }
 
         [Theory]
         [InlineData(typeof(ILanguage), "EnvironmentVariables")]
         [InlineData(typeof(ILanguage), "Current")]
         public void verifica_se_o_cache_está_sendo_usado_nas_consultas(Type tipo, string nomeDePropriedade) =>
-            Program.DependencyResolver.GetInstance(tipo).TestPropertyCache(nomeDePropriedade);
+            Program.DependencyResolver.GetInstance(tipo).AssertTheSameValueButTheSecondTimeIsFaster(nomeDePropriedade);
 
         [Fact]
         public void confere_os_valores_válidos_para_variáveis_de_ambiente_definirem_o_idioma()

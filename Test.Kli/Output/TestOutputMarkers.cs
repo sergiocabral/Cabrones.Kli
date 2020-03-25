@@ -8,22 +8,32 @@ namespace Kli.Output
 {
     public class TestOutputMarkers
     {
-        [Theory]
-        [InlineData(typeof(OutputMarkers), 10)]
-        public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            tipo.TestMethodsCount(totalDeMétodosEsperado);
+        [Fact]
+        public void verificações_declarativas()
+        {
+            // Arrange, Given
+            // Act, When
 
-        [Theory]
-        [InlineData(typeof(OutputMarkers), typeof(IOutputMarkers))]
-        public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            tipoDaClasse.TestImplementations(tiposQueDeveSerImplementado);
+            var sut = typeof(OutputMarkers);
+
+            // Assert, Then
+
+            sut.AssertMyImplementations(
+                typeof(IOutputMarkers));
+            sut.AssertMyOwnImplementations(
+                typeof(IOutputMarkers));
+            sut.AssertMyOwnPublicPropertiesCount(0);
+            sut.AssertMyOwnPublicMethodsCount(0);
+
+            sut.IsClass.Should().BeTrue();
+        }
         
         [Theory]
         [InlineData(typeof(IOutputMarkers), "Markers")]
         [InlineData(typeof(IOutputMarkers), "MarkersEscapedForRegexJoined")]
         [InlineData(typeof(IOutputMarkers), "MarkersEscapedForRegexSeparated")]
         public void verifica_se_o_cache_está_sendo_usado_nas_consultas(Type tipo, string nomeDePropriedade) =>
-            Program.DependencyResolver.GetInstance(tipo).TestPropertyCache(nomeDePropriedade);
+            Program.DependencyResolver.GetInstance(tipo).AssertTheSameValueButTheSecondTimeIsFaster(nomeDePropriedade);
         
         [Fact]
         public void verifica_se_os_valores_dos_marcadores_estao_corretos()

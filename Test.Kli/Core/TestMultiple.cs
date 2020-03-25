@@ -11,15 +11,25 @@ namespace Kli.Core
 {
     public class TestMultiple
     {
-        [Theory]
-        [InlineData(typeof(Multiple<IModule>), 2)]
-        public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            tipo.TestMethodsCount(totalDeMétodosEsperado);
+        [Fact]
+        public void verificações_declarativas()
+        {
+            // Arrange, Given
+            // Act, When
 
-        [Theory]
-        [InlineData(typeof(Multiple<IModule>), typeof(IMultiple<IModule>))]
-        public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            tipoDaClasse.TestImplementations(tiposQueDeveSerImplementado);
+            var sut = typeof(Multiple<>);
+
+            // Assert, Then
+
+            sut.AssertMyImplementations(
+                typeof(IMultiple<>));
+            sut.AssertMyOwnImplementations(
+                typeof(IMultiple<>));
+            sut.AssertMyOwnPublicPropertiesCount(0);
+            sut.AssertMyOwnPublicMethodsCount(0);
+
+            sut.IsClass.Should().BeTrue();
+        }
         
         [Fact]
         public void deve_ser_capaz_de_adicionar_novos_serviços()
@@ -48,7 +58,7 @@ namespace Kli.Core
             // Arrange, Given
 
             var multiple = new MultipleModule(Substitute.For<IInteraction>()) as IMultiple<IModule>;
-            var quantasAdições = this.Fixture().Create<int>();
+            var quantasAdições = this.Fixture<int>();
 
             // Act, When
 
@@ -65,7 +75,7 @@ namespace Kli.Core
             // Arrange, Given
 
             var multiple = new MultipleModule(Substitute.For<IInteraction>()) as IMultiple<IModule>;
-            var quantasAdições = this.Fixture().Create<int>();
+            var quantasAdições = this.Fixture<int>();
             for (var i = 0; i < quantasAdições; i++) multiple.Add(Substitute.For<IModule>());
 
             // Act, When

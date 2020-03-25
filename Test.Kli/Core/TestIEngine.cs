@@ -1,19 +1,29 @@
 ﻿using System;
 using Cabrones.Test;
+using FluentAssertions;
 using Xunit;
 
 namespace Kli.Core
 {
     public class TestIEngine
     {
-        [Theory]
-        [InlineData(typeof(IEngine), 1)]
-        public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            tipo.TestMethodsCount(totalDeMétodosEsperado);
-        
-        [Theory]
-        [InlineData(typeof(IEngine), "Void Initialize()")]
-        public void verifica_os_métodos_existem_com_base_na_assinatura(Type tipo, string assinaturaEsperada) =>
-            tipo.TestMethodPresence(assinaturaEsperada);
+        [Fact]
+        public void verificações_declarativas()
+        {
+            // Arrange, Given
+            // Act, When
+
+            var sut = typeof(IEngine);
+
+            // Assert, Then
+
+            sut.AssertMyImplementations();
+            sut.AssertMyOwnImplementations();
+            sut.AssertMyOwnPublicPropertiesCount(0);
+            sut.AssertMyOwnPublicMethodsCount(1);
+            sut.AssertPublicMethodPresence("Void Initialize()");
+
+            sut.IsInterface.Should().BeTrue();
+        }
     }
 }

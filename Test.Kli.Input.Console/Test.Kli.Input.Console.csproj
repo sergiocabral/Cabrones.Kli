@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.0</TargetFramework>
         <IsPackable>false</IsPackable>
-        <Version>0.0.0.339</Version>
+        <Version>0.0.0.344</Version>
         <RootNamespace>Kli.Input.Console</RootNamespace>
     </PropertyGroup>
 
@@ -12,7 +12,7 @@
     </Target>
 
     <ItemGroup>
-        <PackageReference Include="Cabrones.Test" Version="1.4.0.713" />
+        <PackageReference Include="Cabrones.Test" Version="1.4.0.719" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
         <PackageReference Include="xunit" Version="2.4.1" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />

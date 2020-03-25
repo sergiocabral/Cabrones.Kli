@@ -4,22 +4,32 @@ using Kli.Core;
 using Kli.Infrastructure;
 using NSubstitute;
 using Cabrones.Test;
+using FluentAssertions;
 using Xunit;
 
 namespace Kli
 {
     public class TestProgram
     {
-        [Theory]
-        [InlineData(typeof(Program), 3)]
-        public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            tipo.TestMethodsCount(totalDeMétodosEsperado);
+        [Fact]
+        public void verificações_declarativas()
+        {
+            // Arrange, Given
+            // Act, When
 
-        [Theory]
-        [InlineData(typeof(Program), "IDependencyResolver get_DependencyResolver()")]
-        [InlineData(typeof(Program), "Void Main()")]
-        public void verifica_se_os_métodos_existem_com_base_na_assinatura(Type tipo, string assinaturaEsperada) =>
-            tipo.TestMethodPresence(assinaturaEsperada);
+            var sut = typeof(Program);
+
+            // Assert, Then
+
+            sut.AssertMyImplementations();
+            sut.AssertMyOwnImplementations();
+            sut.AssertMyOwnPublicPropertiesCount(2);
+            sut.AssertPublicPropertyPresence("static IDependencyResolver DependencyResolver { get; set; }");
+            sut.AssertMyOwnPublicMethodsCount(1);
+            sut.AssertPublicMethodPresence("static Void Main()");
+
+            sut.IsClass.Should().BeTrue();
+        }
         
         [Fact]
         public void verifica_se_o_programa_chama_a_classe_com_a_lógica_principal()

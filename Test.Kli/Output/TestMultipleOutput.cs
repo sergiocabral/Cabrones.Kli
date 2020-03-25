@@ -10,15 +10,29 @@ namespace Kli.Output
 {
     public class TestMultipleOutput
     {
-        [Theory]
-        [InlineData(typeof(MultipleOutput), 2)]
-        public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            tipo.TestMethodsCount(totalDeMétodosEsperado);
+        [Fact]
+        public void verificações_declarativas()
+        {
+            // Arrange, Given
+            // Act, When
 
-        [Theory]
-        [InlineData(typeof(MultipleOutput), typeof(Multiple<IOutput>), typeof(IMultiple<IOutput>), typeof(IMultipleOutput), typeof(IOutput))]
-        public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            tipoDaClasse.TestImplementations(tiposQueDeveSerImplementado);
+            var sut = typeof(MultipleOutput);
+
+            // Assert, Then
+
+            sut.AssertMyImplementations(
+                typeof(Multiple<IOutput>),
+                typeof(IMultipleOutput),
+                typeof(IMultiple<IOutput>),
+                typeof(IOutput));
+            sut.AssertMyOwnImplementations(
+                typeof(Multiple<IOutput>),
+                typeof(IMultipleOutput));
+            sut.AssertMyOwnPublicPropertiesCount(0);
+            sut.AssertMyOwnPublicMethodsCount(0);
+
+            sut.IsClass.Should().BeTrue();
+        }
         
         [Fact]
         public void o_método_Write_deve_chamar_o_mesmo_método_de_todos_as_instâncias_adicionados()
@@ -27,13 +41,13 @@ namespace Kli.Output
 
             var multipleOutput = new MultipleOutput() as IMultipleOutput;
 
-            var totalDeInstâncias = this.Fixture().Create<int>();
+            var totalDeInstâncias = this.Fixture<int>();
             for (var i = 0; i < totalDeInstâncias; i++) 
                 multipleOutput.Add(Substitute.For<IOutput>());
 
             // Act, When
 
-            var qualquerTexto = this.Fixture().Create<string>();
+            var qualquerTexto = this.Fixture<string>();
             multipleOutput.Write(qualquerTexto);
             
             // Assert, Then
@@ -49,13 +63,13 @@ namespace Kli.Output
 
             var multipleOutput = new MultipleOutput() as IMultipleOutput;
 
-            var totalDeInstâncias = this.Fixture().Create<int>();
+            var totalDeInstâncias = this.Fixture<int>();
             for (var i = 0; i < totalDeInstâncias; i++) 
                 multipleOutput.Add(Substitute.For<IOutput>());
 
             // Act, When
 
-            var qualquerTexto = this.Fixture().Create<string>();
+            var qualquerTexto = this.Fixture<string>();
             multipleOutput.WriteLine(qualquerTexto);
             
             // Assert, Then

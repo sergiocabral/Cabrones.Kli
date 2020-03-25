@@ -10,10 +10,25 @@ namespace Kli.i18n
 {
     public class TestExtensions
     {
-        [Theory]
-        [InlineData(typeof(Extensions), 3)]
-        public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            tipo.TestMethodsCount(totalDeMétodosEsperado);
+        [Fact]
+        public void verificações_declarativas()
+        {
+            // Arrange, Given
+            // Act, When
+
+            var sut = typeof(Extensions);
+
+            // Assert, Then
+
+            sut.AssertMyImplementations();
+            sut.AssertMyOwnImplementations();
+            sut.AssertMyOwnPublicPropertiesCount(2);
+            sut.AssertPublicPropertyPresence("static IDependencyResolver DependencyResolver { get; set; }");
+            sut.AssertMyOwnPublicMethodsCount(1);
+            sut.AssertPublicMethodPresence("static String Translate(String, String = null)");
+
+            sut.IsClass.Should().BeTrue();
+        }
         
         [Fact]
         public void verifica_se_o_resolvedor_de_dependência_da_classe_está_sendo_usado_quando_é_definido()
@@ -54,8 +69,8 @@ namespace Kli.i18n
 
             // Act, When
 
-            var texto = this.Fixture().Create<string>();
-            var idioma = this.Fixture().Create<string>();
+            var texto = this.Fixture<string>();
+            var idioma = this.Fixture<string>();
             texto.Translate(idioma);
             
             // Assert, Then

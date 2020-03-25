@@ -1,26 +1,35 @@
 ﻿using System;
 using Cabrones.Test;
+using FluentAssertions;
 using Xunit;
 
 namespace Kli.i18n
 {
     public class TestITranslate
     {
-        [Theory]
-        [InlineData(typeof(ITranslate), 8)]
-        public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            tipo.TestMethodsCount(totalDeMétodosEsperado);
+        [Fact]
+        public void verificações_declarativas()
+        {
+            // Arrange, Given
+            // Act, When
 
-        [Theory]
-        [InlineData(typeof(ITranslate), "String get_LanguageDefault()")]
-        [InlineData(typeof(ITranslate), "Void set_LanguageDefault(String)")]
-        [InlineData(typeof(ITranslate), "String Get(String, String = null)")]
-        [InlineData(typeof(ITranslate), "IDictionary<String, IDictionary<String, String>> get_Translates()")]
-        [InlineData(typeof(ITranslate), "Void Clear()")]
-        [InlineData(typeof(ITranslate), "IDictionary<String, IDictionary<String, String>> LoadFromDictionary(IDictionary<String, IDictionary<String, String>>)")]
-        [InlineData(typeof(ITranslate), "IDictionary<String, IDictionary<String, String>> LoadFromText(String)")]
-        [InlineData(typeof(ITranslate), "IDictionary<String, IDictionary<String, String>> LoadFromResource(Assembly, String)")]
-        public void verifica_se_os_métodos_existem_com_base_na_assinatura(Type tipo, string assinaturaEsperada) =>
-            tipo.TestMethodPresence(assinaturaEsperada);
+            var sut = typeof(ITranslate);
+
+            // Assert, Then
+
+            sut.AssertMyImplementations();
+            sut.AssertMyOwnImplementations();
+            sut.AssertMyOwnPublicPropertiesCount(3);
+            sut.AssertPublicPropertyPresence("String LanguageDefault { get; set; }");
+            sut.AssertPublicPropertyPresence("IDictionary<String, IDictionary<String, String>> Translates { get; }");
+            sut.AssertMyOwnPublicMethodsCount(5);
+            sut.AssertPublicMethodPresence("String Get(String, String = null)");
+            sut.AssertPublicMethodPresence("Void Clear()");
+            sut.AssertPublicMethodPresence("IDictionary<String, IDictionary<String, String>> LoadFromDictionary(IDictionary<String, IDictionary<String, String>>)");
+            sut.AssertPublicMethodPresence("IDictionary<String, IDictionary<String, String>> LoadFromText(String)");
+            sut.AssertPublicMethodPresence("IDictionary<String, IDictionary<String, String>> LoadFromResource(Assembly, String)");
+
+            sut.IsInterface.Should().BeTrue();
+        }
     }
 }

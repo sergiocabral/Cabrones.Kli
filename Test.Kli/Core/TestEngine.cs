@@ -13,15 +13,25 @@ namespace Kli.Core
 {
     public class TestEngine
     {
-        [Theory]
-        [InlineData(typeof(Engine), 1)]
-        public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            tipo.TestMethodsCount(totalDeMétodosEsperado);
+        [Fact]
+        public void verificações_declarativas()
+        {
+            // Arrange, Given
+            // Act, When
 
-        [Theory]
-        [InlineData(typeof(Engine), typeof(IEngine))]
-        public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            tipoDaClasse.TestImplementations(tiposQueDeveSerImplementado);
+            var sut = typeof(Engine);
+
+            // Assert, Then
+
+            sut.AssertMyImplementations(
+                typeof(IEngine));
+            sut.AssertMyOwnImplementations(
+                typeof(IEngine));
+            sut.AssertMyOwnPublicPropertiesCount(0);
+            sut.AssertMyOwnPublicMethodsCount(0);
+
+            sut.IsClass.Should().BeTrue();
+        }
         
         [Fact]
         public void método_principal_Initialize_deve_fazer_reset_nas_cores_do_console_no_início_e_no_final()

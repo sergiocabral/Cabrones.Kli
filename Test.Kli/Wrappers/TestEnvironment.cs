@@ -8,15 +8,25 @@ namespace Kli.Wrappers
 {
     public class TestEnvironment
     {
-        [Theory]
-        [InlineData(typeof(Environment), 1)]
-        public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            tipo.TestMethodsCount(totalDeMétodosEsperado);
-        
-        [Theory]
-        [InlineData(typeof(Environment), typeof(IEnvironment))]
-        public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            tipoDaClasse.TestImplementations(tiposQueDeveSerImplementado);
+        [Fact]
+        public void verificações_declarativas()
+        {
+            // Arrange, Given
+            // Act, When
+
+            var sut = typeof(Environment);
+
+            // Assert, Then
+
+            sut.AssertMyImplementations(
+                typeof(IEnvironment));
+            sut.AssertMyOwnImplementations(
+                typeof(IEnvironment));
+            sut.AssertMyOwnPublicPropertiesCount(0);
+            sut.AssertMyOwnPublicMethodsCount(0);
+
+            sut.IsClass.Should().BeTrue();
+        }
 
         [Fact]
         public void métodos_devem_rodar_sem_erros()
@@ -29,7 +39,7 @@ namespace Kli.Wrappers
 
             Action executarTodosOsMétodos = () =>
             {
-                environment.GetEnvironmentVariable(this.Fixture().Create<string>());
+                environment.GetEnvironmentVariable(this.Fixture<string>());
             };
 
             // Assert, Then   
@@ -46,7 +56,7 @@ namespace Kli.Wrappers
 
             // Act, When
 
-            var valorNãoExistente = environment.GetEnvironmentVariable(this.Fixture().Create<string>());
+            var valorNãoExistente = environment.GetEnvironmentVariable(this.Fixture<string>());
 
             // Assert, Then   
 

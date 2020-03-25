@@ -2,21 +2,36 @@
 using Kli.Core;
 using NSubstitute;
 using Cabrones.Test;
+using FluentAssertions;
 using Xunit;
 
 namespace Kli.Module
 {
     public class TestMultipleModule
     {
-        [Theory]
-        [InlineData(typeof(MultipleModule), 1)]
-        public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            tipo.TestMethodsCount(totalDeMétodosEsperado);
+        [Fact]
+        public void verificações_declarativas()
+        {
+            // Arrange, Given
+            // Act, When
 
-        [Theory]
-        [InlineData(typeof(MultipleModule), typeof(Multiple<IModule>), typeof(IMultiple<IModule>), typeof(IMultipleModule), typeof(IModule))]
-        public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            tipoDaClasse.TestImplementations(tiposQueDeveSerImplementado);
+            var sut = typeof(MultipleModule);
+
+            // Assert, Then
+
+            sut.AssertMyImplementations(
+                typeof(Multiple<IModule>),
+                typeof(IMultipleModule),
+                typeof(IMultiple<IModule>),
+                typeof(IModule));
+            sut.AssertMyOwnImplementations(
+                typeof(Multiple<IModule>),
+                typeof(IMultipleModule));
+            sut.AssertMyOwnPublicPropertiesCount(0);
+            sut.AssertMyOwnPublicMethodsCount(0);
+
+            sut.IsClass.Should().BeTrue();
+        }
         
         [Fact]
         public void o_método_Run_deve_chamar_o_serviço_IUtils_para_exibir_as_opções_inicias()

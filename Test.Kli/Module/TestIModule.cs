@@ -1,19 +1,29 @@
 ﻿using System;
 using Cabrones.Test;
+using FluentAssertions;
 using Xunit;
 
 namespace Kli.Module
 {
     public class TestIModule
     {
-        [Theory]
-        [InlineData(typeof(IModule), 1)]
-        public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            tipo.TestMethodsCount(totalDeMétodosEsperado);
+        [Fact]
+        public void verificações_declarativas()
+        {
+            // Arrange, Given
+            // Act, When
 
-        [Theory]
-        [InlineData(typeof(IModule), "Void Run()")]
-        public void verifica_se_os_métodos_existem_com_base_na_assinatura(Type tipo, string assinaturaEsperada) =>
-            tipo.TestMethodPresence(assinaturaEsperada);
+            var sut = typeof(IModule);
+
+            // Assert, Then
+
+            sut.AssertMyImplementations();
+            sut.AssertMyOwnImplementations();
+            sut.AssertMyOwnPublicPropertiesCount(0);
+            sut.AssertMyOwnPublicMethodsCount(1);
+            sut.AssertPublicMethodPresence("Void Run()");
+
+            sut.IsInterface.Should().BeTrue();
+        }
     }
 }

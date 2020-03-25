@@ -14,15 +14,25 @@ namespace Kli.Core
 {
     public class TestLoaderAssembly
     {
-        [Theory]
-        [InlineData(typeof(LoaderAssembly), 3)]
-        public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            tipo.TestMethodsCount(totalDeMétodosEsperado);
+        [Fact]
+        public void verificações_declarativas()
+        {
+            // Arrange, Given
+            // Act, When
 
-        [Theory]
-        [InlineData(typeof(LoaderAssembly), typeof(ILoaderAssembly))]
-        public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            tipoDaClasse.TestImplementations(tiposQueDeveSerImplementado);
+            var sut = typeof(LoaderAssembly);
+
+            // Assert, Then
+
+            sut.AssertMyImplementations(
+                typeof(ILoaderAssembly));
+            sut.AssertMyOwnImplementations(
+                typeof(ILoaderAssembly));
+            sut.AssertMyOwnPublicPropertiesCount(0);
+            sut.AssertMyOwnPublicMethodsCount(0);
+
+            sut.IsClass.Should().BeTrue();
+        }
        
         [Fact]
         public void verifica_se_a_máscara_do_arquivo_está_capturando_os_arquivos_corretamente()

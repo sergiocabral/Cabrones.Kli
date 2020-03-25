@@ -10,15 +10,25 @@ namespace Kli.Module
 {
     public class TestInteraction
     {
-        [Theory]
-        [InlineData(typeof(Interaction), 1)]
-        public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            tipo.TestMethodsCount(totalDeMétodosEsperado);
+        [Fact]
+        public void verificações_declarativas()
+        {
+            // Arrange, Given
+            // Act, When
 
-        [Theory]
-        [InlineData(typeof(Interaction), typeof(IInteraction))]
-        public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            tipoDaClasse.TestImplementations(tiposQueDeveSerImplementado);
+            var sut = typeof(Interaction);
+
+            // Assert, Then
+
+            sut.AssertMyImplementations(
+                typeof(IInteraction));
+            sut.AssertMyOwnImplementations(
+                typeof(IInteraction));
+            sut.AssertMyOwnPublicPropertiesCount(0);
+            sut.AssertMyOwnPublicMethodsCount(0);
+
+            sut.IsClass.Should().BeTrue();
+        }
 
         [Fact]
         public void o_método_que_inicia_a_interação_com_o_usuário_só_pode_ser_chamado_uma_vez()
