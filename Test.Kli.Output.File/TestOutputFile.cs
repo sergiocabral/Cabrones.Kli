@@ -17,16 +17,27 @@ namespace Kli.Output.File
             Program.DependencyResolver.Register<IOutputFile, OutputFile>();
         }
         
-        [Theory]
-        [InlineData(typeof(OutputFile), 4)]
-        public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            tipo.TestMethodsCount(totalDeMétodosEsperado);
+        [Fact]
+        public void verificações_declarativas()
+        {
+            // Arrange, Given
+            // Act, When
 
-        [Theory]
-        [InlineData(typeof(OutputFile), typeof(IOutput), typeof(IOutputFile))]
-        public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            tipoDaClasse.TestImplementations(tiposQueDeveSerImplementado);
+            var sut = typeof(OutputFile);
 
+            // Assert, Then
+
+            sut.AssertMyImplementations(
+                typeof(IOutput), 
+                typeof(IOutputFile));
+            sut.AssertMyOwnImplementations(
+                typeof(IOutputFile));
+            sut.AssertMyOwnPublicPropertiesCount(0);
+            sut.AssertMyOwnPublicMethodsCount(0);
+
+            sut.IsClass.Should().BeTrue();
+        }
+        
         [Fact]
         public void verifica_se_o_nome_do_arquivo_está_correto()
         {
@@ -54,7 +65,7 @@ namespace Kli.Output.File
             var caminhoDoArquivo = Path.Combine(definition.DirectoryOfUser,
                 $"{Regex.Replace(typeof(OutputFile).FullName ?? throw new NullReferenceException(), @"\.\w*$", string.Empty)}.{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.log");
 
-            var conteudoDoArquivoAoEscrever = this.Fixture().Create<string>();
+            var conteudoDoArquivoAoEscrever = this.Fixture<string>();
             System.IO.File.WriteAllText(caminhoDoArquivo, conteudoDoArquivoAoEscrever);
 
             // Act, When
@@ -74,7 +85,7 @@ namespace Kli.Output.File
 
             var outputWriter = Substitute.For<IOutputWriter>();
             var outputFile = new OutputFile(outputWriter, Program.DependencyResolver.GetInstance<IDefinition>()) as IOutputFile;
-            var textoDeExemplo = this.Fixture().Create<string>();
+            var textoDeExemplo = this.Fixture<string>();
             
             // Act, When
 
@@ -94,7 +105,7 @@ namespace Kli.Output.File
 
             var outputFile = new OutputFile(Substitute.For<IOutputWriter>(), 
                 Program.DependencyResolver.GetInstance<IDefinition>()) as IOutputFile;
-            var textoEscrito = this.Fixture().Create<string>();
+            var textoEscrito = this.Fixture<string>();
             
             System.IO.File.WriteAllText(outputFile.Path, string.Empty);
             
@@ -118,7 +129,7 @@ namespace Kli.Output.File
             
             // Act, When
             
-            outputFile.WriteToFile(this.Fixture().Create<string>());
+            outputFile.WriteToFile(this.Fixture<string>());
             
             // Assert, Then
 

@@ -12,16 +12,25 @@ namespace Kli.Output.Console
             Program.DependencyResolver.Register<IOutputMarkersToConsoleColor, OutputMarkersToConsoleColor>();    
         }
         
-        [Theory]
-        [InlineData(typeof(OutputMarkersToConsoleColor), 2)]
-        public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            tipo.TestMethodsCount(totalDeMétodosEsperado);
+        [Fact]
+        public void verificações_declarativas()
+        {
+            // Arrange, Given
+            // Act, When
 
-        [Theory]
-        [InlineData(typeof(OutputMarkersToConsoleColor), typeof(IOutputMarkersToConsoleColor))]
-        public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            tipoDaClasse.TestImplementations(tiposQueDeveSerImplementado);
+            var sut = typeof(OutputMarkersToConsoleColor);
 
+            // Assert, Then
+
+            sut.AssertMyImplementations(
+                typeof(IOutputMarkersToConsoleColor));
+            sut.AssertMyOwnImplementations();
+            sut.AssertMyOwnPublicPropertiesCount(0);
+            sut.AssertMyOwnPublicMethodsCount(0);
+
+            sut.IsClass.Should().BeTrue();
+        }
+        
         [Theory]
         [InlineData((char) 0, ConsoleColor.Gray, ConsoleColor.Black)]
         [InlineData('#', ConsoleColor.DarkGray, ConsoleColor.Black)]

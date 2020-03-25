@@ -1,20 +1,31 @@
 ﻿using System;
 using Cabrones.Test;
+using FluentAssertions;
 using Xunit;
 
 namespace Kli.Output.File
 {
     public class TestIOutputFile
     {
-        [Theory]
-        [InlineData(typeof(IOutputFile), 2)]
-        public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            tipo.TestMethodsCount(totalDeMétodosEsperado);
+        [Fact]
+        public void verificações_declarativas()
+        {
+            // Arrange, Given
+            // Act, When
 
-        [Theory]
-        [InlineData(typeof(IOutputFile), "String get_Path()")]
-        [InlineData(typeof(IOutputFile), "Void WriteToFile(String)")]
-        public void verifica_se_os_métodos_existem_com_base_na_assinatura(Type tipo, string assinaturaEsperada) =>
-            tipo.TestMethodPresence(assinaturaEsperada);
+            var sut = typeof(IOutputFile);
+
+            // Assert, Then
+
+            sut.AssertMyImplementations(
+                typeof(IOutput));
+            sut.AssertMyOwnImplementations();
+            sut.AssertMyOwnPublicPropertiesCount(1);
+            sut.AssertPublicPropertyPresence("String Path { get; }");
+            sut.AssertMyOwnPublicMethodsCount(1);
+            sut.AssertPublicMethodPresence("Void WriteToFile(String)");
+
+            sut.IsInterface.Should().BeTrue();
+        }
     }
 }

@@ -16,16 +16,27 @@ namespace Kli.Output.Console
             Program.DependencyResolver.Register<IOutputMarkersToConsoleColor, OutputMarkersToConsoleColor>();
         }
         
-        [Theory]
-        [InlineData(typeof(OutputConsole), 4)]
-        public void verifica_se_o_total_de_métodos_públicos_declarados_está_correto_neste_tipo(Type tipo, int totalDeMétodosEsperado) =>
-            tipo.TestMethodsCount(totalDeMétodosEsperado);
+        [Fact]
+        public void verificações_declarativas()
+        {
+            // Arrange, Given
+            // Act, When
 
-        [Theory]
-        [InlineData(typeof(OutputConsole), typeof(IOutput), typeof(IOutputConsole))]
-        public void verifica_se_classe_implementa_os_tipos_necessários(Type tipoDaClasse, params Type[] tiposQueDeveSerImplementado) =>
-            tipoDaClasse.TestImplementations(tiposQueDeveSerImplementado);
+            var sut = typeof(OutputConsole);
 
+            // Assert, Then
+
+            sut.AssertMyImplementations(
+                typeof(IOutput), 
+                typeof(IOutputConsole));
+            sut.AssertMyOwnImplementations(
+                typeof(IOutputConsole));
+            sut.AssertMyOwnPublicPropertiesCount(0);
+            sut.AssertMyOwnPublicMethodsCount(0);
+
+            sut.IsClass.Should().BeTrue();
+        }
+        
         [Fact]
         public void ao_escrever_um_texto_o_método_WriteToConsole_deve_ser_chamado()
         {
@@ -36,7 +47,7 @@ namespace Kli.Output.Console
                 outputWriter,
                 Substitute.For<IOutputMarkersToConsoleColor>(),
                 Substitute.For<IConsole>()) as IOutputConsole;
-            var textoDeExemplo = this.Fixture().Create<string>();
+            var textoDeExemplo = this.Fixture<string>();
             
             // Act, When
 
@@ -60,10 +71,10 @@ namespace Kli.Output.Console
                 outputMarkersToConsoleColor,
                 Substitute.For<IConsole>()) as IOutputConsole;
             
-            var marcadorDeExemplo = this.Fixture().Create<char>();
+            var marcadorDeExemplo = this.Fixture<char>();
             
             outputMarkersToConsoleColor.Convert(marcadorDeExemplo).Returns(
-                this.Fixture().Create<Tuple<ConsoleColor, ConsoleColor>>());
+                this.Fixture<Tuple<ConsoleColor, ConsoleColor>>());
             
             // Act, When
 
@@ -94,7 +105,7 @@ namespace Kli.Output.Console
                 // Act, When
 
                 var (esperadoParaForeground, esperadoParaBackground) = outputMarkersToConsoleColor.Convert(marcador);
-                outputConsole.WriteToConsole(this.Fixture().Create<string>(), marcador);
+                outputConsole.WriteToConsole(this.Fixture<string>(), marcador);
             
                 // Assert, Then
 
@@ -116,9 +127,9 @@ namespace Kli.Output.Console
                 console) as IOutputConsole;
             
             outputMarkersToConsoleColor.Convert((char)0).Returns(
-                this.Fixture().Create<Tuple<ConsoleColor, ConsoleColor>>());
+                this.Fixture<Tuple<ConsoleColor, ConsoleColor>>());
             
-            var textoDeExemplo = this.Fixture().Create<string>();
+            var textoDeExemplo = this.Fixture<string>();
             
             // Act, When
 
