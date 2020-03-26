@@ -44,6 +44,10 @@ namespace Kli.Module
             if (_startedInteraction) throw new InvalidOperationException();
             _startedInteraction = true;
 
+            _multipleOutput.Write("Nome: ");
+            var name = _multipleInput.ReadLine();
+            _multipleOutput.WriteLine(name);
+            
             //Execução dos módulos aqui...
         }
     }

@@ -120,9 +120,7 @@ namespace Kli.Core
         /// <summary>
         ///     Inicia a execução dos módulos carregados.
         /// </summary>
-        private void RunModules()
-        {
+        private void RunModules() =>
             _multipleModule.Run();
-        }
     }
 }
