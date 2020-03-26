@@ -1,6 +1,4 @@
-﻿using System;
-using Kli.Module;
-using Cabrones.Test;
+﻿using Cabrones.Test;
 using FluentAssertions;
 using Xunit;
 

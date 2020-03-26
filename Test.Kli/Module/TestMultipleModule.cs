@@ -1,14 +1,30 @@
-﻿using System;
+﻿using Cabrones.Test;
+using FluentAssertions;
 using Kli.Core;
 using NSubstitute;
-using Cabrones.Test;
-using FluentAssertions;
 using Xunit;
 
 namespace Kli.Module
 {
     public class TestMultipleModule
     {
+        [Fact]
+        public void o_método_Run_deve_chamar_o_serviço_IUtils_para_exibir_as_opções_inicias()
+        {
+            // Arrange, Given
+
+            var utils = Substitute.For<IInteraction>();
+            var multipleModule = new MultipleModule(utils);
+
+            // Act, When
+
+            multipleModule.Run();
+
+            // Assert, Then
+
+            utils.Received(1).StartInteraction();
+        }
+
         [Fact]
         public void verificações_declarativas()
         {
@@ -31,23 +47,6 @@ namespace Kli.Module
             sut.AssertMyOwnPublicMethodsCount(0);
 
             sut.IsClass.Should().BeTrue();
-        }
-        
-        [Fact]
-        public void o_método_Run_deve_chamar_o_serviço_IUtils_para_exibir_as_opções_inicias()
-        {
-            // Arrange, Given
-
-            var utils = Substitute.For<IInteraction>();
-            var multipleModule = new MultipleModule(utils);
-
-            // Act, When
-            
-            multipleModule.Run();
-
-            // Assert, Then
-
-            utils.Received(1).StartInteraction();
         }
     }
 }

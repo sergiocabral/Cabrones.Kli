@@ -3,28 +3,34 @@
 namespace Kli.Infrastructure
 {
     /// <summary>
-    /// Classe usada como insumo para testar o DependencyResolver.
+    ///     Classe usada como insumo para testar o DependencyResolver.
     /// </summary>
-    internal class SimulationToTestDependencyResolver: IDisposable
+    internal class SimulationToTestDependencyResolver : IDisposable
     {
         /// <summary>
-        /// Construtor. Define o identificador.
+        ///     Construtor. Define o identificador.
         /// </summary>
-        public SimulationToTestDependencyResolver() => Identificador = DateTime.Now.Ticks;
-        
+        public SimulationToTestDependencyResolver()
+        {
+            Identificador = DateTime.Now.Ticks;
+        }
+
         /// <summary>
-        /// Identificador da instância.
+        ///     Identificador da instância.
         /// </summary>
         public long Identificador { get; }
 
         /// <summary>
-        /// Evento disparado quando Dispose é chamado.
+        ///     Dispose.
         /// </summary>
-        public event Action Disposed;
+        public void Dispose()
+        {
+            Disposed?.Invoke();
+        }
 
         /// <summary>
-        /// Dispose.
+        ///     Evento disparado quando Dispose é chamado.
         /// </summary>
-        public void Dispose() => Disposed?.Invoke();
+        public event Action Disposed;
     }
 }

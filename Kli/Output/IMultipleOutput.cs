@@ -3,9 +3,9 @@
 namespace Kli.Output
 {
     /// <summary>
-    /// Gerencia múltiplas instâncias da mesma interface: IOutput
+    ///     Gerencia múltiplas instâncias da mesma interface: IOutput
     /// </summary>
-    public interface IMultipleOutput: IMultiple<IOutput>, IOutput
+    public interface IMultipleOutput : IMultiple<IOutput>, IOutput
     {
     }
 }

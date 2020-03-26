@@ -9,22 +9,22 @@ using Kli.Infrastructure;
 namespace Kli.Core
 {
     /// <summary>
-    /// Carregador de assembly em disco para a memória.
+    ///     Carregador de assembly em disco para a memória.
     /// </summary>
-    public class LoaderAssembly: ILoaderAssembly
+    public class LoaderAssembly : ILoaderAssembly
     {
         /// <summary>
-        /// Conjunto de definições para o programa.
+        ///     Conjunto de definições para o programa.
         /// </summary>
         private readonly IDefinition _definition;
 
         /// <summary>
-        /// Resolvedor de classes.
+        ///     Resolvedor de classes.
         /// </summary>
         private readonly IDependencyResolver _dependencyResolver;
 
         /// <summary>
-        /// Construtor.
+        ///     Construtor.
         /// </summary>
         /// <param name="definition">Conjunto de definições para o programa.</param>
         /// <param name="dependencyResolver">Resolvedor de classes.</param>
@@ -33,9 +33,9 @@ namespace Kli.Core
             _definition = definition;
             _dependencyResolver = dependencyResolver;
         }
-        
+
         /// <summary>
-        /// Carrega um ou mais arquivos de assembly.
+        ///     Carrega um ou mais arquivos de assembly.
         /// </summary>
         /// <param name="fileMask">Máscara de busca dos arquivos.</param>
         /// <returns>Lista de arquivos com seu respectivo assembly. Quando assembly é null indica falha no carregamento.</returns>
@@ -43,7 +43,6 @@ namespace Kli.Core
         {
             var result = new Dictionary<string, Assembly?>();
             foreach (var file in GetFiles(fileMask))
-            {
                 try
                 {
                     var assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(file.FullName);
@@ -54,12 +53,12 @@ namespace Kli.Core
                 {
                     result.Add(file.FullName, null);
                 }
-            }
+
             return result;
         }
 
         /// <summary>
-        /// Carrega um ou mais arquivos de assembly e registra as instâncias no resolvedor de dependências.
+        ///     Carrega um ou mais arquivos de assembly e registra as instâncias no resolvedor de dependências.
         /// </summary>
         /// <param name="fileMask">Máscara de busca dos arquivos.</param>
         /// <returns>Lista de serviços (tipos) registrados.</returns>
@@ -70,14 +69,13 @@ namespace Kli.Core
             foreach (var assembly in Load(fileMask).Select(a => a.Value))
             {
                 if (assembly == null) continue;
-                foreach (var type in assembly.GetTypes().Where(a => a.IsClass && !a.IsAbstract && a.GetInterfaces().Length > 0))
+                foreach (var type in assembly.GetTypes()
+                    .Where(a => a.IsClass && !a.IsAbstract && a.GetInterfaces().Length > 0))
+                foreach (var interfaceType in type.GetInterfaces())
                 {
-                    foreach (var interfaceType in type.GetInterfaces())
-                    {
-                        if (IsInterfaceForMultipleImplementation(interfaceType)) continue;
-                        _dependencyResolver.Register(interfaceType, type, DependencyResolverLifeTime.PerScope);
-                        interfaces.Add(interfaceType);
-                    }
+                    if (IsInterfaceForMultipleImplementation(interfaceType)) continue;
+                    _dependencyResolver.Register(interfaceType, type, DependencyResolverLifeTime.PerScope);
+                    interfaces.Add(interfaceType);
                 }
             }
 
@@ -85,7 +83,7 @@ namespace Kli.Core
         }
 
         /// <summary>
-        /// Carrega serviços de um determinado tipo presentes em um ou mais arquivos de assembly.
+        ///     Carrega serviços de um determinado tipo presentes em um ou mais arquivos de assembly.
         /// </summary>
         /// <param name="fileMask">Máscara de busca dos arquivos.</param>
         /// <typeparam name="TService">Serviço.</typeparam>
@@ -94,23 +92,25 @@ namespace Kli.Core
         {
             var scope = _dependencyResolver.CreateScope();
             return new List<TService>(
-                from type in RegisterServices(fileMask) 
-                where typeof(TService).IsAssignableFrom(type) 
+                from type in RegisterServices(fileMask)
+                where typeof(TService).IsAssignableFrom(type)
                 select (TService) _dependencyResolver.GetInstance(type, scope)
             ).ToArray();
         }
 
         /// <summary>
-        /// Determina se a interface é do tipo que tem múltiplas implementações.
-        /// Por exemplo: IOutput, IInput, IModule.
+        ///     Determina se a interface é do tipo que tem múltiplas implementações.
+        ///     Por exemplo: IOutput, IInput, IModule.
         /// </summary>
         /// <param name="interfaceType">Tipo da interface</param>
         /// <returns>Indicativo de sim ou não.</returns>
-        private bool IsInterfaceForMultipleImplementation(Type interfaceType) =>
-            _dependencyResolver.InterfacesForMultipleImplementation.Contains(interfaceType);
-        
+        private bool IsInterfaceForMultipleImplementation(Type interfaceType)
+        {
+            return _dependencyResolver.InterfacesForMultipleImplementation.Contains(interfaceType);
+        }
+
         /// <summary>
-        /// Faz a consulta dos arquivos baseados numa máscara de busca.
+        ///     Faz a consulta dos arquivos baseados numa máscara de busca.
         /// </summary>
         /// <param name="fileMask">Máscara de busca dos arquivos.</param>
         /// <returns>Lista de arquivos.</returns>

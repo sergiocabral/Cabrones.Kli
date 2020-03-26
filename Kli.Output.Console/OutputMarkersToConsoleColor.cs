@@ -4,17 +4,17 @@ using System.Linq;
 namespace Kli.Output.Console
 {
     /// <summary>
-    /// Converte marcadores para cores tipo ConsoleColor.
+    ///     Converte marcadores para cores tipo ConsoleColor.
     /// </summary>
-    public class OutputMarkersToConsoleColor: IOutputMarkersToConsoleColor
+    public class OutputMarkersToConsoleColor : IOutputMarkersToConsoleColor
     {
         /// <summary>
-        /// Definições de cores.
+        ///     Definições de cores.
         /// </summary>
         private readonly Tuple<char, ConsoleColor, ConsoleColor>[] _colors;
 
         /// <summary>
-        /// Construtor.
+        ///     Construtor.
         /// </summary>
         /// <param name="outputMarkers">Marcadores para texto de saída para o usuário.</param>
         public OutputMarkersToConsoleColor(IOutputMarkers outputMarkers)
@@ -22,17 +22,22 @@ namespace Kli.Output.Console
             _colors = new[]
             {
                 new Tuple<char, ConsoleColor, ConsoleColor>((char) 0, ConsoleColor.Gray, ConsoleColor.Black),
-                new Tuple<char, ConsoleColor, ConsoleColor>(outputMarkers.Low, ConsoleColor.DarkGray, ConsoleColor.Black),
-                new Tuple<char, ConsoleColor, ConsoleColor>(outputMarkers.Light, ConsoleColor.Magenta, ConsoleColor.Black),
-                new Tuple<char, ConsoleColor, ConsoleColor>(outputMarkers.Highlight, ConsoleColor.DarkCyan, ConsoleColor.Black),
-                new Tuple<char, ConsoleColor, ConsoleColor>(outputMarkers.Question, ConsoleColor.DarkYellow, ConsoleColor.Black),
-                new Tuple<char, ConsoleColor, ConsoleColor>(outputMarkers.Answer, ConsoleColor.Yellow, ConsoleColor.Black),
+                new Tuple<char, ConsoleColor, ConsoleColor>(outputMarkers.Low, ConsoleColor.DarkGray,
+                    ConsoleColor.Black),
+                new Tuple<char, ConsoleColor, ConsoleColor>(outputMarkers.Light, ConsoleColor.Magenta,
+                    ConsoleColor.Black),
+                new Tuple<char, ConsoleColor, ConsoleColor>(outputMarkers.Highlight, ConsoleColor.DarkCyan,
+                    ConsoleColor.Black),
+                new Tuple<char, ConsoleColor, ConsoleColor>(outputMarkers.Question, ConsoleColor.DarkYellow,
+                    ConsoleColor.Black),
+                new Tuple<char, ConsoleColor, ConsoleColor>(outputMarkers.Answer, ConsoleColor.Yellow,
+                    ConsoleColor.Black),
                 new Tuple<char, ConsoleColor, ConsoleColor>(outputMarkers.Error, ConsoleColor.Red, ConsoleColor.Black)
             };
         }
 
         /// <summary>
-        /// Converte um marcador em cor.
+        ///     Converte um marcador em cor.
         /// </summary>
         /// <param name="marker">Marcador.</param>
         /// <returns>Cores foreground e background.</returns>
@@ -45,7 +50,7 @@ namespace Kli.Output.Console
         }
 
         /// <summary>
-        /// Converte uma cor em marcador.
+        ///     Converte uma cor em marcador.
         /// </summary>
         /// <param name="foreground">Cor de foreground.</param>
         /// <param name="background">Cor de background.</param>

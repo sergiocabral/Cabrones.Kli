@@ -1,9 +1,8 @@
 ﻿using System;
-using AutoFixture;
+using Cabrones.Test;
 using FluentAssertions;
 using Kli.Wrappers;
 using NSubstitute;
-using Cabrones.Test;
 using Xunit;
 
 namespace Kli.Output.Console
@@ -15,28 +14,7 @@ namespace Kli.Output.Console
             Program.DependencyResolver.Register<IOutputConsole, OutputConsole>();
             Program.DependencyResolver.Register<IOutputMarkersToConsoleColor, OutputMarkersToConsoleColor>();
         }
-        
-        [Fact]
-        public void verificações_declarativas()
-        {
-            // Arrange, Given
-            // Act, When
 
-            var sut = typeof(OutputConsole);
-
-            // Assert, Then
-
-            sut.AssertMyImplementations(
-                typeof(IOutput), 
-                typeof(IOutputConsole));
-            sut.AssertMyOwnImplementations(
-                typeof(IOutputConsole));
-            sut.AssertMyOwnPublicPropertiesCount(0);
-            sut.AssertMyOwnPublicMethodsCount(0);
-
-            sut.IsClass.Should().BeTrue();
-        }
-        
         [Fact]
         public void ao_escrever_um_texto_o_método_WriteToConsole_deve_ser_chamado()
         {
@@ -48,41 +26,16 @@ namespace Kli.Output.Console
                 Substitute.For<IOutputMarkersToConsoleColor>(),
                 Substitute.For<IConsole>()) as IOutputConsole;
             var textoDeExemplo = this.Fixture<string>();
-            
+
             // Act, When
 
             outputConsole.Write(textoDeExemplo);
             outputConsole.WriteLine(textoDeExemplo);
-            
+
             // Assert, Then
 
             outputWriter.Received(1).Parse(textoDeExemplo, outputConsole.WriteToConsole);
             outputWriter.Received(1).Parse($"{textoDeExemplo}\n", outputConsole.WriteToConsole);
-        }
-
-        [Fact]
-        public void o_método_WriteToConsole_deve_usar_IOutputMarkersToConsoleColor_para_formatar_de_acordo_com_o_marcador()
-        {
-            // Arrange, Given
-
-            var outputMarkersToConsoleColor = Substitute.For<IOutputMarkersToConsoleColor>();
-            var outputConsole = new OutputConsole(
-                Program.DependencyResolver.GetInstance<IOutputWriter>(),
-                outputMarkersToConsoleColor,
-                Substitute.For<IConsole>()) as IOutputConsole;
-            
-            var marcadorDeExemplo = this.Fixture<char>();
-            
-            outputMarkersToConsoleColor.Convert(marcadorDeExemplo).Returns(
-                this.Fixture<Tuple<ConsoleColor, ConsoleColor>>());
-            
-            // Act, When
-
-            outputConsole.WriteToConsole(null, marcadorDeExemplo);
-            
-            // Assert, Then
-
-            outputMarkersToConsoleColor.Received(1).Convert(marcadorDeExemplo);
         }
 
         [Fact]
@@ -101,12 +54,12 @@ namespace Kli.Output.Console
             foreach (var marcador in outputMarkers.Markers)
             {
                 console.ClearReceivedCalls();
-                    
+
                 // Act, When
 
                 var (esperadoParaForeground, esperadoParaBackground) = outputMarkersToConsoleColor.Convert(marcador);
                 outputConsole.WriteToConsole(this.Fixture<string>(), marcador);
-            
+
                 // Assert, Then
 
                 console.Received(1).BackgroundColor = esperadoParaBackground;
@@ -125,21 +78,47 @@ namespace Kli.Output.Console
                 Program.DependencyResolver.GetInstance<IOutputWriter>(),
                 outputMarkersToConsoleColor,
                 console) as IOutputConsole;
-            
-            outputMarkersToConsoleColor.Convert((char)0).Returns(
+
+            outputMarkersToConsoleColor.Convert((char) 0).Returns(
                 this.Fixture<Tuple<ConsoleColor, ConsoleColor>>());
-            
+
             var textoDeExemplo = this.Fixture<string>();
-            
+
             // Act, When
 
             outputConsole.WriteToConsole(textoDeExemplo);
-            
+
             // Assert, Then
 
             console.Received(1).Write(textoDeExemplo);
         }
-        
+
+        [Fact]
+        public void
+            o_método_WriteToConsole_deve_usar_IOutputMarkersToConsoleColor_para_formatar_de_acordo_com_o_marcador()
+        {
+            // Arrange, Given
+
+            var outputMarkersToConsoleColor = Substitute.For<IOutputMarkersToConsoleColor>();
+            var outputConsole = new OutputConsole(
+                Program.DependencyResolver.GetInstance<IOutputWriter>(),
+                outputMarkersToConsoleColor,
+                Substitute.For<IConsole>()) as IOutputConsole;
+
+            var marcadorDeExemplo = this.Fixture<char>();
+
+            outputMarkersToConsoleColor.Convert(marcadorDeExemplo).Returns(
+                this.Fixture<Tuple<ConsoleColor, ConsoleColor>>());
+
+            // Act, When
+
+            outputConsole.WriteToConsole(null, marcadorDeExemplo);
+
+            // Assert, Then
+
+            outputMarkersToConsoleColor.Received(1).Convert(marcadorDeExemplo);
+        }
+
         [Fact]
         public void os_métodos_de_escrita_devem_retornar_uma_auto_referência()
         {
@@ -149,18 +128,18 @@ namespace Kli.Output.Console
                 Substitute.For<IOutputWriter>(),
                 Substitute.For<IOutputMarkersToConsoleColor>(),
                 Substitute.For<IConsole>()) as IOutputConsole;
-            
+
             // Act, When
 
             var retornoDeWrite = outputConsole.Write(null);
             var retornoDeWriteLine = outputConsole.WriteLine(null);
-            
+
             // Assert, Then
 
             retornoDeWrite.Should().BeSameAs(outputConsole);
             retornoDeWriteLine.Should().BeSameAs(outputConsole);
         }
-        
+
         [Fact]
         public void verifica_se_o_marcador_atual_foi_determinado_corretamente_usando_IConsole()
         {
@@ -173,7 +152,8 @@ namespace Kli.Output.Console
                 outputMarkersToConsoleColor,
                 console) as IOutputConsole;
 
-            var marcadorAtualEsperado = outputMarkersToConsoleColor.Convert(console.ForegroundColor, console.BackgroundColor);
+            var marcadorAtualEsperado =
+                outputMarkersToConsoleColor.Convert(console.ForegroundColor, console.BackgroundColor);
 
             var consultaDeBackgroundColor = 0;
             console.BackgroundColor.Returns(info =>
@@ -181,23 +161,44 @@ namespace Kli.Output.Console
                 consultaDeBackgroundColor++;
                 return default;
             });
-            
+
             var consultaDeForegroundColor = 0;
             console.ForegroundColor.Returns(info =>
             {
                 consultaDeForegroundColor++;
                 return default;
             });
-            
+
             // Act, When
 
             var marcadorAtual = outputConsole.CurrentMarker();
-            
+
             // Assert, Then
 
             consultaDeBackgroundColor.Should().Be(1);
             consultaDeForegroundColor.Should().Be(1);
             marcadorAtual.Should().Be(marcadorAtualEsperado);
+        }
+
+        [Fact]
+        public void verificações_declarativas()
+        {
+            // Arrange, Given
+            // Act, When
+
+            var sut = typeof(OutputConsole);
+
+            // Assert, Then
+
+            sut.AssertMyImplementations(
+                typeof(IOutput),
+                typeof(IOutputConsole));
+            sut.AssertMyOwnImplementations(
+                typeof(IOutputConsole));
+            sut.AssertMyOwnPublicPropertiesCount(0);
+            sut.AssertMyOwnPublicMethodsCount(0);
+
+            sut.IsClass.Should().BeTrue();
         }
     }
 }

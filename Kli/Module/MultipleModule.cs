@@ -3,17 +3,17 @@
 namespace Kli.Module
 {
     /// <summary>
-    /// Gerencia múltiplos IModule.
+    ///     Gerencia múltiplos IModule.
     /// </summary>
-    public class MultipleModule: Multiple<IModule>, IMultipleModule
+    public class MultipleModule : Multiple<IModule>, IMultipleModule
     {
         /// <summary>
-        /// Agrupa funções utilitárias para lidar com a interação com o usuário.
+        ///     Agrupa funções utilitárias para lidar com a interação com o usuário.
         /// </summary>
         private readonly IInteraction _interaction;
 
         /// <summary>
-        /// Construtor.
+        ///     Construtor.
         /// </summary>
         /// <param name="interaction">Agrupa funções utilitárias para lidar com a interação com o usuário.</param>
         public MultipleModule(IInteraction interaction)
@@ -22,8 +22,11 @@ namespace Kli.Module
         }
 
         /// <summary>
-        /// Método principal do módulo. Inicia sua execução.
+        ///     Método principal do módulo. Inicia sua execução.
         /// </summary>
-        public void Run() => _interaction.StartInteraction();
+        public void Run()
+        {
+            _interaction.StartInteraction();
+        }
     }
 }

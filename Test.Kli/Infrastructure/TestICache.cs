@@ -1,5 +1,4 @@
-﻿using System;
-using Cabrones.Test;
+﻿using Cabrones.Test;
 using FluentAssertions;
 using Xunit;
 

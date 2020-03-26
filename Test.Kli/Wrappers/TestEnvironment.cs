@@ -1,13 +1,44 @@
 ﻿using System;
-using AutoFixture;
-using FluentAssertions;
 using Cabrones.Test;
+using FluentAssertions;
 using Xunit;
 
 namespace Kli.Wrappers
 {
     public class TestEnvironment
     {
+        [Fact]
+        public void GetEnvironmentVariable_deve_retornar_null_se_não_existe_o_valor()
+        {
+            // Arrange, Given
+
+            var environment = Program.DependencyResolver.GetInstance<IEnvironment>();
+
+            // Act, When
+
+            var valorNãoExistente = environment.GetEnvironmentVariable(this.Fixture<string>());
+
+            // Assert, Then   
+
+            valorNãoExistente.Should().BeNull();
+        }
+
+        [Fact]
+        public void métodos_devem_rodar_sem_erros()
+        {
+            // Arrange, Given
+
+            var environment = Program.DependencyResolver.GetInstance<IEnvironment>();
+
+            // Act, When
+
+            Action executarTodosOsMétodos = () => { environment.GetEnvironmentVariable(this.Fixture<string>()); };
+
+            // Assert, Then   
+
+            executarTodosOsMétodos.Should().NotThrow();
+        }
+
         [Fact]
         public void verificações_declarativas()
         {
@@ -26,41 +57,6 @@ namespace Kli.Wrappers
             sut.AssertMyOwnPublicMethodsCount(0);
 
             sut.IsClass.Should().BeTrue();
-        }
-
-        [Fact]
-        public void métodos_devem_rodar_sem_erros()
-        {
-            // Arrange, Given
-
-            var environment = Program.DependencyResolver.GetInstance<IEnvironment>();
-
-            // Act, When
-
-            Action executarTodosOsMétodos = () =>
-            {
-                environment.GetEnvironmentVariable(this.Fixture<string>());
-            };
-
-            // Assert, Then   
-            
-            executarTodosOsMétodos.Should().NotThrow();
-        }
-
-        [Fact]
-        public void GetEnvironmentVariable_deve_retornar_null_se_não_existe_o_valor()
-        {
-            // Arrange, Given
-
-            var environment = Program.DependencyResolver.GetInstance<IEnvironment>();
-
-            // Act, When
-
-            var valorNãoExistente = environment.GetEnvironmentVariable(this.Fixture<string>());
-
-            // Assert, Then   
-
-            valorNãoExistente.Should().BeNull();
         }
     }
 }

@@ -3,9 +3,9 @@
 namespace Kli.Input
 {
     /// <summary>
-    /// Gerencia múltiplas instâncias da mesma interface: IInput
+    ///     Gerencia múltiplas instâncias da mesma interface: IInput
     /// </summary>
-    public interface IMultipleInput: IMultiple<IInput>, IInput
+    public interface IMultipleInput : IMultiple<IInput>, IInput
     {
     }
 }

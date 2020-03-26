@@ -14,12 +14,22 @@ using Environment = Kli.Wrappers.Environment;
 namespace Kli.Infrastructure
 {
     /// <summary>
-    /// Resolvedor de classes.
+    ///     Resolvedor de classes.
     /// </summary>
-    public class DependencyResolver: IDependencyResolver
+    public class DependencyResolver : IDependencyResolver
     {
         /// <summary>
-        /// Construtor.
+        ///     Container de trabalho do LightInject para este projeto.
+        /// </summary>
+        private readonly ServiceContainer _container = new ServiceContainer();
+
+        /// <summary>
+        ///     Lista de escopos abertos.
+        /// </summary>
+        private readonly IDictionary<Guid, Scope> _scopes = new Dictionary<Guid, Scope>();
+
+        /// <summary>
+        ///     Construtor.
         /// </summary>
         public DependencyResolver()
         {
@@ -27,7 +37,7 @@ namespace Kli.Infrastructure
         }
 
         /// <summary>
-        /// Cria um escope.
+        ///     Cria um escope.
         /// </summary>
         /// <param name="parentScope">Escopo pai.</param>
         /// <returns>Identificador do escopo.</returns>
@@ -42,12 +52,12 @@ namespace Kli.Infrastructure
                 foreach (var (childId, _) in _scopes.Where(a => a.Value.ParentScope == _scopes[id]))
                     DisposeScope(childId);
                 _scopes.Remove(id);
-            }; 
+            };
             return id;
         }
 
         /// <summary>
-        /// Libera um escopo e suas instâncias.
+        ///     Libera um escopo e suas instâncias.
         /// </summary>
         /// <param name="scope">Escopo.</param>
         public void DisposeScope(Guid scope)
@@ -57,7 +67,7 @@ namespace Kli.Infrastructure
         }
 
         /// <summary>
-        /// Verifica se um escopo está liberado.
+        ///     Verifica se um escopo está liberado.
         /// </summary>
         /// <param name="scope">Escopo.</param>
         /// <returns>Indica se está liberado ou não.</returns>
@@ -67,16 +77,18 @@ namespace Kli.Infrastructure
         }
 
         /// <summary>
-        /// Retorna uma instância do tipo solicitado.
+        ///     Retorna uma instância do tipo solicitado.
         /// </summary>
         /// <typeparam name="TService">Tipo solicitado.</typeparam>
         /// <param name="scope">Escopo.</param>
         /// <returns>Instância encontrada.</returns>
-        public TService GetInstance<TService>(Guid? scope) where TService : class =>
-            (TService) GetInstance(typeof(TService), scope);
+        public TService GetInstance<TService>(Guid? scope) where TService : class
+        {
+            return (TService) GetInstance(typeof(TService), scope);
+        }
 
         /// <summary>
-        /// Retorna uma instância do tipo solicitado.
+        ///     Retorna uma instância do tipo solicitado.
         /// </summary>
         /// <param name="service">Tipo solicitado.</param>
         /// <param name="scope">Escopo.</param>
@@ -84,24 +96,26 @@ namespace Kli.Infrastructure
         public object GetInstance(Type service, Guid? scope)
         {
             if (!scope.HasValue) return _container.GetInstance(service);
-            
+
             ValidateScope(scope.Value);
-            
+
             return _scopes[scope.Value].GetInstance(service);
         }
 
         /// <summary>
-        /// Registrar um serviço com sua respectiva implementação.
+        ///     Registrar um serviço com sua respectiva implementação.
         /// </summary>
         /// <typeparam name="TService">Serviço (interface).</typeparam>
         /// <typeparam name="TImplementation">Implementação (class).</typeparam>
         /// <param name="lifetime">Tempo de vida.</param>
-        public void Register<TService, TImplementation>(DependencyResolverLifeTime lifetime) 
-            where TImplementation : TService where TService : class =>
+        public void Register<TService, TImplementation>(DependencyResolverLifeTime lifetime)
+            where TImplementation : TService where TService : class
+        {
             _container.Register<TService, TImplementation>(GetILifeTime(lifetime));
+        }
 
         /// <summary>
-        /// Registrar um serviço com sua respectiva implementação.
+        ///     Registrar um serviço com sua respectiva implementação.
         /// </summary>
         /// <param name="service">Serviço (interface).</param>
         /// <param name="implementation">Implementação (class).</param>
@@ -113,23 +127,14 @@ namespace Kli.Infrastructure
         }
 
         /// <summary>
-        /// Lista de interfaces que são implementadas múltiplas vezes.
-        /// Essas interfaces não podem ser registradas como serviço.
+        ///     Lista de interfaces que são implementadas múltiplas vezes.
+        ///     Essas interfaces não podem ser registradas como serviço.
         /// </summary>
-        public IEnumerable<Type> InterfacesForMultipleImplementation { get; } = new[] {typeof(IOutput), typeof(IInput), typeof(IModule)};
+        public IEnumerable<Type> InterfacesForMultipleImplementation { get; } =
+            new[] {typeof(IOutput), typeof(IInput), typeof(IModule)};
 
         /// <summary>
-        /// Container de trabalho do LightInject para este projeto.
-        /// </summary>
-        private readonly ServiceContainer _container = new ServiceContainer();
-        
-        /// <summary>
-        /// Lista de escopos abertos.
-        /// </summary>
-        private readonly IDictionary<Guid, Scope> _scopes = new Dictionary<Guid, Scope>();
-
-        /// <summary>
-        /// Registra as interfaces e tipos associados.
+        ///     Registra as interfaces e tipos associados.
         /// </summary>
         private void RegisterAssemblies()
         {
@@ -157,7 +162,7 @@ namespace Kli.Infrastructure
         }
 
         /// <summary>
-        /// Converte para o ILifetime correspondente.
+        ///     Converte para o ILifetime correspondente.
         /// </summary>
         /// <param name="lifetime">Enum</param>
         /// <returns>ILifetime</returns>
@@ -168,7 +173,7 @@ namespace Kli.Infrastructure
         }
 
         /// <summary>
-        /// Verifica de um escopo é válido.
+        ///     Verifica de um escopo é válido.
         /// </summary>
         /// <param name="scope">Escopo.</param>
         /// <exception cref="ObjectDisposedException">Quando não é válido.</exception>
@@ -176,6 +181,6 @@ namespace Kli.Infrastructure
         {
             if (!scope.HasValue) return;
             if (!IsActive(scope.Value)) throw new ObjectDisposedException(scope.Value.ToString());
-        } 
+        }
     }
 }

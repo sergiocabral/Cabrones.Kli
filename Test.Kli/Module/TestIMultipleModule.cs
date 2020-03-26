@@ -1,5 +1,4 @@
-﻿using System;
-using Cabrones.Test;
+﻿using Cabrones.Test;
 using FluentAssertions;
 using Kli.Core;
 using Xunit;
@@ -19,10 +18,10 @@ namespace Kli.Module
             // Assert, Then
 
             sut.AssertMyImplementations(
-                typeof(IMultiple<IModule>), 
+                typeof(IMultiple<IModule>),
                 typeof(IModule));
             sut.AssertMyOwnImplementations(
-                typeof(IMultiple<IModule>), 
+                typeof(IMultiple<IModule>),
                 typeof(IModule));
             sut.AssertMyOwnPublicPropertiesCount(0);
             sut.AssertMyOwnPublicMethodsCount(0);

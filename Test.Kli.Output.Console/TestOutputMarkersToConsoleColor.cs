@@ -1,6 +1,6 @@
 ﻿using System;
-using FluentAssertions;
 using Cabrones.Test;
+using FluentAssertions;
 using Xunit;
 
 namespace Kli.Output.Console
@@ -9,28 +9,9 @@ namespace Kli.Output.Console
     {
         public TestOutputMarkersToConsoleColor()
         {
-            Program.DependencyResolver.Register<IOutputMarkersToConsoleColor, OutputMarkersToConsoleColor>();    
+            Program.DependencyResolver.Register<IOutputMarkersToConsoleColor, OutputMarkersToConsoleColor>();
         }
-        
-        [Fact]
-        public void verificações_declarativas()
-        {
-            // Arrange, Given
-            // Act, When
 
-            var sut = typeof(OutputMarkersToConsoleColor);
-
-            // Assert, Then
-
-            sut.AssertMyImplementations(
-                typeof(IOutputMarkersToConsoleColor));
-            sut.AssertMyOwnImplementations();
-            sut.AssertMyOwnPublicPropertiesCount(0);
-            sut.AssertMyOwnPublicMethodsCount(0);
-
-            sut.IsClass.Should().BeTrue();
-        }
-        
         [Theory]
         [InlineData((char) 0, ConsoleColor.Gray, ConsoleColor.Black)]
         [InlineData('#', ConsoleColor.DarkGray, ConsoleColor.Black)]
@@ -39,7 +20,8 @@ namespace Kli.Output.Console
         [InlineData('?', ConsoleColor.DarkYellow, ConsoleColor.Black)]
         [InlineData('@', ConsoleColor.Yellow, ConsoleColor.Black)]
         [InlineData('!', ConsoleColor.Red, ConsoleColor.Black)]
-        public void verifica_se_as_cores_estão_corretamente_associadas(char marcador, ConsoleColor foreground, ConsoleColor background)
+        public void verifica_se_as_cores_estão_corretamente_associadas(char marcador, ConsoleColor foreground,
+            ConsoleColor background)
         {
             // Arrange, Given
 
@@ -49,7 +31,7 @@ namespace Kli.Output.Console
 
             var convertidoParaMarcador = outputMarkersToConsoleColor.Convert(foreground, background);
             var (convertidoParaForeground, convertidoParaBackground) = outputMarkersToConsoleColor.Convert(marcador);
-            
+
             // Assert, Then
 
             convertidoParaMarcador.Should().Be(marcador);
@@ -68,12 +50,31 @@ namespace Kli.Output.Console
 
             var convertidoParaMarcador = outputMarkersToConsoleColor.Convert(ConsoleColor.White, ConsoleColor.White);
             var (convertidoParaForeground, convertidoParaBackground) = outputMarkersToConsoleColor.Convert('Z');
-            
+
             // Assert, Then
 
             convertidoParaMarcador.Should().Be((char) 0);
             convertidoParaForeground.Should().Be(ConsoleColor.Gray);
             convertidoParaBackground.Should().Be(ConsoleColor.Black);
+        }
+
+        [Fact]
+        public void verificações_declarativas()
+        {
+            // Arrange, Given
+            // Act, When
+
+            var sut = typeof(OutputMarkersToConsoleColor);
+
+            // Assert, Then
+
+            sut.AssertMyImplementations(
+                typeof(IOutputMarkersToConsoleColor));
+            sut.AssertMyOwnImplementations();
+            sut.AssertMyOwnPublicPropertiesCount(0);
+            sut.AssertMyOwnPublicMethodsCount(0);
+
+            sut.IsClass.Should().BeTrue();
         }
     }
 }

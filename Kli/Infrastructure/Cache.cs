@@ -3,17 +3,17 @@
 namespace Kli.Infrastructure
 {
     /// <summary>
-    /// Cache simples para valores.
+    ///     Cache simples para valores.
     /// </summary>
-    public class Cache: ICache
+    public class Cache : ICache
     {
         /// <summary>
-        /// Dados do cache.
+        ///     Dados do cache.
         /// </summary>
         private readonly IDictionary<string, object> _cache = new Dictionary<string, object>();
 
         /// <summary>
-        /// Grava um valor no cache.
+        ///     Grava um valor no cache.
         /// </summary>
         /// <param name="key">Identificador.</param>
         /// <param name="value">Valor.</param>
@@ -23,20 +23,18 @@ namespace Kli.Infrastructure
         {
             if (value == null)
             {
-                if (_cache.ContainsKey(key))
-                {
-                    _cache.Remove(key);
-                }
+                if (_cache.ContainsKey(key)) _cache.Remove(key);
             }
             else
             {
                 _cache[key] = value;
             }
+
             return value;
         }
 
         /// <summary>
-        /// LÊ um valor do cache.
+        ///     LÊ um valor do cache.
         /// </summary>
         /// <param name="key">Identificador.</param>
         /// <typeparam name="T">Tipo de valor.</typeparam>
@@ -48,8 +46,11 @@ namespace Kli.Infrastructure
         }
 
         /// <summary>
-        /// Limpa os valores do cache.
+        ///     Limpa os valores do cache.
         /// </summary>
-        public void Clear() => _cache.Clear();
+        public void Clear()
+        {
+            _cache.Clear();
+        }
     }
 }
